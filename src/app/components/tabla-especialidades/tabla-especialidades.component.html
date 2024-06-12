@@ -1,0 +1,30 @@
+<body>
+  <main>
+    <div class="container py-4">
+      <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">Especialidades</span>
+        </h4>
+
+        <ul class="list-group mb-3">
+          <div *ngIf="especialidades$ | async as especialidades">
+              <li class="list-group-item d-flex justify-content-between lh-sm" style="cursor: pointer;" *ngFor="let espec of especialidades" (click)="seleccionarEspecialidad(espec.id)">
+              <div>
+                <h6 class="my-0"> {{ espec.especialidad }} </h6>
+              </div>
+          </div>
+
+          <form class="card p-2">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Nueva especialidad" [(ngModel)]="especialidad.especialidad" [ngModelOptions]="{standalone: true}">
+              
+            </div>
+            
+          </form>   
+          <button (click)="agregarEspecialidad()" class="btn btn-secondary">Agregar</button>       
+        </ul>
+        
+      </div>
+    </div>
+  </main>
+</body>

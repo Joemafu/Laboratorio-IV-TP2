@@ -1,0 +1,147 @@
+<div class="container">
+  <div class="py-5 text-center">
+    <h2>Alta de paciente</h2>
+  </div>
+
+  <div class="row g-5">
+
+      <!-- <div class="col-md-5 col-lg-4 order-md-last">
+          <app-tabla-especialidades (especialidadSeleccionada)="onEspecialidadSeleccionada($event)"></app-tabla-especialidades>
+      </div> -->
+
+      <div class="col-md-7 col-lg-8">
+          <h4 class="mb-3">Ingrese los datos del paciente:</h4>
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+              <div class="row g-3">
+
+                  <div class="col-sm-6">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input formControlName="nombre" type="text" class="form-control" id="nombre" required>
+                    @if(registerForm.get('nombre'); as aux) {
+                        @if(aux.invalid && (aux.dirty || aux.touched)){
+                            <div class="alert alert-danger">
+                                {{aux.hasError('required') ? 'Ingrese el nombre.' : 'Mínimo 2 caracteres, solo letras.'}}
+                            </div>
+                        }   
+                    }
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input formControlName="apellido" type="text" class="form-control" id="apellido" required>
+                    @if(registerForm.get('apellido'); as aux) {
+                        @if(aux.invalid && (aux.dirty || aux.touched)){
+                            <div class="alert alert-danger">
+                                {{aux.hasError('required') ? 'Ingrese el apellido.' : 'Mínimo 2 caracteres, solo letras.'}}
+                            </div>
+                        }   
+                    }
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label for="mail" class="form-label">Correo</label>
+                    <input formControlName="mail" type="email" class="form-control" id="mail" required>
+                    @if(registerForm.get('mail'); as aux) {
+                        @if(aux.invalid && (aux.dirty || aux.touched)){
+                            <div class="alert alert-danger">
+                                {{aux.hasError('required') ? 'Ingrese el correo.' : 'Correo no válido.'}}
+                            </div>
+                        }   
+                    }
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label for="pass" class="form-label">Contraseña</label>
+                    <input formControlName="pass" type="password" class="form-control" id="pass" required>
+                    @if(registerForm.get('pass'); as aux) {
+                        @if(aux.invalid && (aux.dirty || aux.touched)){
+                            <div class="alert alert-danger">
+                                {{aux.hasError('required') ? 'Ingrese la contraseña.' : 'Mínimo 6 caracteres.'}}
+                            </div>
+                        }   
+                    }
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label for="tipoDoc" class="form-label">Tipo de documento</label>
+                    <select formControlName="tipoDoc" class="form-select form-control" id="tipoDoc" value="DNI">
+                      <option>DNI</option>
+                      <option>Pasaporte</option>
+                    </select>
+                    @if(registerForm.get('tipoDoc'); as aux) {
+                      @if(aux.invalid && (aux.dirty || aux.touched)){
+                          <div class="alert alert-danger">
+                              {{aux.hasError('required') ? 'Seleccione el tipo de documento.' : 'Es inválido.'}}
+                          </div>
+                      }   
+                    }
+                  </div>
+
+                  <div class="col-sm-6">
+                      <label for="nroDocumento" class="form-label">Número de documento</label>
+                      <input formControlName="nroDocumento" type="number" class="form-control" id="nroDocumento" required>
+                      @if(registerForm.get('nroDocumento'); as aux) {
+                          @if(aux.invalid && (aux.dirty || aux.touched)){
+                              <div class="alert alert-danger">
+                                  {{aux.hasError('required') ? 'Ingrese el número de documento.' : 'Es inválido.'}}
+                              </div>
+                          }   
+                      }
+                  </div>
+
+                  <div class="col-sm-12">
+                      <label for="fechaNac" class="form-label">Fecha de nacimiento</label>
+                      <input formControlName="fechaNac" type="date" class="form-control" id="fechaNac" required>
+                      @if(registerForm.get('fechaNac'); as aux) {
+                          @if(aux.invalid && (aux.dirty || aux.touched)){
+                              <div class="alert alert-danger">
+                                  {{aux.hasError('required') ? 'Ingrese la fecha de nacimiento.' : 'Es inválida.'}}
+                              </div>
+                          }   
+                      }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="fotoPerfilUno" class="form-label">Foto 1</label>
+                    <input formControlName="fotoPerfilUno" class="form-control" type="file" (change)="onFileSelectedUno($event)" id="fotoPerfilUno" required>
+                    @if(registerForm.get('fotoPerfilUno'); as aux) {
+                        @if(aux.invalid && (aux.dirty || aux.touched)){
+                            <div class="alert alert-danger">
+                                {{aux.hasError('required') ? 'Por favor seleccione una foto en formato ".jpg".' : 'Es inválido.'}}
+                            </div>
+                        }   
+                    }
+                </div>
+                
+                <div class="mb-3">
+                  <label for="fotoPerfilDos" class="form-label">Foto 2</label>
+                  <input formControlName="fotoPerfilDos" class="form-control" type="file" (change)="onFileSelectedDos($event)" id="fotoPerfilDos" required>
+                  @if(registerForm.get('fotoPerfilDos'); as aux) {
+                      @if(aux.invalid && (aux.dirty || aux.touched)){
+                          <div class="alert alert-danger">
+                              {{aux.hasError('required') ? 'Por favor seleccione una foto en formato ".jpg".' : 'Es inválido.'}}
+                          </div>
+                      }   
+                  }
+              </div>
+      
+                <div class="col-12">
+                  <label for="obraSocial" class="form-label">Obra Social <span class="text-body-secondary"></span></label>
+                  <input formControlName="obraSocial" type="text" class="form-control" id="obraSocial" required >
+                  @if(registerForm.get('obraSocial'); as aux) {
+                      @if(aux.invalid && (aux.dirty || aux.touched)){
+                          <div class="alert alert-danger">
+                              {{aux.hasError('required') ? 'Utilice la tabla para seleccionar la obraSocial.' : 'Es inválida.'}}
+                          </div>
+                      }   
+                  }
+                </div>
+
+                <hr class="my-4">
+
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Dar de alta al paciente</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>

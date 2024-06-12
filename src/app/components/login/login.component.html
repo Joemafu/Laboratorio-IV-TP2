@@ -1,0 +1,48 @@
+<main class="form-signin w-100 m-auto">
+  <form [formGroup]="loginForm" (ngSubmit)="buttonEntrar()" class="needs-validation" novalidate>
+    <header></header>
+
+    <h1 class="h3 mb-3 fw-normal m-auto">Ingrese sus credenciales</h1>
+
+    @if(alert!='') {
+      <div class="alert alert-danger">
+          {{alert}}
+      </div>
+    }
+
+    <div class="form-floating">
+      <input formControlName="mail" name="mail" type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="{{mail}}" (keyup.enter)="buttonEntrar()">
+      @if(loginForm.get('mail'); as aux) {
+        @if(aux.invalid && (aux.dirty || aux.touched)){
+            <div class="alert alert-danger">
+                {{aux.hasError('required') ? 'Ingrese su correo.' : 'Ingrese un correo válido.'}}
+            </div>
+        }   
+    }
+      <label for="floatingInput">Correo</label>
+    </div>
+    <div class="form-floating">
+      <input formControlName="pass" name="pass" type="password" class="form-control" id="floatingPassword" placeholder="Password" value="{{pass}}" (keyup.enter)="buttonEntrar()">
+      @if(loginForm.get('pass'); as aux) {
+        @if(aux.invalid && (aux.dirty || aux.touched)){
+            <div class="alert alert-danger">
+                {{aux.hasError('required') ? 'Ingrese su contraseña.' : 'Mínimo 6 caracteres.'}}
+            </div>
+        }   
+    }
+      <label for="floatingPassword">Contraseña</label>
+    </div>
+
+    <button (click)="buttonEntrar()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Iniciar sesión</button>
+<!--     <label for="noAccount">No posee una cuenta?  </label>
+    <a id="noAccount" routerLink="registar/paciente" class="link" style="cursor: pointer;">Registrarse</a>
+ -->
+    </form>
+
+    <hr>
+
+    <button (click)="buttonDemoPaciente()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Paciente Ramirez</button>
+    <button (click)="buttonDemoDr()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Dra. Bruma 😺</button>
+    <button (click)="buttonDemoAdmin()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Admin</button>
+
+</main>
