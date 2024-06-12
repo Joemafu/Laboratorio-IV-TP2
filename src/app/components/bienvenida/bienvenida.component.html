@@ -4,7 +4,8 @@
     
     @if(authService.currentUserSig() == null)
     {
-    <button routerLink="/login" class="btn btn-primary mr-2">Login</button>
+      <button routerLink="/login" class="mx-1 btn btn-primary mr-2">Iniciar Sesión</button>
+      <button routerLink="/registrar/paciente" class="mx-1 btn btn-primary mr-2">Registrarse</button>
     }
     @if(authService.currentUserSig() != null)
     {
