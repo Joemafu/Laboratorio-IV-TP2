@@ -14,12 +14,14 @@ export class UserService {
   private firestore: Firestore = inject(Firestore);
   private PATHUNO: string = 'pacientes';
   private PATHDOS: string = 'especialistas';
-  private pacientesCollection;
-  private especialistasCollection;
+  public paciente$: Observable<Paciente[]>;
+  public especialista$: Observable<Especialista[]>;
+  /* private pacientesCollection;
+  private especialistasCollection; */
 
   constructor() {
-    this.pacientesCollection = collection(this.firestore, this.PATHUNO);
-    this.especialistasCollection = collection(this.firestore, this.PATHDOS);
+    this.paciente$ = this.getPacientes();
+    this.especialista$ = this.getEspecialistas();
   }
 
   getPacientes(): Observable<Paciente[]> {
@@ -33,8 +35,6 @@ export class UserService {
     const queryCol = query(col, orderBy('apellido', 'asc'));
     return collectionData(queryCol, { idField: 'id' }) as Observable<Especialista[]>;
   }
-
-
 
   /* public async agregarEspecialidad(especialidad: Especialidad) {
     try{
@@ -51,23 +51,23 @@ export class UserService {
     return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Especialidad));
   } */
 
-    activarEspecialista(usuario: Usuario) {
-      let docRef = doc(this.firestore, `especialistas/${usuario.uid}`);
-      return updateDoc(docRef, { activo: true });
-    }
-  
-    desactivarEspecialista(usuario: Usuario) {
-      let docRef = doc(this.firestore, `especialistas/${usuario.uid}`);
-      return updateDoc(docRef, { activo: false });
-    }
+  activarEspecialista(usuario: Usuario) {
+    let docRef = doc(this.firestore, `especialistas/${usuario.uid}`);
+    return updateDoc(docRef, { activo: true });
+  }
 
-    activarPaciente(usuario: Usuario) {
-      let docRef = doc(this.firestore, `pacientes/${usuario.uid}`);
-      return updateDoc(docRef, { activo: true });
-    }
-  
-    desactivarPaciente(usuario: Usuario) {
-      let docRef = doc(this.firestore, `pacientes/${usuario.uid}`);
-      return updateDoc(docRef, { activo: false });
-    }
+  desactivarEspecialista(usuario: Usuario) {
+    let docRef = doc(this.firestore, `especialistas/${usuario.uid}`);
+    return updateDoc(docRef, { activo: false });
+  }
+
+  activarPaciente(usuario: Usuario) {
+    let docRef = doc(this.firestore, `pacientes/${usuario.uid}`);
+    return updateDoc(docRef, { activo: true });
+  }
+
+  desactivarPaciente(usuario: Usuario) {
+    let docRef = doc(this.firestore, `pacientes/${usuario.uid}`);
+    return updateDoc(docRef, { activo: false });
+  }
 }

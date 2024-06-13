@@ -60,7 +60,7 @@ export class AuthService {
         const user = userCredential.user;
         if (user)
           {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/bienvenida']);
             resolve('');
             if (user.email) {
               this.currentUser = user.email;

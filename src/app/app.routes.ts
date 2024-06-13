@@ -11,7 +11,7 @@ import { AdministrarUsuariosComponent } from './components/administrar-usuarios/
 
 export const routes: Routes = [
   { 
-      path: '', redirectTo: 'home', pathMatch: 'full'
+      path: '', redirectTo: 'bienvenida', pathMatch: 'full'
   },
   { 
       path: 'login',

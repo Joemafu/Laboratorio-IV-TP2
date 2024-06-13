@@ -40,11 +40,12 @@ export class RegistrarPacienteComponent implements OnInit{
     const minLengthCorreo = Validators.minLength(6);
     const correo = Validators.email;
     const prueba = Validators.pattern('^[a-zA-Z0-9_.-]*$');
-    const soloLetras = Validators.pattern('^[a-zA-Záéíóú\']*$');
+    const nombre = Validators.pattern('^[a-zA-Záéíóú]*$');
+    const apellido = Validators.pattern('^[a-zA-Záéíóú\']*$');
 
     this.registerForm = this.fb.group({
-      nombre: ['', [required, minLength, soloLetras]],
-      apellido: ['', [required, minLength, soloLetras]],
+      nombre: ['', [required, minLength, nombre]],
+      apellido: ['', [required, minLength, apellido]],
       mail: ['', [required, correo]],
       pass: ['', [required, minLengthCorreo]],
       tipoDoc: ['', [required, minLength]],
@@ -61,18 +62,6 @@ export class RegistrarPacienteComponent implements OnInit{
   ngOnInit(): void {}
 
   onSubmit() {
-    /* if (this.registerForm.valid) {
-      const user: Usuario = {
-        ...this.registerForm.value,
-        role: 'patient'
-      };
-      this.authService.register(user, this.registerForm.value.pass).then(() => {
-        this.router.navigate(['/login']);
-      }).catch(error => {
-        console.error('Error during registration:', error);
-      });
-    } */
-
     this.registerForm.markAllAsTouched();
     if (this.registerForm.valid) {
       const paciente: Paciente = this.registerForm.value;
@@ -86,7 +75,7 @@ export class RegistrarPacienteComponent implements OnInit{
             });
           });
         }).then(() => {
-          //this.registerForm.reset();
+          this.registerForm.reset();
         }).catch(error => {
           console.error('RegistrarPacienteComponent - onSubmit()=> agregarPaciente():', error);
           if (paciente.fotoPerfil) {

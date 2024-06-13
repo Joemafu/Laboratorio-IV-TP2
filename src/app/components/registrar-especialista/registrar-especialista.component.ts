@@ -68,7 +68,7 @@ export class RegistrarEspecialistaComponent implements OnInit {
             return this.especialistaService.agregarEspecialista(especialista);
           });
         }).then(() => {
-          //this.registerForm.reset();
+          this.registerForm.reset();
         }).catch(error => {
           console.error('RegistrarEspecialistaComponent - onSubmit()=> agregarEspecialista():', error);
           if (especialista.fotoPerfil) {
