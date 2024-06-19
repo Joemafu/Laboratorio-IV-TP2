@@ -18,16 +18,9 @@ export class TablaEspecialidadesComponent {
   especialidadService: EspecialidadService = inject(EspecialidadService);
   especialidades$!: Observable<Especialidad[]>;
   especialidad: Especialidad = { id: '', especialidad: ''};
-  especialidades: Especialidad[] = [];
-  nextId: number = 1;
 
   ngOnInit (): void {
     this.especialidades$ = this.especialidadService.getEspecialidades();
-
-    this.especialidades$.subscribe(data => {
-      this.especialidades = data;
-      this.nextId = this.especialidades.length + 1;
-    });
   }
 
   seleccionarEspecialidad(especialidadId: string) {
@@ -35,13 +28,7 @@ export class TablaEspecialidadesComponent {
   }
 
   agregarEspecialidad() {
-
-    
     this.especialidadService.agregarEspecialidad(this.especialidad);
     this.especialidad.especialidad = '';
-  }
-
-  generarId() {
-    this.nextId++;
   }
 }

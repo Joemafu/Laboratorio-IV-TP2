@@ -1,35 +1,29 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { EspecialidadService } from '../../services/especialidad.service';
-import { TablaEspecialidadesComponent } from '../tabla-especialidades/tabla-especialidades.component';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Especialidad } from '../../interfaces/especialidad';
-import { Especialista } from '../../models/especialista';
-import { EspecialistaService } from '../../services/especialista.service';
+import { Admin } from '../../models/admin';
+import { AdminService } from '../../services/admin.service';
 import { ImagenUploadService } from '../../services/imagen-upload.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-  selector: 'app-registrar-especialista',
+  selector: 'app-registrar-admin',
   standalone: true,
-  imports: [ ReactiveFormsModule, CommonModule, TablaEspecialidadesComponent, FormsModule, MatIconModule, MatButtonModule, MatMenuModule ],
-  templateUrl: './registrar-especialista.component.html',
-  styleUrl: './registrar-especialista.component.css'
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule ],
+  templateUrl: './registrar-admin.component.html',
+  styleUrl: './registrar-admin.component.css'
 })
-export class RegistrarEspecialistaComponent implements OnInit {
+export class RegistrarAdminComponent  implements OnInit{
   
   fb : FormBuilder = inject(FormBuilder);
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
   registerForm: FormGroup;
-  especialidadService: EspecialidadService = inject(EspecialidadService);
-  especialistaService: EspecialistaService = inject(EspecialistaService);
+  adminService: AdminService = inject(AdminService);
   imagenUploadService: ImagenUploadService = inject(ImagenUploadService);
   archivoSeleccionado: File | null = null;
+  errorMensaje: string = '';
 
   constructor() {
     const required = Validators.required;
@@ -53,9 +47,8 @@ export class RegistrarEspecialistaComponent implements OnInit {
       nroDocumento: ['', [required, minDni, maxDni, numMinDni, numMaxDni]],
       fechaNac: ['', [required]],
       fotoPerfil: ['', [required, formatoImagen]],
-      especialidad: ['', [required]],
-      rol: 'especialista',
-      activo: false
+      rol: 'admin',
+      activo: true
     });
   }
 
@@ -64,36 +57,31 @@ export class RegistrarEspecialistaComponent implements OnInit {
   onSubmit() {
     this.registerForm.markAllAsTouched();
     if (this.registerForm.valid) {
-      const especialista: Especialista = this.registerForm.value;
+      const admin: Admin = this.registerForm.value;
       if (this.archivoSeleccionado) {
-        this.imagenUploadService.subirImagen(this.archivoSeleccionado, this.registerForm.get('nroDocumento')?.value,1).then((url) => {
-          especialista.fotoPerfil = url;
-          this.authService.register(this.registerForm.value.mail, this.registerForm.value.pass).then(() => {
-            return this.especialistaService.agregarEspecialista(especialista);
+        this.imagenUploadService.subirImagen(this.archivoSeleccionado, this.registerForm.get('nroDocumento')?.value,1).then((urlUno) => {
+          admin.fotoPerfil = urlUno;
+          this.authService.register(this.registerForm.value.mail, this.registerForm.value.pass).then((mensajeError) => {
+            this.errorMensaje = mensajeError;
+            return this.adminService.agregarAdmin(admin);
           });
         }).then(() => {
           this.registerForm.reset();
         }).catch(error => {
-          console.error('RegistrarEspecialistaComponent - onSubmit()=> agregarEspecialista():', error);
-          if (especialista.fotoPerfil) {
-            this.imagenUploadService.deleteImage(especialista.fotoPerfil).catch(deleteError => {
-              console.error('RegistrarEspecialistaComponent - onSubmit()=> deleteImage():', deleteError);
+          console.error('RegistrarAdminComponent - onSubmit()=> agregarAdmin():', error);
+          if (admin.fotoPerfil) {
+            this.imagenUploadService.deleteImage(admin.fotoPerfil).catch(deleteError => {
+              console.error('RegistrarAdminComponent - onSubmit()=> deleteImage() error borrando imagen:', deleteError);
             });
           }
         });
       } else {
-        console.error('RegistrarEspecialistaComponent - onSubmit()=> agregarEspecialista():', 'No se seleccionó archivo');
+        console.error('RegistrarAdminComponent - onSubmit()=> agregarAdmin():', 'No se seleccionó el archivo');
       }
     }
   }
 
-  onEspecialidadSeleccionada(id: string): void {
-    this.especialidadService.getEspecialidadById(id).subscribe((espec: Especialidad) => {
-      this.registerForm.patchValue({ especialidad: espec.especialidad});
-    });
-  }
-
-  onFileSelected(event: Event) : void {
+  onFileSelectedUno(event: Event) : void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];

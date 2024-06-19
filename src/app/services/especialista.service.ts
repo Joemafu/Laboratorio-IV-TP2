@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { Especialista } from '../interfaces/especialista';
+import { Especialista } from '../models/especialista';
 import { map } from 'rxjs/operators';
 
 @Injectable({

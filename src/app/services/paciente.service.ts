@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { Paciente } from '../interfaces/paciente';
+import { Paciente } from '../models/paciente';
 import { map } from 'rxjs/operators';
+import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class PacienteService {
 
   private firestore: Firestore = inject(Firestore);
   private PATH: string = 'pacientes';
-  private pacientesCollection;
+  public pacientesCollection;
 
   constructor() {
     this.pacientesCollection = collection(this.firestore, this.PATH);
@@ -29,6 +30,7 @@ export class PacienteService {
       let docRef = await addDoc(pacientes, { paciente: paciente});
       return docRef.id;
     }catch(error){
+      console.error('PacienteService - agregarPaciente():', error);
       return '';
     }
   }
@@ -42,6 +44,8 @@ export class PacienteService {
       const docRef = doc(this.firestore, `pacientes/${pacienteId}`);
       return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Paciente));
     }
+
+    
 
 }
 

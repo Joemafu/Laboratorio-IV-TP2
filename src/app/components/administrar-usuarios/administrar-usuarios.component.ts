@@ -1,10 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { Usuario } from '../../interfaces/usuario';
+import { Usuario } from '../../models/usuario';
 import { CommonModule } from '@angular/common';
-import { Paciente } from '../../interfaces/paciente';
-import { Especialista } from '../../interfaces/especialista';
-import { Subscription } from 'rxjs';
+import { Paciente } from '../../models/paciente';
+import { Especialista } from '../../models/especialista';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-administrar-usuarios',
@@ -15,40 +15,17 @@ import { Subscription } from 'rxjs';
 })
 export class AdministrarUsuariosComponent implements OnInit {
 
-  pacientes: Paciente[] = [];
-  especialistas: Especialista[] = [];
-  pacienteService: UserService = inject(UserService);
-  especialistaService: UserService = inject(UserService);
   userService: UserService = inject(UserService);
-  pacienteSubscription: Subscription = new Subscription();
-  especialistaSubscription: Subscription = new Subscription();
+  especialistas$!: Observable<Especialista[]>;
+  pacientes$!: Observable<Paciente[]>;
 
-  constructor() {}
+  constructor() {
+
+  }
 
   ngOnInit(): void {
-    this.pacienteSubscription = this.pacienteService.paciente$.subscribe ((paciente) => {
-      if (paciente) {
-        this.pacientes = paciente;
-      }
-    });
-
-    this.especialistaSubscription = this.especialistaService.especialista$.subscribe ((especialista) => {
-      if (especialista) {
-        this.especialistas = especialista;
-      }
-    });
-
-    /* console.log(this.pacientes);
-    console.log(this.especialistas);
-
-    this.pacienteService.getPacientes().subscribe(data => {
-      this.pacientes = data;
-      console.log(this.pacientes);
-    });
-    this.especialistaService.getEspecialistas().subscribe(data => {
-      this.especialistas = data;
-      console.log(this.especialistas);
-    }); */
+    this.especialistas$ = this.userService.getEspecialistas();
+    this.pacientes$ = this.userService.getPacientes();
   }
 
   activarUsuario(usuario: Usuario) {

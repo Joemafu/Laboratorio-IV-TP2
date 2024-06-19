@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Auth, signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, sendEmailVerification, sendPasswordResetEmail } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Usuario } from '../interfaces/usuario';
 
@@ -19,15 +19,11 @@ export class AuthService {
     return new Promise<string>((resolve) => {
       createUserWithEmailAndPassword(this.firebaseAuth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        if (user)
-          {
-            //this.router.navigate(['/home']);
-            resolve('');
-            if (user.email) {
-              this.currentUser = user.email;
-            }            
-          }   
+
+        this.sendVerificationEmail(userCredential.user).then(() => {
+          resolve('');
+          //this.logout();
+        });
         })
         .catch(err => {
           let mensajeError = '';
@@ -57,15 +53,20 @@ export class AuthService {
     return new Promise<string>((resolve) => {
       signInWithEmailAndPassword(this.firebaseAuth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        if (user)
-          {
-            this.router.navigate(['/bienvenida']);
-            resolve('');
-            if (user.email) {
-              this.currentUser = user.email;
-            }     
-          }      
+        if (userCredential.user && userCredential.user.emailVerified)
+        {
+          const user = userCredential.user;
+          this.router.navigate(['/bienvenida']);
+          resolve('');
+          if (user.email) {
+            this.currentUser = user.email;
+          }     
+        } 
+        else
+        {
+          resolve('Verifique su correo electrónico para activar su cuenta.');
+          this.logout();
+        }     
       })
       .catch( err => {
         let mensajeError = '';
@@ -93,4 +94,47 @@ export class AuthService {
       this.router.navigate(['/login']);
     });
   }
+
+  async resetPassword(email: string): Promise<string> {
+    return new Promise<string>((resolve) => {
+      sendPasswordResetEmail(this.firebaseAuth, email).then(() => {
+        resolve('Se ha enviado un correo para restablecer la contraseña.');
+      })
+      .catch(err => {
+        let mensajeError = '';
+        switch (err.message) {
+          case 'Firebase: Error (auth/invalid-email).':
+            mensajeError = 'Ingrese un correo válido.';
+            break;
+          case 'Firebase: Error (auth/user-not-found).':
+            mensajeError = 'El correo indicado no se encuentra registrado.';
+            break;
+          default:
+            mensajeError = 'Error';
+            break;
+        }
+        resolve(mensajeError);
+      });
+    });
+  }
+
+  async sendVerificationEmail(user: any): Promise<string> {
+    sendEmailVerification(user).then(() => {
+      console.log('Email de verificación enviado');
+    })
+    .catch(err => {
+      let mensajeError = '';
+      switch (err.message) {
+        case 'Firebase: Error (auth/too-many-requests).':
+          mensajeError = 'Demasiados intentos. Intente más tarde.';
+          break;
+        default:
+          mensajeError = 'Error al enviar el correo de verificación.';
+          break;
+      }
+      return mensajeError;
+    });
+    return Promise.resolve('Email de verificación enviado');
+  }
+
 }

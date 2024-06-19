@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
-import { Usuario } from '../interfaces/usuario';
-import { Especialista } from '../interfaces/especialista';
-import { Paciente } from '../interfaces/paciente'
+import { Usuario } from '../models/usuario';
+import { Especialista } from '../models/especialista';
+import { Paciente } from '../models/paciente'
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -26,15 +26,18 @@ export class UserService {
 
   getPacientes(): Observable<Paciente[]> {
     const col = collection(this.firestore, this.PATHUNO);
-    const queryCol = query(col, orderBy('apellido', 'asc'));
-    return collectionData(queryCol, { idField: 'id' }) as Observable<Paciente[]>;
+    return collectionData(col, { idField: 'id' }) as Observable<Paciente[]>;
   }
 
   getEspecialistas(): Observable<Especialista[]> {
     const col = collection(this.firestore, this.PATHDOS);
-    const queryCol = query(col, orderBy('apellido', 'asc'));
-    return collectionData(queryCol, { idField: 'id' }) as Observable<Especialista[]>;
+    return collectionData(col, { idField: 'id' }) as Observable<Especialista[]>;
   }
+
+  /* getUsersForTable(): Observable<Especialista[]> {
+    let c = collection(this.firestore, 'especialistas');
+    return collectionData(c, { idField: 'id' }) as Observable<Especialista[]>;
+  } */
 
   /* public async agregarEspecialidad(especialidad: Especialidad) {
     try{

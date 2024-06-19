@@ -5,12 +5,14 @@
     @if(authService.currentUserSig() == null)
     {
       <button routerLink="/login" class="mx-1 btn btn-primary mr-2">Iniciar Sesión</button>
-      <button routerLink="/registrar/paciente" class="mx-1 btn btn-primary mr-2">Registrarse</button>
+
     }
+    <button routerLink="/registrar" class="mx-1 btn btn-secondary">Registro</button>
+<!--     <button routerLink="/registrar/paciente" class="mx-1 btn btn-secondary">Registro Paciente</button>
+    <button routerLink="/registrar/especialista" class="mx-1 btn btn-secondary">Registro Especialista</button> -->
     @if(authService.currentUserSig() != null)
     {
-    <button routerLink="/registrar/paciente" class="mx-1 btn btn-secondary">Registro Paciente</button>
-    <button routerLink="/registrar/especialista" class="mx-1 btn btn-secondary">Registro Especialista</button>
+
     }
   </div>
 </div>

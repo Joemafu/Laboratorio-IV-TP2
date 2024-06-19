@@ -23,16 +23,24 @@
   <div class="collapse navbar-collapse" id="collapsibleNavId">
     <ul class="navbar-nav me-auto mt-2 mt-lg-0">
 
+      <li class="nav-item">
+        <a class="nav-link" href="/registrar">Registro</a>
+      </li>
+
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="/registrar/especialista">Registrar especialista</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/registrar/paciente">Registrar paciente</a>
+      </li> -->
+
+      <!-- <li>
+        <mat-slide-toggle>Toggle me!</mat-slide-toggle>
+      </li> -->
+      
       @if(authService.currentUserSig() != null)
       {
-        <li class="nav-item">
-          <a class="nav-link" href="/registrar/especialista">Nuevo especialista</a>
-        </li>
-  
-        <li class="nav-item">
-          <a class="nav-link" href="/registrar/paciente">Nuevo paciente</a>
-        </li>
-  
         <li class="nav-item">
           <a class="nav-link" href="administrar-usuarios">Administrar usuarios</a>
         </li>
@@ -50,9 +58,6 @@
       {
         <li>
           <a class="nav-link" href="/login" >Iniciar Sesión</a>
-        </li>
-        <li>
-          <a class="nav-link" href="/registrar/paciente" >Registrarse</a>
         </li>
       }
       
@@ -100,8 +105,7 @@
 </div>
 
 <div class="container">
-  <footer class="pt-3 mt-4 text-body-secondary border-top">
+  <footer class="pt-3 my-4 text-body-secondary border-top sticky-footer">
     Joel Mahafud &copy; 2024
   </footer>
 </div>
-

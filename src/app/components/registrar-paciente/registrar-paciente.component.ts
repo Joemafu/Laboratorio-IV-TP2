@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 //import { Especialidad } from '../../interfaces/especialidad';
-import { Paciente } from '../../interfaces/paciente';
+import { Paciente } from '../../models/paciente';
 import { PacienteService } from '../../services/paciente.service';
 import { ImagenUploadService } from '../../services/imagen-upload.service';
 
@@ -28,6 +28,7 @@ export class RegistrarPacienteComponent implements OnInit{
   imagenUploadService: ImagenUploadService = inject(ImagenUploadService);
   archivoSeleccionadoUno: File | null = null;
   archivoSeleccionadoDos: File | null = null;
+  errorMensaje: string = '';
 
 
   constructor() {
@@ -38,10 +39,10 @@ export class RegistrarPacienteComponent implements OnInit{
     const numMaxDni = Validators.max(99999999);
     const minLength = Validators.minLength(2);
     const minLengthCorreo = Validators.minLength(6);
-    const correo = Validators.email;
-    const prueba = Validators.pattern('^[a-zA-Z0-9_.-]*$');
-    const nombre = Validators.pattern('^[a-zA-Záéíóú]*$');
-    const apellido = Validators.pattern('^[a-zA-Záéíóú\']*$');
+    const correo = Validators.pattern('^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    const nombre = Validators.pattern('^[a-zA-Z áéíóú]*$');
+    const apellido = Validators.pattern('^[a-zA-Z áéíóú\']*$');
+    const formatoImagen = Validators.pattern(/\.(jpg|jpeg|png|webp)$/i);
 
     this.registerForm = this.fb.group({
       nombre: ['', [required, minLength, nombre]],
@@ -51,8 +52,8 @@ export class RegistrarPacienteComponent implements OnInit{
       tipoDoc: ['', [required, minLength]],
       nroDocumento: ['', [required, minDni, maxDni, numMinDni, numMaxDni]],
       fechaNac: ['', [required]],
-      fotoPerfilUno: ['', [required]],
-      fotoPerfilDos: ['', [required]],
+      fotoPerfil: ['', [required, formatoImagen]],
+      fotoPerfilDos: ['', [required, formatoImagen]],
       obraSocial: ['', [required]],
       rol: 'paciente',
       activo: true
@@ -66,16 +67,17 @@ export class RegistrarPacienteComponent implements OnInit{
     if (this.registerForm.valid) {
       const paciente: Paciente = this.registerForm.value;
       if (this.archivoSeleccionadoUno && this.archivoSeleccionadoDos) {
-        this.imagenUploadService.subirImagen(this.archivoSeleccionadoUno).then((urlUno) => {
+        this.imagenUploadService.subirImagen(this.archivoSeleccionadoUno, this.registerForm.get('nroDocumento')?.value,1).then((urlUno) => {
           paciente.fotoPerfil = urlUno;
-          this.imagenUploadService.subirImagen(this.archivoSeleccionadoDos!).then((urlDos) => {
+          this.imagenUploadService.subirImagen(this.archivoSeleccionadoDos!, this.registerForm.get('nroDocumento')?.value,2).then((urlDos) => {
             paciente.fotoPerfilDos = urlDos;
-            this.authService.register(this.registerForm.value.mail, this.registerForm.value.pass).then(() => {
+            this.authService.register(this.registerForm.value.mail, this.registerForm.value.pass).then((mensajeError) => {
+              this.errorMensaje = mensajeError;
               return this.pacienteService.agregarPaciente(paciente);
             });
           });
         }).then(() => {
-          this.registerForm.reset();
+          //this.registerForm.reset();
         }).catch(error => {
           console.error('RegistrarPacienteComponent - onSubmit()=> agregarPaciente():', error);
           if (paciente.fotoPerfil) {

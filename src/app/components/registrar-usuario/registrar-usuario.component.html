@@ -1,0 +1,36 @@
+<div class="button-container d-flex flex-column align-items-center" >
+    <button id="botonEspecialista" data-mdb-button-init data-mdb-ripple-init 
+            class="mt-4 btn btn-lg btn-primary rounded-circle botonSVG"
+            [ngClass]="{'botonSVGSeleccionado': mostrarFormE}"
+            (click)="mostrarFormEspecialista()">
+            <img src="../../../assets/especialista.svg" alt="especialista">
+    </button>
+    <button id="botonPaciente" data-mdb-button-init data-mdb-ripple-init 
+            color="primary"
+            class="mt-4 btn btn-lg btn-primary rounded-circle botonSVG"
+            [ngClass]="{'botonSVGSeleccionado': mostrarFormP}"
+            (click)="mostrarFormPaciente()">
+            <img src="../../../assets/paciente.svg" alt="paciente">
+    </button>
+    <button 
+        [hidden]="!esAdmin"
+        id="botonAdmin" data-mdb-button-init data-mdb-ripple-init 
+        color="primary"
+        class="mt-4 btn btn-lg btn-primary rounded-circle botonSVG"
+        [ngClass]="{'botonSVGSeleccionado': mostrarFormA}"
+        (click)="mostrarFormAdmin()">
+        <img src="../../../assets/admin.svg" alt="admin">
+    </button>
+
+    <hr>
+
+    @if (mostrarFormE) {
+        <app-registrar-especialista></app-registrar-especialista>
+    }
+    @if (mostrarFormP) {
+        <app-registrar-paciente></app-registrar-paciente>
+    }
+    @if (mostrarFormA) {
+        <app-registrar-admin></app-registrar-admin>
+    }
+</div>

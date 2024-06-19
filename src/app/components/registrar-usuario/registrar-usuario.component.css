@@ -1,0 +1,14 @@
+.botonSVG{
+    width: 90px; 
+    height: 90px; 
+    background-color: #114d79; 
+    border: none;
+}
+
+.botonSVG:hover{
+    background-color: #1c79b8;
+}
+
+.botonSVGSeleccionado{
+    background-color: #1c79b8 !important;
+}

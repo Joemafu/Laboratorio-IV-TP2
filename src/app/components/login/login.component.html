@@ -1,3 +1,4 @@
+
 <main class="form-signin w-100 m-auto">
   <form [formGroup]="loginForm" (ngSubmit)="buttonEntrar()" class="needs-validation" novalidate>
     <header></header>
@@ -34,15 +35,37 @@
     </div>
 
     <button (click)="buttonEntrar()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Iniciar sesión</button>
-<!--     <label for="noAccount">No posee una cuenta?  </label>
-    <a id="noAccount" routerLink="registar/paciente" class="link" style="cursor: pointer;">Registrarse</a>
- -->
+    <!-- <label for="noAccount">Olvidó su contraseña?</label> -->
+<!--     <a id="noAccount" routerLink="/#" class="link" style="cursor: pointer;">Recuperar contraseña</a> -->
+
     </form>
 
-    <hr>
+    <div class="fab-container">
+      <div class="fab-buttons" [class.open]="fabAbierto">
+        <button mat-mini-fab color="primary" (click)="accesoUno()" class="fab-sub-button">
+          <img src="https://firebasestorage.googleapis.com/v0/b/clinicatp2laboiv.appspot.com/o/imagenes%2F11111109-1-jpg?alt=media&token=a45a999b-61ff-4262-8e00-9870d9aea6e4" alt=""/>
+        </button>
+        <button mat-mini-fab color="primary" (click)="accesoDos()"  class="fab-sub-button">
+          <img src="https://firebasestorage.googleapis.com/v0/b/clinicatp2laboiv.appspot.com/o/imagenes%2F22222222-1-jpg?alt=media&token=c4e0c400-1525-460f-9756-0c112a45fa93" alt=""/>
+        </button>
+        <button mat-mini-fab color="primary" (click)="accesoTres()"  class="fab-sub-button">
+          <img src="https://firebasestorage.googleapis.com/v0/b/clinicatp2laboiv.appspot.com/o/imagenes%2F33333333-1-png?alt=media&token=d07031a6-1a34-4c9a-9303-c1d5315c9452" alt=""/>
+        </button>
+        <button mat-mini-fab color="primary" (click)="accesoCuatro()" class="fab-sub-button">
+          <img src="https://firebasestorage.googleapis.com/v0/b/clinicatp2laboiv.appspot.com/o/imagenes%2F44444444-1-jpg?alt=media&token=854dafb2-d514-4260-9428-65fa1791b37e" alt=""/>
+        </button>
+        <button mat-mini-fab color="primary" (click)="accesoCinco()"  class="fab-sub-button">
+          <img src="https://firebasestorage.googleapis.com/v0/b/clinicatp2laboiv.appspot.com/o/imagenes%2F55555555-1-webp?alt=media&token=aad62c0b-beb3-4085-b7a0-b55a6a967251" alt=""/>
+        </button>
+        <button mat-mini-fab color="primary" (click)="accesoSeis()"  class="fab-sub-button">
+          <img src="https://firebasestorage.googleapis.com/v0/b/clinicatp2laboiv.appspot.com/o/imagenes%2F77777777-1-jpg?alt=media&token=6aa3deaa-64af-4819-8030-114ba021d1ec" alt=""/>
+        </button>
+      </div>
 
-    <button (click)="buttonDemoPaciente()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Paciente Ramirez</button>
-    <button (click)="buttonDemoDr()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Dra. Bruma 😺</button>
-    <button (click)="buttonDemoAdmin()" class="btn btn-primary w-100 py-2 mb-3" type="submit">Admin</button>
-
+      <button mat-fab color="primary" class="fab-button" (click)="switchFab()">
+        <img src="../../../assets/usuariosDemo.svg" alt="User Profile" class="fav-button-image">
+      </button>
+    
+      
+    </div>
 </main>

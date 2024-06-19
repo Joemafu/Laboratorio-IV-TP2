@@ -11,26 +11,33 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let usuario of especialistas">
-        <td>{{ usuario.nombre }}</td> 
-        <td>{{ usuario.apellido }}</td>
-        <td>{{ usuario.mail }}</td>
-        <td>{{ usuario.rol }}</td>
-        <td>
-          <button *ngIf="!usuario.activo" (click)="activarUsuario(usuario)" class="btn btn-success">Habilitar</button>
-          <button *ngIf="usuario.activo" (click)="desactivarUsuario(usuario)" class="btn btn-danger">Deshabilitar</button>
-        </td>
-      </tr>
-      <tr *ngFor="let usuario of pacientes">
-        <td>{{ usuario.nombre }}</td> 
-        <td>{{ usuario.apellido }}</td>
-        <td>{{ usuario.mail }}</td>
-        <td>{{ usuario.rol }}</td>
-        <td>
-          <button *ngIf="!usuario.activo" (click)="activarUsuario(usuario)" class="btn btn-success">Habilitar</button>
-          <button *ngIf="usuario.activo" (click)="desactivarUsuario(usuario)" class="btn btn-danger">Deshabilitar</button>
-        </td>
-      </tr>
+
+      <div *ngIf="especialistas$ | async as especialistas">
+        <tr *ngFor="let usuario of especialistas">
+          <td>{{ usuario.nombre }}</td> 
+          <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.mail }}</td>
+          <td>{{ usuario.rol }}</td>
+          <td>
+            <button *ngIf="!usuario.activo" (click)="activarUsuario(usuario)" class="btn btn-success">Habilitar</button>
+            <button *ngIf="usuario.activo" (click)="desactivarUsuario(usuario)" class="btn btn-danger">Deshabilitar</button>
+          </td>
+        </tr>
+      </div>
+
+      <div *ngIf="pacientes$ | async as pacientes">
+        <tr *ngFor="let usuario of pacientes">
+          <td>{{ usuario.nombre }}</td> 
+          <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.mail }}</td>
+          <td>{{ usuario.rol }}</td>
+          <td>
+            <button *ngIf="!usuario.activo" (click)="activarUsuario(usuario)" class="btn btn-success">Habilitar</button>
+            <button *ngIf="usuario.activo" (click)="desactivarUsuario(usuario)" class="btn btn-danger">Deshabilitar</button>
+          </td>
+        </tr>
+      </div>     
+      
     </tbody>
   </table>
 </div>

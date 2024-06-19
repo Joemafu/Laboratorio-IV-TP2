@@ -11,6 +11,13 @@
 
       <div class="col-md-7 col-lg-8">
           <h4 class="mb-3">Ingrese los datos del paciente:</h4>
+          @if(errorMensaje !== "") {
+
+            <div class="alert alert-danger">
+                {{errorMensaje}}
+            </div>
+
+        }
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
               <div class="row g-3">
 
@@ -102,12 +109,12 @@
                   </div>
 
                   <div class="mb-3">
-                    <label for="fotoPerfilUno" class="form-label">Foto 1</label>
-                    <input formControlName="fotoPerfilUno" class="form-control" type="file" (change)="onFileSelectedUno($event)" id="fotoPerfilUno" required>
-                    @if(registerForm.get('fotoPerfilUno'); as aux) {
+                    <label for="fotoPerfil" class="form-label">Foto 1</label>
+                    <input formControlName="fotoPerfil" class="form-control" type="file" (change)="onFileSelectedUno($event)" id="fotoPerfil" required>
+                    @if(registerForm.get('fotoPerfil'); as aux) {
                         @if(aux.invalid && (aux.dirty || aux.touched)){
                             <div class="alert alert-danger">
-                                {{aux.hasError('required') ? 'Por favor seleccione una foto en formato ".jpg".' : 'Es inválido.'}}
+                                {{aux.hasError('required') ? 'Por favor seleccione una foto en formato .jpg .jpeg .png o .webp' : 'Solo imágenes en formato .jpg .jpeg .png o .webp'}}
                             </div>
                         }   
                     }
@@ -119,7 +126,7 @@
                   @if(registerForm.get('fotoPerfilDos'); as aux) {
                       @if(aux.invalid && (aux.dirty || aux.touched)){
                           <div class="alert alert-danger">
-                              {{aux.hasError('required') ? 'Por favor seleccione una foto en formato ".jpg".' : 'Es inválido.'}}
+                            {{aux.hasError('required') ? 'Por favor seleccione una foto en formato .jpg .jpeg .png o .webp' : 'Solo imágenes en formato .jpg .jpeg .png o .webp'}}
                           </div>
                       }   
                   }

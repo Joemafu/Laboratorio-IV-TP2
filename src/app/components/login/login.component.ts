@@ -3,12 +3,15 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, FormsModule, Validators } 
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Usuario } from '../../interfaces/usuario';
+import { Usuario } from '../../models/usuario';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ FormsModule, CommonModule, ReactiveFormsModule ],
+  imports: [ FormsModule, CommonModule, ReactiveFormsModule, MatIconModule, MatButtonModule, MatMenuModule ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -22,6 +25,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
+  fabAbierto: boolean = false;
 
   constructor() {
     const minLength = Validators.minLength(6);
@@ -36,24 +40,45 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  buttonDemoDr()
+  accesoUno()
   {
-    this.mail="Bruma@correo.com";
-    this.pass="brumita";
+    this.mail="hkskjlhwo@mozmail.com";
+    this.pass="harveydent";
     this.loginForm.setValue({mail: this.mail, pass: this.pass});
   }
 
-  buttonDemoAdmin()
+  accesoDos()
   {
-    this.mail="Admin@correo.com";
+    this.mail="dq2r7xp88@mozmail.com";
+    this.pass="bobesponja";
+    this.loginForm.setValue({mail: this.mail, pass: this.pass});
+  }
+
+  accesoTres()
+  {
+    this.mail="w12papab7@mozmail.com";
+    this.pass="randymarsh";
+    this.loginForm.setValue({mail: this.mail, pass: this.pass});
+  }
+
+  accesoCuatro()
+  {
+    this.mail="alvpqz8u0@mozmail.com";
+    this.pass="nickriviera";
+    this.loginForm.setValue({mail: this.mail, pass: this.pass});
+  }
+
+  accesoCinco()
+  {
+    this.mail="xhzays0dj@mozmail.com";
+    this.pass="juliushibbert";
+    this.loginForm.setValue({mail: this.mail, pass: this.pass});
+  }
+
+  accesoSeis()
+  {
+    this.mail="joe_mafu@hotmail.com";
     this.pass="3l4dm1n";
-    this.loginForm.setValue({mail: this.mail, pass: this.pass});
-  }
-
-  buttonDemoPaciente()
-  {
-    this.mail="Ramirez@correo.com";
-    this.pass="mister.ramirez";
     this.loginForm.setValue({mail: this.mail, pass: this.pass});
   }
 
@@ -66,7 +91,9 @@ export class LoginComponent implements OnInit {
       this.alert = alert;
       this.mail = "";
       this.pass = "";
-      this.router.navigateByUrl('/bienvenida');
+      if (alert === '') {
+        this.router.navigateByUrl('/bienvenida');
+      }
     }).catch(error => {
       console.error('login.component - login()', error);
     });
@@ -74,5 +101,10 @@ export class LoginComponent implements OnInit {
     else {
       this.loginForm.markAllAsTouched();
     }    
+  }
+
+  switchFab()
+  {
+    this.fabAbierto = !this.fabAbierto;
   }
 }

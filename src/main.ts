@@ -1,13 +1,15 @@
 /* 
 
-* Botones de Acceso rápido
-- Deben ser botones cuadrados con bordes redondeados
-- Deben tener la imagen de perfil del usuario
-- Deben estar a la derecha del login, uno abajo del otro, 6 usuarios (3 pacientes, 2 especialistas, 1 admin)
+* Botones de Acceso rápido 
+- Debe ser botones favbutton 
+- Debe tener la imagen de perfil del usuario 
+- Debe estar en la esquina inferior derecha de la pantalla login. 
+  6 usuarios. (3 pacientes, 2 especialistas, 1 admin) 
 
-* Registro de usuarios
-- Al ingresar a la página solo se deben ver 2 imágenes que represente a un paciente o especialista, según esa elección mostrará un formulario correspondiente.
-- Estas imágenes deben estar en botones cuadrados con bordes redondeados
+* Registro de usuarios 
+- Al ingresar a la página solo se deben ver 2 botones con la imagen que represente un paciente o especialista,
+  según esa elección mostrará el formulario correspondiente. 
+- Estas imagenes tienen que estar en botones redondos uno al abajo del otro. 
 
 */
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -20,3 +22,9 @@ const app = initializeApp(firebaseConfig);
 
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
+
+  /* 
+  
+      TENGO QUE VER DE ACTIVAR LA CUENTA DEL DR NICK RIVIERA.
+
+  */

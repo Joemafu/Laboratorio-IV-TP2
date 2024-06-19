@@ -1,16 +1,23 @@
 <div class="container">
     <div class="py-5 text-center">
-      <h2>Alta de especialista</h2>
+      <h2>Alta de Admin</h2>
     </div>
   
     <div class="row g-5">
   
-        <div class="col-md-5 col-lg-4 order-md-last">
+        <!-- <div class="col-md-5 col-lg-4 order-md-last">
             <app-tabla-especialidades (especialidadSeleccionada)="onEspecialidadSeleccionada($event)"></app-tabla-especialidades>
-        </div>
+        </div> -->
   
         <div class="col-md-7 col-lg-8">
-            <h4 class="mb-3">Ingrese los datos del especialista:</h4>
+            <h4 class="mb-3">Ingrese los datos del Admin:</h4>
+            @if(errorMensaje !== "") {
+  
+              <div class="alert alert-danger">
+                  {{errorMensaje}}
+              </div>
+  
+          }
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
                 <div class="row g-3">
   
@@ -37,7 +44,7 @@
                           }   
                       }
                     </div>
-
+  
                     <div class="col-sm-12">
                       <label for="mail" class="form-label">Correo</label>
                       <input formControlName="mail" type="email" class="form-control" id="mail" required>
@@ -49,7 +56,7 @@
                           }   
                       }
                     </div>
-
+  
                     <div class="col-sm-12">
                       <label for="pass" class="form-label">Contraseña</label>
                       <input formControlName="pass" type="password" class="form-control" id="pass" required>
@@ -61,7 +68,7 @@
                           }   
                       }
                     </div>
-
+  
                     <div class="col-sm-6">
                       <label for="tipoDoc" class="form-label">Tipo de documento</label>
                       <select formControlName="tipoDoc" class="form-select form-control" id="tipoDoc" value="DNI">
@@ -76,7 +83,7 @@
                         }   
                       }
                     </div>
-
+  
                     <div class="col-sm-6">
                         <label for="nroDocumento" class="form-label">Número de documento</label>
                         <input formControlName="nroDocumento" type="number" class="form-control" id="nroDocumento" required>
@@ -88,7 +95,7 @@
                             }   
                         }
                     </div>
-
+  
                     <div class="col-sm-12">
                         <label for="fechaNac" class="form-label">Fecha de nacimiento</label>
                         <input formControlName="fechaNac" type="date" class="form-control" id="fechaNac" required>
@@ -100,34 +107,22 @@
                             }   
                         }
                     </div>
-
+  
                     <div class="mb-3">
                       <label for="fotoPerfil" class="form-label">Foto</label>
-                      <input formControlName="fotoPerfil" class="form-control" type="file" (change)="onFileSelected($event)" id="fotoPerfil" required>
+                      <input formControlName="fotoPerfil" class="form-control" type="file" (change)="onFileSelectedUno($event)" id="fotoPerfil" required>
                       @if(registerForm.get('fotoPerfil'); as aux) {
                           @if(aux.invalid && (aux.dirty || aux.touched)){
                               <div class="alert alert-danger">
-                                {{aux.hasError('required') ? 'Por favor seleccione una foto en formato .jpg .jpeg .png o .webp' : 'Solo imágenes en formato .jpg .jpeg .png o .webp'}}
+                                  {{aux.hasError('required') ? 'Por favor seleccione una foto en formato .jpg .jpeg .png o .webp' : 'Solo imágenes en formato .jpg .jpeg .png o .webp'}}
                               </div>
                           }   
                       }
                   </div>
-        
-                  <div class="col-12">
-                    <label for="especialidad" class="form-label">Seleccione la especialidad ejercida <span class="text-body-secondary"></span></label>
-                    <input formControlName="especialidad" readonly type="text" class="form-control" id="especialidad" required >
-                    @if(registerForm.get('especialidad'); as aux) {
-                        @if(aux.invalid && (aux.dirty || aux.touched)){
-                            <div class="alert alert-danger">
-                                {{aux.hasError('required') ? 'Utilice la tabla para seleccionar la especialidad.' : 'Es inválida.'}}
-                            </div>
-                        }   
-                    }
-                  </div>
-
+  
                   <hr class="my-4">
-
-                  <button class="w-100 btn btn-primary btn-lg" type="submit">Dar de alta al especialista</button>
+  
+                  <button class="w-100 btn btn-primary btn-lg" type="submit">Dar de alta al Admin</button>
                 </div>
             </form>
         </div>

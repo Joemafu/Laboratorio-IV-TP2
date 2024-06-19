@@ -12,9 +12,10 @@ export class ImagenUploadService {
     this.storage = getStorage();
   }
 
-  subirImagen(file: File): Promise<string> {
+  subirImagen(file: File, nroDocumento : number, nroDeFoto : Number): Promise<string> {
     return new Promise((resolve, reject) => {
-      const path : string = `imagenes/${file.name}`;
+
+      const path : string = `imagenes/${nroDocumento}-${nroDeFoto}-${(file.name.split('.').pop())}`;
       console.log('Se subio la imagen con este path: ', path);
       const storageRef = ref(this.storage, path);
       const uploadTask = uploadBytesResumable(storageRef, file);
