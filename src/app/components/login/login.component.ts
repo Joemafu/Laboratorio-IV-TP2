@@ -30,10 +30,10 @@ export class LoginComponent implements OnInit {
   constructor() {
     const minLength = Validators.minLength(6);
     const required = Validators.required;
-    const mailPattern = Validators.email;
+    const correo = Validators.pattern('^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
     this.loginForm = this.fb.group({
-      mail: ['', [required, minLength, mailPattern]],
+      mail: ['', [required, minLength, correo]],
       pass: ['', [required, minLength]],
     });
   }

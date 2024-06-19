@@ -1,4 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
+import { Firestore, collection, doc, getDocs, query, where } from '@angular/fire/firestore';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, sendEmailVerification, sendPasswordResetEmail } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Usuario } from '../interfaces/usuario';
@@ -9,6 +10,7 @@ import { Usuario } from '../interfaces/usuario';
 export class AuthService {
   private firebaseAuth: Auth = inject(Auth);
   private router: Router = inject(Router);
+  private firestore: Firestore = inject(Firestore);
   public user$ = user(this.firebaseAuth);
   public currentUserSig = signal<Usuario | null | undefined>(undefined);
   public currentUser: string = '';
@@ -52,16 +54,40 @@ export class AuthService {
   login(email: string, password: string) : Promise <string> {
     return new Promise<string>((resolve) => {
       signInWithEmailAndPassword(this.firebaseAuth, email, password)
-      .then((userCredential) => {
+      .then( async (userCredential) => {
         if (userCredential.user && userCredential.user.emailVerified)
         {
           const user = userCredential.user;
-          this.router.navigate(['/bienvenida']);
-          resolve('');
-          if (user.email) {
-            this.currentUser = user.email;
-          }     
-        } 
+
+
+
+          const collections = ['admins', 'pacientes', 'especialistas'];
+          let usuarioActivo = false;
+
+          for(const collectionName of collections) {
+            const userQuery = query(collection(this.firestore, collectionName), where('email', '==', user.email));
+            const querySnapshot = await getDocs(userQuery);
+
+            if(!querySnapshot.empty) {
+              const userDoc = querySnapshot.docs[0];
+              if (userDoc.exists() && userDoc.data()['activo']) {
+                usuarioActivo = true;
+                break;
+              }
+            }
+          }
+          if(usuarioActivo) {
+            this.router.navigate(['/bienvenida']);
+            resolve('');
+            if (user.email) {
+              this.currentUser = user.email;
+            }   
+          }else
+          {
+            resolve('Su cuenta se encuentra deshabilitada, póngase en contacto con un administrador.');
+            this.logout();
+          }
+        }
         else
         {
           resolve('Verifique su correo electrónico para activar su cuenta.');
