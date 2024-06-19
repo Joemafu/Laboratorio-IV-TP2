@@ -1,5 +1,5 @@
 export class Usuario {
-    uid: string = "";
+    id: string = "";
     nombre: string = "";
     apellido: string = "";
     mail: any;

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Especialista } from '../models/especialista';
@@ -11,10 +11,15 @@ export class EspecialistaService {
 
   private firestore: Firestore = inject(Firestore);
   private PATH: string = 'especialistas';
-  private especialistasCollection;
+  public especialistasSignal = signal<Especialista[] | null | undefined>(undefined);
+  public especialistas: Especialista[] = [];
+  public especialistas$!: Observable<Especialista[]>;
+
+  //private especialistasCollection;
 
   constructor() { 
-    this.especialistasCollection = collection(this.firestore, this.PATH);
+    this.especialistas$ = this.getEspecialistas();
+    //this.especialistasCollection = collection(this.firestore, this.PATH);
   }
 
   getEspecialistas(): Observable<Especialista[]> {
@@ -26,7 +31,8 @@ export class EspecialistaService {
   public async agregarEspecialista(especialista: Especialista) {
     try{
       let especialistas = collection(this.firestore, this.PATH);
-      let docRef = await addDoc(especialistas, { especialista: especialista});
+      let docRef = await addDoc(especialistas, especialista);
+      especialista.id = docRef.id;
       return docRef.id;
     }catch(error){
       return '';

@@ -28,6 +28,7 @@ export class AdminService {
     try{
       let admins = collection(this.firestore, this.PATH);
       let docRef = await addDoc(admins, { admin: admin});
+      admin.id = docRef.id;
       return docRef.id;
     }catch(error){
       console.error('AdminService - agregarAdmin():', error);

@@ -16,7 +16,6 @@ export class ImagenUploadService {
     return new Promise((resolve, reject) => {
 
       const path : string = `imagenes/${nroDocumento}-${nroDeFoto}-${(file.name.split('.').pop())}`;
-      console.log('Se subio la imagen con este path: ', path);
       const storageRef = ref(this.storage, path);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -26,7 +25,7 @@ export class ImagenUploadService {
         async () => {
           const url = await getDownloadURL(uploadTask.snapshot.ref);
           
-          console.log('Se subio la imagen con esta URL: ', url);
+          //console.log('Se subio la imagen con esta URL: ', url);
           resolve(url);
         }
       );

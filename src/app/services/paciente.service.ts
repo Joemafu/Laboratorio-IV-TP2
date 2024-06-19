@@ -27,7 +27,8 @@ export class PacienteService {
   public async agregarPaciente(paciente: Paciente) {
     try{
       let pacientes = collection(this.firestore, this.PATH);
-      let docRef = await addDoc(pacientes, { paciente: paciente});
+      let docRef = await addDoc(pacientes, paciente);
+      paciente.id = docRef.id;
       return docRef.id;
     }catch(error){
       console.error('PacienteService - agregarPaciente():', error);

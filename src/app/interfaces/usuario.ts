@@ -1,5 +1,5 @@
 export interface Usuario {
-    uid?: string;
+    id?: string;
     nombre?: string;
     apellido?: string;
     mail: string;
@@ -10,5 +10,5 @@ export interface Usuario {
     fotoPerfil?: string;
     rol?: string;
     activo?: boolean;
-  }
+}
   

@@ -5,38 +5,51 @@
       <tr>
         <th>Nombre</th>
         <th>Apellido</th>
+        <th>Tipo doc</th>
+        <th>Numero doc</th>
         <th>Email</th>
         <th>Rol</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
+      @if (especialistas) {
+        @for (especialista of especialistas; track especialista) {
+          <tr>
+            <td>{{ especialista.nombre }}</td>
+            <td>{{ especialista.apellido }}</td>
+            <td>{{ especialista.tipoDoc }}</td>
+            <td>{{ especialista.nroDocumento }}</td>
+            <td>{{ especialista.mail }}</td>
+            <td>{{ especialista.rol }}</td>
+            <td>
+              <mat-slide-toggle
+                [checked]="especialista.activo"
+                (change)="toggleUsuarioActivo(especialista, $event.checked)">
+              </mat-slide-toggle>
+            </td>
+          </tr>
+        }
+      }
 
-      <div *ngIf="especialistas$ | async as especialistas">
-        <tr *ngFor="let usuario of especialistas">
-          <td>{{ usuario.nombre }}</td> 
-          <td>{{ usuario.apellido }}</td>
-          <td>{{ usuario.mail }}</td>
-          <td>{{ usuario.rol }}</td>
-          <td>
-            <button *ngIf="!usuario.activo" (click)="activarUsuario(usuario)" class="btn btn-success">Habilitar</button>
-            <button *ngIf="usuario.activo" (click)="desactivarUsuario(usuario)" class="btn btn-danger">Deshabilitar</button>
-          </td>
-        </tr>
-      </div>
-
-      <div *ngIf="pacientes$ | async as pacientes">
-        <tr *ngFor="let usuario of pacientes">
-          <td>{{ usuario.nombre }}</td> 
-          <td>{{ usuario.apellido }}</td>
-          <td>{{ usuario.mail }}</td>
-          <td>{{ usuario.rol }}</td>
-          <td>
-            <button *ngIf="!usuario.activo" (click)="activarUsuario(usuario)" class="btn btn-success">Habilitar</button>
-            <button *ngIf="usuario.activo" (click)="desactivarUsuario(usuario)" class="btn btn-danger">Deshabilitar</button>
-          </td>
-        </tr>
-      </div>     
+      @if (pacientes) {
+        @for (paciente of pacientes; track paciente) {
+          <tr>
+            <td>{{ paciente.nombre }}</td>
+            <td>{{ paciente.apellido }}</td>
+            <td>{{ paciente.tipoDoc }}</td>
+            <td>{{ paciente.nroDocumento }}</td>
+            <td>{{ paciente.mail }}</td>
+            <td>{{ paciente.rol }}</td>
+            <td>
+              <mat-slide-toggle
+                [checked]="paciente.activo"
+                (change)="toggleUsuarioActivo(paciente, $event.checked)">
+              </mat-slide-toggle>
+            </td>
+          </tr>
+        }
+      }   
       
     </tbody>
   </table>

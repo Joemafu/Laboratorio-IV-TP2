@@ -77,7 +77,7 @@ export class RegistrarPacienteComponent implements OnInit{
             });
           });
         }).then(() => {
-          //this.registerForm.reset();
+          this.registerForm.reset();
         }).catch(error => {
           console.error('RegistrarPacienteComponent - onSubmit()=> agregarPaciente():', error);
           if (paciente.fotoPerfil) {

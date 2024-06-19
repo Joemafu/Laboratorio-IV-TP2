@@ -26,13 +26,9 @@
   z-index: 1000;
 }
 
-
-
-
-
 .fab-container {
   position: fixed;
-  bottom: 16px;
+  bottom: 78px;
   right: 16px;
   display: flex;
   flex-direction: column;

@@ -1,3 +1,15 @@
 h1 {
     text-align: center;
   }
+
+  .footer{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .mainComponent{
+    margin-bottom: 90px;
+  }
