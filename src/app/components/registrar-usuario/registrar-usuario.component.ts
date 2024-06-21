@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RegistrarEspecialistaComponent } from '../registrar-especialista/registrar-especialista.component';
 import { RegistrarPacienteComponent } from '../registrar-paciente/registrar-paciente.component';
 import { RegistrarAdminComponent } from '../registrar-admin/registrar-admin.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -17,6 +18,7 @@ export class RegistrarUsuarioComponent {
   mostrarFormP= false;
   mostrarFormA= false;
   esAdmin = false;
+  authService = inject(AuthService);
   
 
   mostrarFormEspecialista()

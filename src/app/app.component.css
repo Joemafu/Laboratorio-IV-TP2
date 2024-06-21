@@ -8,6 +8,7 @@ h1 {
     right: 0;
     bottom: 0;
     width: 100%;
+    background-color: white;
   }
 
   .mainComponent{

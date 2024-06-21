@@ -1,15 +1,14 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { Subscription } from 'rxjs';
-import { MatSlideToggleModule  } from '@angular/material/slide-toggle';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatSlideToggleModule],
+  imports: [RouterOutlet, CommonModule, FormsModule, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -18,6 +17,11 @@ export class AppComponent implements OnInit {
   authService : AuthService = inject(AuthService);
   usuario: string = '';
   public subscription: Subscription = new Subscription();
+  public router = inject(Router);
+
+  constructor(){
+
+  }
 
   ngOnInit(): void {
     this.subscription = this.authService.user$.subscribe((user) => {
@@ -32,13 +36,30 @@ export class AppComponent implements OnInit {
         this.authService.currentUserSig.set(null);    
       }
     });
+
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  } 
+
+  buttonHome() {
+    this.router.navigate(['bienvenida']);
+  }
+
+  buttonAdministrarUsuarios() {
+    this.router.navigate(['administrar-usuarios']);
+  }
+
+  buttonLogin() {
+    this.router.navigate(['login']);
+  }
+
+  buttonRegistrar() {
+    this.router.navigate(['registrar']);
   }
 
   buttonLogOut() {
     this.authService.logout();
-  }  
+  } 
 }

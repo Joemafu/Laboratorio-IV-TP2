@@ -108,7 +108,7 @@
                       }
                   </div>
 
-                  <div class="mb-3">
+                  <div class="col-sm-6 mb-3">
                     <label for="fotoPerfil" class="form-label">Foto 1</label>
                     <input formControlName="fotoPerfil" class="form-control" type="file" (change)="onFileSelectedUno($event)" id="fotoPerfil" required>
                     @if(registerForm.get('fotoPerfil'); as aux) {
@@ -120,7 +120,7 @@
                     }
                 </div>
                 
-                <div class="mb-3">
+                <div class="col-sm-6 mb-3">
                   <label for="fotoPerfilDos" class="form-label">Foto 2</label>
                   <input formControlName="fotoPerfilDos" class="form-control" type="file" (change)="onFileSelectedDos($event)" id="fotoPerfilDos" required>
                   @if(registerForm.get('fotoPerfilDos'); as aux) {

@@ -12,15 +12,18 @@
             (click)="mostrarFormPaciente()">
             <img src="../../../assets/paciente.svg" alt="paciente">
     </button>
-    <button 
-        
-        id="botonAdmin" data-mdb-button-init data-mdb-ripple-init 
-        color="primary"
-        class="mt-4 btn btn-lg btn-primary rounded-circle botonSVG"
-        [ngClass]="{'botonSVGSeleccionado': mostrarFormA}"
-        (click)="mostrarFormAdmin()">
-        <img src="../../../assets/admin.svg" alt="admin">
-    </button>
+    @if( authService.personaLogeada!=null && authService.personaLogeada.rol === 'admin')
+    {
+        <button 
+            id="botonAdmin" data-mdb-button-init data-mdb-ripple-init 
+            color="primary"
+            class="mt-4 btn btn-lg btn-primary rounded-circle botonSVG"
+            [ngClass]="{'botonSVGSeleccionado': mostrarFormA}"
+            (click)="mostrarFormAdmin()">
+            <img src="../../../assets/admin.svg" alt="admin">
+        </button>
+    }
+    
 
     <hr>
 

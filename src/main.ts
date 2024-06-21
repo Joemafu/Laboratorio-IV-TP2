@@ -22,9 +22,3 @@ const app = initializeApp(firebaseConfig);
 
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
-
-  /* 
-  
-      TENGO QUE VER DE ACTIVAR LA CUENTA DEL DR NICK RIVIERA.
-
-  */

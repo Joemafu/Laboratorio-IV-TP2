@@ -4,8 +4,8 @@
   style="background-color: #114d79;">
   <div class="container-fluid">
 
-    <a class="navbar-brand" href="/bienvenida">
-      <img src="../favicon.ico" alt="logo" class="" href="/login">
+    <a class="navbar-brand" role="button" (click)="buttonHome()">
+      <img src="../favicon.ico" alt="logo" >
       Clínica Online
     </a>
 
@@ -24,45 +24,35 @@
     <ul class="navbar-nav me-auto mt-2 mt-lg-0">
 
       <li class="nav-item">
-        <a class="nav-link" href="/registrar">Registro</a>
+        <a class="nav-link" role="button" (click)="buttonRegistrar()">Registro</a>
       </li>
-
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="/registrar/especialista">Registrar especialista</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="/registrar/paciente">Registrar paciente</a>
-      </li> -->
-
-      <!-- <li>
-        <mat-slide-toggle>Toggle me!</mat-slide-toggle>
-      </li> -->
       
       @if(authService.currentUserSig() != null)
       {
-        <li class="nav-item">
-          <a class="nav-link" href="administrar-usuarios">Administrar usuarios</a>
-        </li>
+
+        @if((authService.currentUser) === 'joe_mafu@hotmail.com')
+        {
+          <li class="nav-item">
+            <a class="nav-link" role="button" (click)="buttonAdministrarUsuarios()">Administrar usuarios</a>
+          </li>
+        }
 
         <li>
           <a class="nav-link disabled ">{{usuario}}</a>
         </li>
 
         <li>
-          <a class="nav-link" href="/login" (click)="buttonLogOut()">Cerrar Sesión</a>
+          <a class="nav-link" role="button" (click)="buttonLogOut()">Cerrar Sesión</a>
         </li>
       }
 
       @if(authService.currentUserSig() == null)
       {
         <li>
-          <a class="nav-link" href="/login" >Iniciar Sesión</a>
+          <a class="nav-link" role="button" (click)="buttonLogin()">Iniciar Sesión</a>
         </li>
       }
       
-
-
       <!-- DROPDOWN -->
 
       <!-- <li class="nav-item dropdown">

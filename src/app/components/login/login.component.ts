@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   router: Router = inject(Router);
   fabAbierto: boolean = false;
 
+
   constructor() {
     const minLength = Validators.minLength(6);
     const required = Validators.required;
@@ -82,7 +83,7 @@ export class LoginComponent implements OnInit {
     this.loginForm.setValue({mail: this.mail, pass: this.pass});
   }
 
-  buttonEntrar()
+  async buttonEntrar()
   {
     if (this.loginForm.valid) {
       const usuario: Usuario = this.loginForm.value;
@@ -94,6 +95,7 @@ export class LoginComponent implements OnInit {
       if (alert === '') {
         this.router.navigateByUrl('/bienvenida');
       }
+
     }).catch(error => {
       console.error('login.component - login()', error);
     });

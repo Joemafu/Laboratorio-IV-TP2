@@ -4,5 +4,5 @@ export class Paciente extends Usuario{
     obraSocial: string = '';
     fotoPerfilDos: string = '';
     override rol: string = 'paciente';
-    activo: boolean = true;
+    override activo: boolean = true;
 }

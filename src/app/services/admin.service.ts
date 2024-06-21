@@ -27,7 +27,7 @@ export class AdminService {
   public async agregarAdmin(admin: Admin) {
     try{
       let admins = collection(this.firestore, this.PATH);
-      let docRef = await addDoc(admins, { admin: admin});
+      let docRef = await addDoc(admins, admin);
       admin.id = docRef.id;
       return docRef.id;
     }catch(error){
