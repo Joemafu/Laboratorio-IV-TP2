@@ -47,6 +47,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['bienvenida']);
   }
 
+  buttonPerfil() {
+    this.router.navigate(['perfil']);
+  }
+
   buttonTurnos() {
     this.router.navigate(['turnos']);
   }

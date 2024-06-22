@@ -1,0 +1,12 @@
+@import "../../app.component.css";
+
+
+.table {
+    background-color: transparent;
+  }
+  
+  .table th, .table td {
+    background-color: rgba(17, 77, 121, .8); /* Fondo blanco con transparencia */
+    color: white;
+  }
+  

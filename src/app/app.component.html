@@ -1,105 +1,117 @@
-<div>
-  <nav
-  class="navbar navbar-expand-sm navbar-dark"
-  style="background-color: #114d79;">
-  <div class="container-fluid">
+<div class="main">
 
-    <a class="navbar-brand" role="button" (click)="buttonHome()">
-      <img src="../favicon.ico" alt="logo" >
-      Clínica Online
-    </a>
-
-    <button
-      class="navbar-toggler d-lg-none"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#collapsibleNavId"
-      aria-controls="collapsibleNavId"
-      aria-expanded="false"
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-  <div class="collapse navbar-collapse" id="collapsibleNavId">
-    <ul class="navbar-nav me-auto mt-2 mt-lg-0">
-
-      <li class="nav-item">
-        <a class="nav-link" role="button" (click)="buttonRegistrar()">Registro</a>
-      </li>
+  <div>
+    <nav
+    class="navbar navbar-expand-sm navbar-dark"
+    style="background-color: #114d79;">
+    <div class="container-fluid">
       
-      @if(authService.currentUserSig() != null)
-      {
-
-        <li class="nav-item">
-          <a class="nav-link" role="button" (click)="buttonTurnos()">Turnos</a>
-        </li>
-
-        @if((authService.currentUser) === 'joe_mafu@hotmail.com')
-        {
-          <li class="nav-item">
-            <a class="nav-link" role="button" (click)="buttonAdministrarUsuarios()">Administrar usuarios</a>
-          </li>
-        }
-
-        <li>
-          <a class="nav-link disabled ">{{usuario}}</a>
-        </li>
-
-        <li>
-          <a class="nav-link" role="button" (click)="buttonLogOut()">Cerrar Sesión</a>
-        </li>
-      }
-
-      @if(authService.currentUserSig() == null)
-      {
-        <li>
-          <a class="nav-link" role="button" (click)="buttonLogin()">Iniciar Sesión</a>
-        </li>
-      }
-      
-      <!-- DROPDOWN -->
-
-      <!-- <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          href="#"
-          id="dropdownId"
-          data-bs-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-          >Dropdown</a
-        >
-        <div class="dropdown-menu" aria-labelledby="dropdownId">
-          <a class="dropdown-item" href="#">Action 1</a>
-          <a class="dropdown-item" href="#">Action 2</a>
-        </div>
-      </li> -->
-
-    </ul>
-
-    <!-- BOTÓN BÚSQUEDA -->
-
-    <!-- <form class="d-flex my-2 my-lg-0">
-      <input
-        class="form-control me-sm-2"
-        type="text"
-        placeholder="Search"
-      />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-        Search
+      <a class="navbar-brand" role="button" (click)="buttonHome()">
+        <img src="../favicon.ico" alt="logo" >
+        Clínica Online
+      </a>
+        
+        <button
+        class="navbar-toggler d-lg-none"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapsibleNavId"
+        aria-controls="collapsibleNavId"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
-    </form> -->
+      
+      <div class="collapse navbar-collapse" id="collapsibleNavId">
+        <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+          
+          @if(authService.currentUserSig() != null)
+          {
+            
+            <li class="nav-item">
+              <a class="nav-link" role="button" (click)="buttonPerfil()">Mi perfil</a>
+            </li>
+            
+          }
+          
+          <li class="nav-item">
+            <a class="nav-link" role="button" (click)="buttonRegistrar()">Registro</a>
+          </li>
+          
+          @if(authService.currentUserSig() != null)
+          {
+            
+            <li class="nav-item">
+              <a class="nav-link" role="button" (click)="buttonTurnos()">Turnos</a>
+            </li>
+            
+            @if((authService.personaLogeada) && (authService.personaLogeada.rol) === 'admin')
+            {
+              <li class="nav-item">
+                <a class="nav-link" role="button" (click)="buttonAdministrarUsuarios()">Administrar usuarios</a>
+              </li>
+            }
+            
+            <li>
+              <a class="nav-link disabled ">{{usuario}}</a>
+            </li>
+            
+            <li>
+              <a class="nav-link" role="button" (click)="buttonLogOut()">Cerrar Sesión</a>
+            </li>
+          }
+          
+          @if(authService.currentUserSig() == null)
+          {
+            <li>
+              <a class="nav-link" role="button" (click)="buttonLogin()">Iniciar Sesión</a>
+            </li>
+          }
+          
+          <!-- DROPDOWN -->
+          
+          <!-- <li class="nav-item dropdown">
+            <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="dropdownId"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            >Dropdown</a
+            >
+            <div class="dropdown-menu" aria-labelledby="dropdownId">
+              <a class="dropdown-item" href="#">Action 1</a>
+              <a class="dropdown-item" href="#">Action 2</a>
+            </div>
+          </li> -->
+          
+        </ul>
+        
+        <!-- BOTÓN BÚSQUEDA -->
+        
+        <!-- <form class="d-flex my-2 my-lg-0">
+          <input
+          class="form-control me-sm-2"
+          type="text"
+          placeholder="Search"
+          />
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Search
+          </button>
+        </form> -->
+      </div>
+    </div>
+  </nav>
   </div>
-</div>
-</nav>
-</div>
 
-<div class="mainComponent">
-  <router-outlet></router-outlet>
-</div>
+  <div class="pb-5 mainComponent container">
+    <router-outlet></router-outlet>
+  </div>
 
-<div class="container footer">
-  <footer class="pt-3 my-4 text-body-secondary border-top sticky-footer">
-    Joel Mahafud &copy; 2024
-  </footer>
+  <div class="container footer">
+    <footer class="pt-3 my-4 border-top sticky-footer">
+      Joel Mahafud &copy; 2024
+    </footer>
+  </div>
 </div>

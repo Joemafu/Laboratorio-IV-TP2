@@ -2,15 +2,33 @@ h1 {
     text-align: center;
   }
 
+  .main {
+    background-image: url(../assets/img/background.jpg); 
+    background-size:cover;
+    min-height: 100vh;
+    background-attachment: fixed;
+    padding: 10px;
+    margin: 0%;
+  }
+
   .footer{
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     width: 100%;
-    background-color: white;
+    background-color: #114d79;
+    color: white
   }
 
   .mainComponent{
     margin-bottom: 90px;
+    background-color: rgba(255, 255, 255, .65);
+    border-radius: 10px;
+    padding: 20px; 
+    margin-top: 15px;
+  }
+
+  .text-primary{
+    color: #114d79 !important;
   }

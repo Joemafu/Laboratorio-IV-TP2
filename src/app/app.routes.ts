@@ -13,7 +13,11 @@ export const routes: Routes = [
       loadComponent: () => import('./components/login/login.component').then(c => c.LoginComponent),
       ...canActivate(() => redirectLoggedInToHome()),
   },
-  
+  { 
+      path: 'perfil',
+      loadComponent: () => import('./components/mi-perfil/mi-perfil.component').then(c => c.MiPerfilComponent),
+      ...canActivate(() => redirectUnauthorizedToLogin()),
+  },  
   { 
     path: 'registrar',
     loadComponent: () => import('./components/registrar-usuario/registrar-usuario.component').then(c => c.RegistrarUsuarioComponent),

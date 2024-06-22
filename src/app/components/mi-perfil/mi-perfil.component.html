@@ -1,0 +1,38 @@
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-10 col-sm-8 col-lg-6">
+        <img [src]="usuario?.fotoPerfil" class="mb-3 d-block mx-lg-auto img-fluid foto-perfil" alt="Foto Perfil" loading="lazy">
+        @if(usuario?.rol == "paciente")
+        {
+            <img [src]="usuario?.fotoPerfilDos" class="d-block mx-lg-auto img-fluid foto-perfil" alt="Foto Perfil Dos" loading="lazy">
+        }
+      </div>
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">{{usuario?.rol}}</h1>
+        <p class="lead"><strong>Nombre: {{usuario?.nombre}}</strong></p>
+        <p class="lead"><strong>Apellido: {{usuario?.apellido}}</strong></p>
+        <p class="lead"><strong>Edad: {{usuario?.fechaNac}}</strong></p>
+        <p class="lead"><strong>DNI: {{usuario?.nroDocumento}}</strong></p>
+        <p class="lead"><strong>Correo: {{usuario?.mail}}</strong></p>
+
+        @if(usuario?.rol == "paciente")
+        {
+            <p class="lead"><strong>Obra Social: {{usuario?.obraSocial}}</strong></p>
+        }
+        @if(usuario?.rol == "especialista")
+        {
+<!--             @for (let especialidad of usuario?.especialidad)
+            { -->
+                <p class="lead"><strong>Especialidad: {{usuario?.especialidad}}</strong></p>
+<!--             } -->
+            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Mis Horarios</button>
+
+        }       
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <!-- <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button> -->
+        </div>
+      </div>
+    </div>
+  </div>

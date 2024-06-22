@@ -10,5 +10,8 @@ export interface Usuario {
     fotoPerfil?: string;
     rol?: string;
     activo?: boolean;
+
+    fotoPerfilDos?: string;
+    obraSocial?: string;
+    especialidad?: string[];
 }
-  

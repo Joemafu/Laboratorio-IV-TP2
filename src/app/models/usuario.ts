@@ -9,5 +9,9 @@ export class Usuario {
     fechaNac: number = 0;
     fotoPerfil: string = "";
     rol: string = "";
-    activo: boolean = false;
+    activo: boolean = true;
+
+    fotoPerfilDos: string = "";
+    obraSocial: string = "";
+    especialidad: string[] = [];
 }
