@@ -25,7 +25,6 @@ export class ImagenUploadService {
         async () => {
           const url = await getDownloadURL(uploadTask.snapshot.ref);
           
-          //console.log('Se subio la imagen con esta URL: ', url);
           resolve(url);
         }
       );

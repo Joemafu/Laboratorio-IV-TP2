@@ -1,9 +1,13 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Firestore, collection, doc, getDocs, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, query, where } from '@angular/fire/firestore';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, sendEmailVerification, sendPasswordResetEmail } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Usuario } from '../interfaces/usuario';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { recaptchaSecretKey } from '../../environments/environment.development';
+import  Swal from 'sweetalert2';
+
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +23,16 @@ export class AuthService {
 
   public personaLogeada: Usuario | null = null;
 
+  public http: HttpClient = inject(HttpClient);
+  private secretKey = recaptchaSecretKey;
+
 
   constructor() {
 
   }
 
   register(mail: string, password: string): Promise<string> {
+
     return new Promise<string>((resolve) => {
       createUserWithEmailAndPassword(this.firebaseAuth, mail, password)
       .then((userCredential) => {
@@ -50,7 +58,7 @@ export class AuthService {
               mensajeError = 'Ingrese una contraseña.';
               break;
             default:
-              mensajeError = 'Error al registrar usuario.';
+              mensajeError = 'Error al registrar usuario: ' + err.message;
               break;
           }
           resolve(mensajeError);
@@ -58,30 +66,24 @@ export class AuthService {
     });
   }
   
-  async login(mail: string, password: string): Promise<string> {
-    console.log('Login function called'); // Log when function is called
+  login(mail: string, password: string): Promise<string> {
     return new Promise<string>((resolve) => {
       signInWithEmailAndPassword(this.firebaseAuth, mail, password)
         .then(async (userCredential) => {
-          console.log('signInWithEmailAndPassword resolved'); // Log after signInWithEmailAndPassword
           if (userCredential.user && userCredential.user.emailVerified) {
             const user = userCredential.user;
-            console.log('User email verified:', user.email); // Log user email if verified
   
             const collections = ['admins', 'pacientes', 'especialistas'];
             let usuarioActivo = false;
   
             for (const collectionName of collections) {
-              console.log(`Checking collection: ${collectionName}`);
               const userQuery = query(collection(this.firestore, collectionName), where('mail', '==', user.email));
               const querySnapshot = await getDocs(userQuery);
   
               if (!querySnapshot.empty) {
-                console.log(`Found user in collection: ${collectionName}`);
                 const userDoc = querySnapshot.docs[0];
                 const userData = userDoc.data() as Usuario;
                 this.personaLogeada = userData;
-                console.log(`User data: `, userData);
                 if (userDoc.exists() && userData['activo']) {
                   usuarioActivo = true;
                   this.currentUserSig.set(userData);
@@ -90,25 +92,21 @@ export class AuthService {
               }
             }
             if (usuarioActivo) {
-              console.log('Usuario activo, navegando a bienvenida'); // Log if user is active
               this.router.navigate(['/bienvenida']);
               resolve('');
               if (user.email) {
                 this.currentUser = user.email;
               }
             } else {
-              console.log('Cuenta deshabilitada'); // Log if user is not active
               resolve('Su cuenta se encuentra deshabilitada, póngase en contacto con un administrador.');
               this.logout();
             }
           } else {
-            console.log('Email no verificado'); // Log if email not verified
             resolve('Verifique su correo electrónico para activar su cuenta.');
             this.logout();
           }
         })
         .catch(err => {
-          console.log('Error en signInWithEmailAndPassword:', err.message); // Log error in catch block
           let mensajeError = '';
           switch (err.message) {
             case 'Firebase: Error (auth/invalid-credential).':
@@ -121,7 +119,7 @@ export class AuthService {
               mensajeError = 'Ingrese una contraseña.';
               break;
             default:
-              mensajeError = 'Error al iniciar sesión.';
+              mensajeError = 'Error al iniciar sesión.'+ err.message;
               break;
           }
           resolve(mensajeError);
@@ -163,7 +161,13 @@ export class AuthService {
 
   sendVerificationEmail(user: any): Promise<string> {
     sendEmailVerification(user).then(() => {
-      console.log('Email de verificación enviado');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Se ha enviado un correo de validación.",
+        showConfirmButton: false,
+        timer: 2500
+      });
     })
     .catch(err => {
       let mensajeError = '';
@@ -180,4 +184,8 @@ export class AuthService {
     return Promise.resolve('Email de verificación enviado');
   }
 
+  verifyCaptcha(captchaResponse: string): Observable<{ success: boolean }>{
+    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${this.secretKey}&response=${captchaResponse}`;
+    return this.http.post<{ success: boolean }>(url, {});
+  }
 }

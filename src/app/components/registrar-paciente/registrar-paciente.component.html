@@ -17,7 +17,7 @@
                 {{errorMensaje}}
             </div>
 
-        }
+          }
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
               <div class="row g-3">
 
@@ -138,11 +138,25 @@
                   @if(registerForm.get('obraSocial'); as aux) {
                       @if(aux.invalid && (aux.dirty || aux.touched)){
                           <div class="alert alert-danger">
-                              {{aux.hasError('required') ? 'Utilice la tabla para seleccionar la obraSocial.' : 'Es inválida.'}}
+                              {{aux.hasError('required') ? 'Ingrese la obra social.' : 'Es inválida.'}}
                           </div>
                       }   
                   }
                 </div>
+
+                <re-captcha 
+                    (resolved)="resolved($event)" 
+                    [siteKey]="siteKey"
+                    formControlName="recaptcha"
+                    >
+                </re-captcha>
+                @if(registerForm.get('recaptcha'); as aux) {
+                    @if(aux.invalid && (aux.dirty || aux.touched) && captchaOk === false){
+                        <div class="alert alert-danger">
+                            {{aux.hasError('required') ? 'Verifique que no es un robot.' : 'Verifique que no es un robot.'}}
+                        </div>
+                    }   
+                }
 
                 <hr class="my-4">
 

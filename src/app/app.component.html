@@ -30,6 +30,10 @@
       @if(authService.currentUserSig() != null)
       {
 
+        <li class="nav-item">
+          <a class="nav-link" role="button" (click)="buttonTurnos()">Turnos</a>
+        </li>
+
         @if((authService.currentUser) === 'joe_mafu@hotmail.com')
         {
           <li class="nav-item">

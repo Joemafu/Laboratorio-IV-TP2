@@ -18,15 +18,6 @@ export const routes: Routes = [
     path: 'registrar',
     loadComponent: () => import('./components/registrar-usuario/registrar-usuario.component').then(c => c.RegistrarUsuarioComponent),
   },
-  /* 
-  { 
-      path: 'registrar/especialista',
-      loadComponent: () => import('./components/registrar-especialista/registrar-especialista.component').then(c => c.RegistrarEspecialistaComponent),
-  },
-  { 
-      path: 'registrar/paciente',
-      loadComponent: () => import('./components/registrar-paciente/registrar-paciente.component').then(c => c.RegistrarPacienteComponent),
-  }, */
   { 
       path: 'bienvenida',
       loadComponent: () => import('./components/bienvenida/bienvenida.component').then(c => c.BienvenidaComponent),
@@ -34,6 +25,11 @@ export const routes: Routes = [
   { 
       path: 'administrar-usuarios',
       loadComponent: () => import('./components/administrar-usuarios/administrar-usuarios.component').then(c => c.AdministrarUsuariosComponent),
+      ...canActivate(() => redirectUnauthorizedToLogin()),
+  },
+  { 
+      path: 'turnos',
+      loadComponent: () => import('./components/turnos/turnos.component').then(c => c.TurnosComponent),
       ...canActivate(() => redirectUnauthorizedToLogin()),
   },
   { 

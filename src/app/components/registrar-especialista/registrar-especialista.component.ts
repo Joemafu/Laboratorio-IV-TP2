@@ -3,20 +3,18 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } 
 import { AuthService } from '../../services/auth.service';
 import { EspecialidadService } from '../../services/especialidad.service';
 import { TablaEspecialidadesComponent } from '../tabla-especialidades/tabla-especialidades.component';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Especialidad } from '../../interfaces/especialidad';
 import { Especialista } from '../../models/especialista';
 import { EspecialistaService } from '../../services/especialista.service';
 import { ImagenUploadService } from '../../services/imagen-upload.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
+import { RecaptchaFormsModule, RecaptchaModule } from 'ng-recaptcha';
+import { recaptchaSiteKey } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-registrar-especialista',
   standalone: true,
-  imports: [ ReactiveFormsModule, CommonModule, TablaEspecialidadesComponent, FormsModule, MatIconModule, MatButtonModule, MatMenuModule ],
+  imports: [ ReactiveFormsModule, CommonModule, TablaEspecialidadesComponent, FormsModule, RecaptchaModule, RecaptchaFormsModule ],
   templateUrl: './registrar-especialista.component.html',
   styleUrl: './registrar-especialista.component.css'
 })
@@ -24,12 +22,16 @@ export class RegistrarEspecialistaComponent implements OnInit {
   
   fb : FormBuilder = inject(FormBuilder);
   authService: AuthService = inject(AuthService);
-  router: Router = inject(Router);
   registerForm: FormGroup;
   especialidadService: EspecialidadService = inject(EspecialidadService);
   especialistaService: EspecialistaService = inject(EspecialistaService);
   imagenUploadService: ImagenUploadService = inject(ImagenUploadService);
   archivoSeleccionado: File | null = null;
+  errorMensaje: string = '';
+
+  captchaOk: boolean = false;
+  siteKey: string = recaptchaSiteKey;
+  captchaToken: string | null = null;
 
   constructor() {
     const required = Validators.required;
@@ -39,7 +41,7 @@ export class RegistrarEspecialistaComponent implements OnInit {
     const numMaxDni = Validators.max(99999999);
     const minLength = Validators.minLength(2);
     const minLengthCorreo = Validators.minLength(6);
-    const correo = Validators.pattern('^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    const correo = Validators.pattern('^[a-zA-Z0-9_.-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,}$');
     const nombre = Validators.pattern('^[a-zA-Z áéíóú]*$');
     const apellido = Validators.pattern('^[a-zA-Z áéíóú\']*$');
     const formatoImagen = Validators.pattern(/\.(jpg|jpeg|png|webp)$/i);
@@ -55,20 +57,27 @@ export class RegistrarEspecialistaComponent implements OnInit {
       fotoPerfil: ['', [required, formatoImagen]],
       especialidad: ['', [required]],
       rol: 'especialista',
-      activo: false
+      activo: false,
+      recaptcha: [null, [required]]
     });
   }
 
   ngOnInit(): void {}
 
   onSubmit() {
+    this.errorMensaje = '';
     this.registerForm.markAllAsTouched();
     if (this.registerForm.valid) {
+      this.registerForm.markAsPristine();
       const especialista: Especialista = this.registerForm.value;
       if (this.archivoSeleccionado) {
         this.imagenUploadService.subirImagen(this.archivoSeleccionado, this.registerForm.get('nroDocumento')?.value,1).then((url) => {
           especialista.fotoPerfil = url;
-          this.authService.register(this.registerForm.value.mail, this.registerForm.value.pass).then(() => {
+          this.authService.register(especialista.mail, especialista.pass).then((mensajeError) => {
+            if (mensajeError){
+              this.errorMensaje = mensajeError;
+              return Promise.reject(mensajeError);
+            }    
             return this.especialistaService.agregarEspecialista(especialista);
           });
         }).then(() => {
@@ -100,5 +109,10 @@ export class RegistrarEspecialistaComponent implements OnInit {
       this.archivoSeleccionado = file;
       this.registerForm.patchValue({ foto: file });
     }
+  }
+  
+  resolved(token: any): void {
+    this.captchaOk = true;
+    this.captchaToken = token;
   }
 }

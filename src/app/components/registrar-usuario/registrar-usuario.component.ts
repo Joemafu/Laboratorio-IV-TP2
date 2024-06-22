@@ -14,12 +14,11 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegistrarUsuarioComponent {
 
-  mostrarFormE= false;
-  mostrarFormP= false;
-  mostrarFormA= false;
+  mostrarFormE = false;
+  mostrarFormP = false;
+  mostrarFormA = false;
   esAdmin = false;
   authService = inject(AuthService);
-  
 
   mostrarFormEspecialista()
   {
@@ -41,5 +40,4 @@ export class RegistrarUsuarioComponent {
     this.mostrarFormP = false;
     this.mostrarFormE = false;
   }
-
 }

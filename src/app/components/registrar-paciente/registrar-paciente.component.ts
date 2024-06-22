@@ -1,19 +1,17 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-//import { EspecialidadService } from '../../services/especialidad.service';
-//import { TablaEspecialidadesComponent } from '../tabla-especialidades/tabla-especialidades.component';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-//import { Especialidad } from '../../interfaces/especialidad';
 import { Paciente } from '../../models/paciente';
 import { PacienteService } from '../../services/paciente.service';
 import { ImagenUploadService } from '../../services/imagen-upload.service';
+import { RecaptchaFormsModule, RecaptchaModule } from 'ng-recaptcha';
+import { recaptchaSiteKey } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-registrar-paciente',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, FormsModule ],
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule, RecaptchaModule, RecaptchaFormsModule ],
   templateUrl: './registrar-paciente.component.html',
   styleUrl: './registrar-paciente.component.css'
 })
@@ -21,14 +19,16 @@ export class RegistrarPacienteComponent implements OnInit{
   
   fb : FormBuilder = inject(FormBuilder);
   authService: AuthService = inject(AuthService);
-  router: Router = inject(Router);
   registerForm: FormGroup;
-  //especialidadService: EspecialidadService = inject(EspecialidadService);
   pacienteService: PacienteService = inject(PacienteService);
   imagenUploadService: ImagenUploadService = inject(ImagenUploadService);
   archivoSeleccionadoUno: File | null = null;
   archivoSeleccionadoDos: File | null = null;
   errorMensaje: string = '';
+
+  captchaOk: boolean = false;
+  siteKey: string = recaptchaSiteKey;
+  captchaToken: string | null = null;
 
 
   constructor() {
@@ -39,7 +39,7 @@ export class RegistrarPacienteComponent implements OnInit{
     const numMaxDni = Validators.max(99999999);
     const minLength = Validators.minLength(2);
     const minLengthCorreo = Validators.minLength(6);
-    const correo = Validators.pattern('^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    const correo = Validators.pattern('^[a-zA-Z0-9_.-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,}$');
     const nombre = Validators.pattern('^[a-zA-Z áéíóú]*$');
     const apellido = Validators.pattern('^[a-zA-Z áéíóú\']*$');
     const formatoImagen = Validators.pattern(/\.(jpg|jpeg|png|webp)$/i);
@@ -56,44 +56,54 @@ export class RegistrarPacienteComponent implements OnInit{
       fotoPerfilDos: ['', [required, formatoImagen]],
       obraSocial: ['', [required]],
       rol: 'paciente',
-      activo: true
+      activo: true,
+      recaptcha: [null, [required]]
     });
   }
 
   ngOnInit(): void {}
 
   onSubmit() {
-    this.registerForm.markAllAsTouched();
-    if (this.registerForm.valid) {
-      const paciente: Paciente = this.registerForm.value;
-      if (this.archivoSeleccionadoUno && this.archivoSeleccionadoDos) {
-        this.imagenUploadService.subirImagen(this.archivoSeleccionadoUno, this.registerForm.get('nroDocumento')?.value,1).then((urlUno) => {
-          paciente.fotoPerfil = urlUno;
-          this.imagenUploadService.subirImagen(this.archivoSeleccionadoDos!, this.registerForm.get('nroDocumento')?.value,2).then((urlDos) => {
-            paciente.fotoPerfilDos = urlDos;
-            this.authService.register(this.registerForm.value.mail, this.registerForm.value.pass).then((mensajeError) => {
-              this.errorMensaje = mensajeError;
-              return this.pacienteService.agregarPaciente(paciente);
+    /* this.authService.verifyCaptcha(this.captchaToken!).subscribe(response => {
+      if (response.success) {
+       */
+        this.errorMensaje = '';
+        this.registerForm.markAllAsTouched();
+        if (this.registerForm.valid) {
+          const paciente: Paciente = this.registerForm.value;
+          if (this.archivoSeleccionadoUno && this.archivoSeleccionadoDos) {
+            this.imagenUploadService.subirImagen(this.archivoSeleccionadoUno, this.registerForm.get('nroDocumento')?.value,1).then((urlUno) => {
+              paciente.fotoPerfil = urlUno;
+              this.imagenUploadService.subirImagen(this.archivoSeleccionadoDos!, this.registerForm.get('nroDocumento')?.value,2).then((urlDos) => {
+                paciente.fotoPerfilDos = urlDos;
+                this.authService.register(paciente.mail, paciente.pass).then((mensajeError) => {
+                  if (mensajeError){
+                    this.errorMensaje = mensajeError;
+                    return Promise.reject(mensajeError);
+                  }    
+                  return this.pacienteService.agregarPaciente(paciente);          
+                });
+              });
+            }).then(() => {
+              this.registerForm.reset();
+            }).catch(error => {
+              console.error('RegistrarPacienteComponent - onSubmit()=> agregarPaciente():', error);
+              if (paciente.fotoPerfil) {
+                this.imagenUploadService.deleteImage(paciente.fotoPerfil).catch(deleteError => {
+                  console.error('RegistrarPacienteComponent - onSubmit()=> deleteImage() error borrando imagen uno:', deleteError);
+                });
+              }if (paciente.fotoPerfilDos) {
+                this.imagenUploadService.deleteImage(paciente.fotoPerfilDos).catch(deleteError => {
+                  console.error('RegistrarPacienteComponent - onSubmit()=> deleteImage() error borrando imagen dos:', deleteError);
+                });
+              }
             });
-          });
-        }).then(() => {
-          this.registerForm.reset();
-        }).catch(error => {
-          console.error('RegistrarPacienteComponent - onSubmit()=> agregarPaciente():', error);
-          if (paciente.fotoPerfil) {
-            this.imagenUploadService.deleteImage(paciente.fotoPerfil).catch(deleteError => {
-              console.error('RegistrarPacienteComponent - onSubmit()=> deleteImage() error borrando imagen uno:', deleteError);
-            });
-          }if (paciente.fotoPerfilDos) {
-            this.imagenUploadService.deleteImage(paciente.fotoPerfilDos).catch(deleteError => {
-              console.error('RegistrarPacienteComponent - onSubmit()=> deleteImage() error borrando imagen dos:', deleteError);
-            });
+          } else {
+            console.error('RegistrarPacienteComponent - onSubmit()=> agregarPaciente():', 'No se seleccionaron los archivos');
           }
-        });
-      } else {
-        console.error('RegistrarPacienteComponent - onSubmit()=> agregarPaciente():', 'No se seleccionaron los archivos');
-      }
-    }
+        }
+      /* }
+    });  */
   }
 
   onFileSelectedUno(event: Event) : void {
@@ -112,5 +122,10 @@ export class RegistrarPacienteComponent implements OnInit{
       this.archivoSeleccionadoDos = file;
       this.registerForm.patchValue({ foto: file });
     }
+  }
+  
+  resolved(token: any): void {
+    this.captchaOk = true;
+    this.captchaToken = token;
   }
 }

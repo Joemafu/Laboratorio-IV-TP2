@@ -13,11 +13,11 @@
             <h4 class="mb-3">Ingrese los datos del Admin:</h4>
             @if(errorMensaje !== "") {
   
-              <div class="alert alert-danger">
-                  {{errorMensaje}}
-              </div>
-  
-          }
+                <div class="alert alert-danger">
+                    {{errorMensaje}}
+                </div>
+                
+            }
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
                 <div class="row g-3">
   
@@ -119,6 +119,20 @@
                           }   
                       }
                   </div>
+
+                  <re-captcha 
+                      (resolved)="resolved($event)" 
+                      [siteKey]="siteKey"
+                      formControlName="recaptcha"
+                      >
+                  </re-captcha>
+                  @if(registerForm.get('recaptcha'); as aux) {
+                    @if(aux.invalid && (aux.dirty || aux.touched) && captchaOk === false){
+                          <div class="alert alert-danger">
+                              {{aux.hasError('required') ? 'Verifique que no es un robot.' : 'Verifique que no es un robot.'}}
+                          </div>
+                      }   
+                  }
   
                   <hr class="my-4">
   

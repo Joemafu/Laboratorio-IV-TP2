@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
+
 export class LoginComponent implements OnInit {
 
   protected mail: string = "";

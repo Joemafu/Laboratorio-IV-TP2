@@ -47,6 +47,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['bienvenida']);
   }
 
+  buttonTurnos() {
+    this.router.navigate(['turnos']);
+  }
+
   buttonAdministrarUsuarios() {
     this.router.navigate(['administrar-usuarios']);
   }

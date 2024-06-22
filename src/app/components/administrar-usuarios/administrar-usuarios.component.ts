@@ -29,21 +29,17 @@ export class AdministrarUsuariosComponent implements OnInit {
   ngOnInit(): void {
     this.especialistaSubscription = this.userService.especialistas$.subscribe((especialistas) => {
       if (especialistas) {
-        console.log (especialistas);
         this.especialistas = especialistas;
       }
       else {
-        console.log('No hay especialistas');
         this.especialistas = [];
       }
     });
     this.pacienteSubscription = this.userService.pacientes$.subscribe((pacientes) => {
       if (pacientes) {
-        console.log (pacientes);
         this.pacientes = pacientes;
       }
       else {
-        console.log('No hay pacientes');
         this.pacientes = [];
       }
     });
