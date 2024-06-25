@@ -4,6 +4,7 @@ import { RegistrarPacienteComponent } from '../registrar-paciente/registrar-paci
 import { RegistrarAdminComponent } from '../registrar-admin/registrar-admin.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -19,6 +20,7 @@ export class RegistrarUsuarioComponent {
   mostrarFormA = false;
   esAdmin = false;
   authService = inject(AuthService);
+  userService = inject(UserService);
 
   mostrarFormEspecialista()
   {

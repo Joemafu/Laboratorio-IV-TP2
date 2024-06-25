@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Especialista } from '../models/especialista';
+import { Especialidad } from '../interfaces/especialidad';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -47,5 +48,11 @@ export class EspecialistaService {
   getEspecialistaById(especialistaId: string): Observable<Especialista> {
     const docRef = doc(this.firestore, `especialistas/${especialistaId}`);
     return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Especialista));
+  }
+
+  //revisar esta funcion
+  getEspecialidadesByEspecialistaId(especialistaId: string): Observable<Especialidad[]> {
+    const col = collection(this.firestore, `especialistas/${especialistaId}/especialidades`);
+    return collectionData(col, { idField: 'id' }) as Observable<Especialidad[]>;
   }
 }

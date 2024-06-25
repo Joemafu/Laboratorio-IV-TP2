@@ -121,15 +121,19 @@
                   </div>
         
                   <div class="col-12">
-                    <label for="especialidad" class="form-label">Seleccione la especialidad ejercida <span class="text-body-secondary"></span></label>
-                    <input formControlName="especialidad" readonly type="text" class="form-control" id="especialidad" required >
-                    @if(registerForm.get('especialidad'); as aux) {
+                    <label for="especialidades" class="form-label">Seleccione una o más especialidades de la tabla.</label>
+                    <div *ngFor="let especCtrl of especialidades.controls; let i = index" class="input-group mb-3">
+                      <input [formControlName]="i" type="text" class="form-control" [value]="especialidades.value[i]" readonly required>
+                      <button type="button" class="btn btn-danger" (click)="eliminarEspecialidad(i)">-</button>
+                    </div>
+                    <!-- <button type="button" class="btn btn-primary" (click)="agregarEspecialidad('')">+</button> -->
+                    @if(registerForm.get('especialidades'); as aux) {
                         @if(aux.invalid && (aux.dirty || aux.touched)){
-                            <div class="alert alert-danger">
-                                {{aux.hasError('required') ? 'Utilice la tabla para seleccionar la especialidad.' : 'Es inválida.'}}
-                            </div>
-                        }   
-                    }
+                              <div class="alert alert-danger">
+                                  {{aux.hasError('required') ? 'Seleccione al menos una especialidad.' : 'Es inválida.'}}
+                              </div>
+                          }   
+                      }
                   </div>
 
                   <re-captcha 

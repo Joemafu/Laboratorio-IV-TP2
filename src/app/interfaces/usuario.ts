@@ -1,3 +1,5 @@
+import { Especialidad } from "./especialidad";
+
 export interface Usuario {
     id?: string;
     nombre?: string;
@@ -13,5 +15,5 @@ export interface Usuario {
 
     fotoPerfilDos?: string;
     obraSocial?: string;
-    especialidad?: string[];
+    especialidades?: Especialidad[];
 }

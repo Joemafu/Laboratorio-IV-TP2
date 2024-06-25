@@ -1,1 +1,39 @@
-<p>turnos-especialista works!</p>
+<div class="container">
+    <h2>Mis Turnos</h2>
+  
+    <!-- Filtro de Turnos -->
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Buscar por especialidad" [(ngModel)]="filtroEspecialidad">
+      <input type="text" class="form-control" placeholder="Buscar por paciente" [(ngModel)]="filtroPaciente">
+    </div>
+  
+    <!-- Listado de Turnos -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Especialidad</th>
+          <th>Paciente</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let turno of turnosFiltrados">
+          <td>{{ turno.especialidad }}</td>
+          <td>{{ turno.pacienteId }}</td>
+          <td>{{ turno.fecha | date:'short' }}</td>
+          <td>{{ turno.estado }}</td>
+          <td>
+            <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm">Cancelar</button>
+            <button *ngIf="puedeRechazar(turno)" (click)="rechazarTurno(turno)" class="btn btn-warning btn-sm">Rechazar</button>
+            <button *ngIf="puedeAceptar(turno)" (click)="aceptarTurno(turno)" class="btn btn-success btn-sm">Aceptar</button>
+            <button *ngIf="puedeFinalizar(turno)" (click)="finalizarTurno(turno)" class="btn btn-primary btn-sm">Finalizar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <!-- BORRADOR - REVISAR -->

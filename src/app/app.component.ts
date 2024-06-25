@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +16,11 @@ import { CommonModule } from '@angular/common';
 export class AppComponent implements OnInit {
   title = 'Mahafud Joel - Clinica TP2 Labo IV';
   authService : AuthService = inject(AuthService);
+  userService : UserService = inject(UserService);
   usuario: string = '';
   public subscription: Subscription = new Subscription();
   public router = inject(Router);
+  public personaLogeada: any;
 
   constructor(){
 
@@ -29,14 +32,21 @@ export class AppComponent implements OnInit {
         this.authService.currentUserSig.set({
           mail: user.email!,
           pass: "",
+          nombre: "", 
+          apellido: "",
         });
         this.usuario = user.email!;
+        this.userService.getUsuarioPorCorreo(this.usuario);
+        
       } else {
         this.usuario="";
         this.authService.currentUserSig.set(null);    
       }
     });
+    
 
+
+    //this.userService.personaLogeada = this.personaLogeada;
   }
 
   ngOnDestroy(): void {

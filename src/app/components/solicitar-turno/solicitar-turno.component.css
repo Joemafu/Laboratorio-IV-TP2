@@ -1,0 +1,35 @@
+    .profesionales button, .especialidades button, .horarios button {
+        display: inline-block;
+        width: 150px;
+        height: 150px;
+        margin: 10px;
+        text-align: center;
+        vertical-align: top;
+        background-color: #f0f0f0;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+    .profesionales img, .especialidades img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+    .profesionales p, .especialidades p, .horarios p {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .profesionales img.inactive {
+        filter: grayscale(100%);
+    }
+
+    .profesionales img.inactive:hover {
+        /* filter: grayscale(0%); */
+        cursor: not-allowed;
+    }
+
+    .profesionales button:disabled {
+        pointer-events: none;
+    }

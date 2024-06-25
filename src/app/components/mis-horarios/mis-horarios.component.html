@@ -1,0 +1,79 @@
+<h1 class="text-primary">Seleccione especialidad</h1>
+<div class="container-fluid d-flex justify-content-center align-items-center full-width">
+  <nav>
+    <div class="nav nav-tabs" id="nav-especialidades-tab" role="tablist">
+      <button
+        *ngFor="let especialidad of especialidades; let i = index"
+        class="nav-link"
+        id="nav-especialidad-{{i}}-tab"
+        data-bs-toggle="tab"
+        attr.data-bs-target="#nav-especialidad-{{+i}}"
+        type="button"
+        role="tab"
+        attr.aria-controls="nav-especialidad-{{+i}}"
+        [ngClass]="{ active: especialidad === selectedEspecialidad }"
+        (click)="selectEspecialidad(especialidad)"
+      >
+        {{ especialidad }}
+      </button>
+    </div>
+  </nav>
+</div>
+
+<h1 class="text-primary">Seleccione día</h1>
+
+<div class="container-fluid d-flex justify-content-center align-items-center full-width">
+  <nav>
+    <div class="nav nav-tabs" id="nav-semanas-tab" role="tablist">
+      <button
+        *ngFor="let dia of dias; let i = index"
+        class="nav-link"
+        id="nav-dia-{{i}}-tab"
+        data-bs-toggle="tab"
+        attr.data-bs-target="#nav-dia-{{+i}}"
+        type="button"
+        role="tab"
+        attr.aria-controls="nav-dia-{{+i}}"
+        [ngClass]="{ active: dia === activeDay}"
+        (click)="setActiveDay(dia)"
+      >
+        {{ dia }}
+      </button>
+    </div>
+  </nav>
+</div>
+
+<h1 class="text-primary">Seleccione horarios</h1>
+
+<div class="container-fluid d-flex justify-content-center align-items-center full-width">
+  <div class="tab-content" id="nav-tabContent">
+    <div *ngFor="let dia of dias; let i = index" class="tab-pane fade show active" [id]="'nav-dia-' + i" role="tabpanel" [ngClass]="{ active: dia === activeDay }">
+      <div class="py-3 row container-fluid d-flex justify-content-center align-items-center full-width">
+        <div *ngFor="let hora of getHorasDisponibles(dia)" class="col-auto mb-3">
+          <button
+            class="btn horario-btn"
+            [ngClass]="{
+              'btn-primary': isTurnoSeleccionado(dia, hora),
+              'btn-secondary': !isTurnoSeleccionado(dia, hora),
+              'disabled': !isTurnoDisponible(dia, hora)
+            }"
+            [disabled]="!isTurnoDisponible(dia, hora)"
+            (click)="toggleTurno(dia, hora)"
+          >
+            {{ hora }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container-fluid d-flex justify-content-center align-items-center full-width save-cancel-btns">
+  <button (click)="saveHorarios()" class="btn btn-success">Guardar Horarios</button>
+  <button (click)="cancelar()" class="btn btn-danger">Cancelar</button>
+</div>
+
+
+<!-- BORRADOR - REVISAR -->

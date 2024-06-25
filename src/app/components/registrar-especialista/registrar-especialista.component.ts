@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule, FormArray } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { EspecialidadService } from '../../services/especialidad.service';
 import { TablaEspecialidadesComponent } from '../tabla-especialidades/tabla-especialidades.component';
@@ -16,8 +16,9 @@ import { recaptchaSiteKey } from '../../../environments/environment.development'
   standalone: true,
   imports: [ ReactiveFormsModule, CommonModule, TablaEspecialidadesComponent, FormsModule, RecaptchaModule, RecaptchaFormsModule ],
   templateUrl: './registrar-especialista.component.html',
-  styleUrl: './registrar-especialista.component.css'
+  styleUrls: ['./registrar-especialista.component.css']
 })
+
 export class RegistrarEspecialistaComponent implements OnInit {
   
   fb : FormBuilder = inject(FormBuilder);
@@ -55,14 +56,43 @@ export class RegistrarEspecialistaComponent implements OnInit {
       nroDocumento: ['', [required, minDni, maxDni, numMinDni, numMaxDni]],
       fechaNac: ['', [required]],
       fotoPerfil: ['', [required, formatoImagen]],
-      especialidad: ['', [required]],
-      rol: 'especialista',
+      especialidades: this.fb.array([], Validators.required),
+      rol: 'Especialista',
       activo: false,
       recaptcha: [null, [required]]
     });
   }
 
   ngOnInit(): void {}
+
+  get especialidades(): FormArray {
+    return this.registerForm.get('especialidades') as FormArray;
+  }
+
+  agregarEspecialidad(especialidad: string) {
+    if (!this.especialidades.value.includes(especialidad)) {
+      this.especialidades.push(this.fb.control(especialidad, Validators.required));
+    }    
+  }
+
+  eliminarEspecialidad(index: number) {
+    this.especialidades.removeAt(index);
+  }
+
+  onEspecialidadSeleccionada(id: string): void {
+    this.especialidadService.getEspecialidadById(id).subscribe((espec: Especialidad) => {
+      this.agregarEspecialidad(espec.especialidad);
+    });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.archivoSeleccionado = file;
+      this.registerForm.patchValue({ fotoPerfil: file });
+    }
+  }
 
   onSubmit() {
     this.errorMensaje = '';
@@ -71,13 +101,13 @@ export class RegistrarEspecialistaComponent implements OnInit {
       this.registerForm.markAsPristine();
       const especialista: Especialista = this.registerForm.value;
       if (this.archivoSeleccionado) {
-        this.imagenUploadService.subirImagen(this.archivoSeleccionado, this.registerForm.get('nroDocumento')?.value,1).then((url) => {
+        this.imagenUploadService.subirImagen(this.archivoSeleccionado, this.registerForm.get('nroDocumento')?.value, 1).then((url) => {
           especialista.fotoPerfil = url;
-          this.authService.register(especialista.mail, especialista.pass).then((mensajeError) => {
-            if (mensajeError){
+          this.authService.register(especialista.mail, especialista.pass, especialista.nroDocumento).then((mensajeError) => {
+            if (mensajeError) {
               this.errorMensaje = mensajeError;
               return Promise.reject(mensajeError);
-            }    
+            }
             return this.especialistaService.agregarEspecialista(especialista);
           });
         }).then(() => {
@@ -96,21 +126,6 @@ export class RegistrarEspecialistaComponent implements OnInit {
     }
   }
 
-  onEspecialidadSeleccionada(id: string): void {
-    this.especialidadService.getEspecialidadById(id).subscribe((espec: Especialidad) => {
-      this.registerForm.patchValue({ especialidad: espec.especialidad});
-    });
-  }
-
-  onFileSelected(event: Event) : void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.archivoSeleccionado = file;
-      this.registerForm.patchValue({ foto: file });
-    }
-  }
-  
   resolved(token: any): void {
     this.captchaOk = true;
     this.captchaToken = token;

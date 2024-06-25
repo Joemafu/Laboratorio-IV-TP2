@@ -51,7 +51,7 @@ export class AdministrarUsuariosComponent implements OnInit {
   }
 
   toggleUsuarioActivo(usuario: Paciente | Especialista, activo: boolean) {
-    const collectionPath = usuario.rol === 'paciente' ? this.userService.PATHUNO : this.userService.PATHDOS;
+    const collectionPath = usuario.rol === 'Paciente' ? this.userService.PATHUNO : this.userService.PATHDOS;
     this.userService.actualizarEstadoUsuario(collectionPath, usuario.id, activo).then(() => {
       usuario.activo = activo;
     }).catch(error => {
@@ -60,17 +60,17 @@ export class AdministrarUsuariosComponent implements OnInit {
   }
 
   /* activarUsuario(usuario: Usuario) {
-    if (usuario.rol === 'paciente') {
+    if (usuario.rol === 'Paciente') {
       this.userService.activarPaciente(usuario);
-    } else if (usuario.rol === 'especialista') {
+    } else if (usuario.rol === 'Especialista') {
       this.userService.activarEspecialista(usuario);
     }
   }
 
   desactivarUsuario(usuario: Usuario) {
-    if (usuario.rol === 'paciente') {
+    if (usuario.rol === 'Paciente') {
       this.userService.desactivarPaciente(usuario);
-    } else if (usuario.rol === 'especialista') {
+    } else if (usuario.rol === 'Especialista') {
       this.userService.desactivarEspecialista(usuario);
     }
   } */

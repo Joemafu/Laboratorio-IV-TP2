@@ -1,0 +1,38 @@
+<div class="container">
+    <h2>Solicitar Turno</h2>
+
+    <div *ngIf="!seleccionadoEspecialista">
+        <h3>Seleccionar Profesional</h3>
+        <div class="profesionales">
+            <button *ngFor="let especialista of especialistas" (click)="onEspecialistaSelect(especialista)"
+            [disabled]="!especialista.activo" [ngClass]="{'inactive': !especialista.activo}">
+                <img [src]="especialista.fotoPerfil || 'assets/default-profesional.png'" 
+                [ngClass]="{'inactive': !especialista.activo}" alt="Imagen Profesional">
+                <p *ngIf="especialista.activo">{{ especialista.nombre }} {{ especialista.apellido }}</p>
+                <p *ngIf="!especialista.activo">{{ especialista.nombre }} {{ especialista.apellido }} (inactivo)</p>
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="seleccionadoEspecialista && !seleccionadaEspecialidad">
+        <h3>Seleccionar Especialidad</h3>
+        <div class="especialidades">
+            <button *ngFor="let especialidad of especialidades" (click)="onEspecialidadSelect(especialidad)">
+                <img [src]="especialidad || 'assets/default-especialidad.png'" alt="Imagen Especialidad">
+                <p>{{ especialidad.especialidad }}</p>
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="seleccionadoEspecialista && seleccionadaEspecialidad">
+        <h3>Seleccionar Fecha y Horario</h3>
+        <div class="horarios">
+            <button *ngFor="let horario of horariosDisponibles" (click)="onFechaSelect(horario.fecha, horario.horario)">
+                <p>{{ horario.fecha }} {{ horario.horario }}</p>
+            </button>
+        </div>
+        <button (click)="onSubmit()" class="btn btn-primary">Solicitar Turno</button>
+    </div>
+</div>
+
+<!-- BORRADOR - REVISAR -->

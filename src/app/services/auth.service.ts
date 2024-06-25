@@ -1,5 +1,4 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Firestore, collection, getDocs, query, where } from '@angular/fire/firestore';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, sendEmailVerification, sendPasswordResetEmail } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Usuario } from '../interfaces/usuario';
@@ -7,6 +6,8 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { recaptchaSecretKey } from '../../environments/environment.development';
 import  Swal from 'sweetalert2';
+import { UserService } from './user.service';
+import { Subscription } from 'rxjs';
 
 
 @Injectable({
@@ -15,23 +16,24 @@ import  Swal from 'sweetalert2';
 export class AuthService {
   private firebaseAuth: Auth = inject(Auth);
   private router: Router = inject(Router);
-  private firestore: Firestore = inject(Firestore);
 
   public user$ = user(this.firebaseAuth);
   public currentUserSig = signal<Usuario | null | undefined>(undefined);
   public currentUser: string = '';
 
-  public personaLogeada: Usuario | null = null;
-
   public http: HttpClient = inject(HttpClient);
   private secretKey = recaptchaSecretKey;
 
+  public userService: UserService = inject(UserService);
 
-  constructor() {
+  constructor() {}
 
-  }
+  async register(mail: string, password: string, nroDocumento: string): Promise<string> {
 
-  register(mail: string, password: string): Promise<string> {
+    if(await this.userService.documentoRegistrado(nroDocumento))
+    {
+      return Promise.resolve('El número de documento ya se encuentra registrado.');
+    }
 
     return new Promise<string>((resolve) => {
       createUserWithEmailAndPassword(this.firebaseAuth, mail, password)
@@ -72,26 +74,12 @@ export class AuthService {
         .then(async (userCredential) => {
           if (userCredential.user && userCredential.user.emailVerified) {
             const user = userCredential.user;
-  
-            const collections = ['admins', 'pacientes', 'especialistas'];
-            let usuarioActivo = false;
-  
-            for (const collectionName of collections) {
-              const userQuery = query(collection(this.firestore, collectionName), where('mail', '==', user.email));
-              const querySnapshot = await getDocs(userQuery);
-  
-              if (!querySnapshot.empty) {
-                const userDoc = querySnapshot.docs[0];
-                const userData = userDoc.data() as Usuario;
-                this.personaLogeada = userData;
-                if (userDoc.exists() && userData['activo']) {
-                  usuarioActivo = true;
-                  this.currentUserSig.set(userData);
-                  break;
-                }
-              }
-            }
-            if (usuarioActivo) {
+
+            await this.userService.getUsuarioPorCorreo(user.email!);
+
+            if(this.userService.usuarioActivo())
+            {
+              this.currentUserSig.set(this.userService.personaLogeada);
               this.router.navigate(['/bienvenida']);
               resolve('');
               if (user.email) {
@@ -125,14 +113,14 @@ export class AuthService {
           resolve(mensajeError);
         });
     });
-  }
-  
+  }  
 
   logout() {
     signOut(this.firebaseAuth).then(() => {
-      this.personaLogeada = null;
+      //this.personaLogeada = null;
       this.currentUserSig.set(null);
       this.router.navigate(['/login']);
+      this.userService.borrarPersonaLogeada();
     });
   }
 

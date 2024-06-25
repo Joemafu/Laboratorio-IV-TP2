@@ -18,7 +18,8 @@ h1 {
     bottom: 0;
     width: 100%;
     background-color: #114d79;
-    color: white
+    color: white;
+    z-index: 1000;
   }
 
   .mainComponent{

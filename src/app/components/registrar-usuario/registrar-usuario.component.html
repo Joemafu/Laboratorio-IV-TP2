@@ -12,7 +12,7 @@
             (click)="mostrarFormPaciente()">
             <img src="../../../assets/paciente.svg" alt="paciente">
     </button>
-    @if( authService.personaLogeada!=null && authService.personaLogeada.rol === 'admin')
+    @if( userService.personaLogeada!=null && userService.personaLogeada.rol === 'Admin')
     {
         <button 
             id="botonAdmin" data-mdb-button-init data-mdb-ripple-init 

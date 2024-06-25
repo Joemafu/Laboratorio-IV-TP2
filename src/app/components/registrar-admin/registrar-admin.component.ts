@@ -51,7 +51,7 @@ export class RegistrarAdminComponent  implements OnInit{
       nroDocumento: ['', [required, minDni, maxDni, numMinDni, numMaxDni]],
       fechaNac: ['', [required]],
       fotoPerfil: ['', [required, formatoImagen]],
-      rol: 'admin',
+      rol: 'Admin',
       activo: true,
       recaptcha: [null, [required]]
     });
@@ -68,7 +68,7 @@ export class RegistrarAdminComponent  implements OnInit{
       if (this.archivoSeleccionado) {
         this.imagenUploadService.subirImagen(this.archivoSeleccionado, this.registerForm.get('nroDocumento')?.value,1).then((urlUno) => {
           admin.fotoPerfil = urlUno;
-          this.authService.register(admin.mail, admin.pass).then((mensajeError) => {
+          this.authService.register(admin.mail, admin.pass, admin.nroDocumento).then((mensajeError) => {
             if (mensajeError){
               this.errorMensaje = mensajeError;
               return Promise.reject(mensajeError);

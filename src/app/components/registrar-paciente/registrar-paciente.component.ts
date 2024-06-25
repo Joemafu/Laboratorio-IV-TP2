@@ -55,7 +55,7 @@ export class RegistrarPacienteComponent implements OnInit{
       fotoPerfil: ['', [required, formatoImagen]],
       fotoPerfilDos: ['', [required, formatoImagen]],
       obraSocial: ['', [required]],
-      rol: 'paciente',
+      rol: 'Paciente',
       activo: true,
       recaptcha: [null, [required]]
     });
@@ -76,7 +76,7 @@ export class RegistrarPacienteComponent implements OnInit{
               paciente.fotoPerfil = urlUno;
               this.imagenUploadService.subirImagen(this.archivoSeleccionadoDos!, this.registerForm.get('nroDocumento')?.value,2).then((urlDos) => {
                 paciente.fotoPerfilDos = urlDos;
-                this.authService.register(paciente.mail, paciente.pass).then((mensajeError) => {
+                this.authService.register(paciente.mail, paciente.pass, paciente.nroDocumento).then((mensajeError) => {
                   if (mensajeError){
                     this.errorMensaje = mensajeError;
                     return Promise.reject(mensajeError);

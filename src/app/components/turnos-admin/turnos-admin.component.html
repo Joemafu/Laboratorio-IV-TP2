@@ -1,1 +1,37 @@
-<p>turnos-admin works!</p>
+<div class="container">
+  
+  
+    <!-- Filtro de Turnos -->
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Buscar por especialidad" [(ngModel)]="filtroEspecialidad">
+      <input type="text" class="form-control" placeholder="Buscar por especialista" [(ngModel)]="filtroEspecialista">
+    </div>
+  
+    <!-- Listado de Turnos -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Especialidad</th>
+          <th>Especialista</th>
+          <th>Paciente</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let turno of turnosFiltrados">
+          <td>{{ turno.especialidad }}</td>
+          <td>{{ turno.especialistaId }}</td>
+          <td>{{ turno.pacienteId }}</td>
+          <td>{{ turno.fecha | date:'short' }}</td>
+          <td>{{ turno.estado }}</td>
+          <td>
+            <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm">Cancelar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- BORRADOR - REVISAR -->

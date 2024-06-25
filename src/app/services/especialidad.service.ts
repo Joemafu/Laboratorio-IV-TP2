@@ -23,7 +23,7 @@ export class EspecialidadService {
     return collectionData(queryCol, { idField: 'id' }) as Observable<Especialidad[]>;
   }
 
-  public async agregarEspecialidad(especialidad: Especialidad) {
+  async agregarEspecialidad(especialidad: Especialidad) {
     try{
       let especialidades = collection(this.firestore, "especialidades");
       let docRef = await addDoc(especialidades, { especialidad: especialidad.especialidad});
