@@ -25,6 +25,22 @@
     Estos botones deben ser cuadrados. 
     Formato (2021-09-09 1:15 PM)
 
+
+    Cambios Sprint 3
+
+    * Sección Pacientes
+    - Para los especialistas. 
+      - Solo deberá mostrar los usuarios que el especialista haya atendido al menos 1 vez."
+      -	Mostrar los usuarios con un favbutton redondo , imagen y nombre, al seleccionar un paciente  se muestra los dellaes de los turnos y un acceso a la reseña  de cada consulta
+Sección usuarios	"Solamente para el perfil Administrador, un excel con los datos de los
+usuarios."	Mostrar los usuarios con un favbutton redondo , imagen y nombre.Al seleccionarlo descarga los datos de que turnos tomo y con quien
+Mi perfil	"Para los usuarios paciente, un pdf con la historia clínica. El PDF tiene que tener
+logo de la clínica, título del informe y fecha de emisión."	Poder bajar Todas las atenciones que realice segun un PROFESIONAL
+Agustin friadenrich
+12:25 p.m.
+Animaciones	"Se debe agregar al menos 2, como mínimo, animaciones de transición entre componentes al navegar
+la aplicación."	Derecha a izquierda
+
 */
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';

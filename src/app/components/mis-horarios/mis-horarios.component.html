@@ -34,7 +34,7 @@
         type="button"
         role="tab"
         attr.aria-controls="nav-dia-{{+i}}"
-        [ngClass]="{ active: dia === activeDay}"
+        [ngClass]="{ active: dia === activeDay }"
         (click)="setActiveDay(dia)"
       >
         {{ dia }}
@@ -53,12 +53,12 @@
           <button
             class="btn horario-btn"
             [ngClass]="{
-              'btn-primary': isTurnoSeleccionado(dia, hora),
-              'btn-secondary': !isTurnoSeleccionado(dia, hora),
+              'btn-primary': !isTurnoSeleccionado(dia, hora),
+              'btn-secondary': isTurnoSeleccionado(dia, hora),
               'disabled': !isTurnoDisponible(dia, hora)
             }"
-            [disabled]="!isTurnoDisponible(dia, hora)"
             (click)="toggleTurno(dia, hora)"
+            [disabled]="!isTurnoDisponible(dia, hora)"
           >
             {{ hora }}
           </button>
@@ -68,12 +68,9 @@
   </div>
 </div>
 
-
-
 <div class="container-fluid d-flex justify-content-center align-items-center full-width save-cancel-btns">
   <button (click)="saveHorarios()" class="btn btn-success">Guardar Horarios</button>
   <button (click)="cancelar()" class="btn btn-danger">Cancelar</button>
 </div>
-
 
 <!-- BORRADOR - REVISAR -->

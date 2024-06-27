@@ -20,7 +20,7 @@ export class MisHorariosComponent implements OnInit {
   especialidades: Especialidad[] = [];
   especialista: Especialista;
   dias: string[] = [];
-  selectedTurnos: { especialidad: string, dia: string, hora: string }[] = [];
+  selectedTurnos: { especialidad: string, fecha: string, hora: string }[] = [];
   selectedEspecialidad?: Especialidad;
   activeDay: string = '';
   userService: UserService = inject(UserService);
@@ -28,12 +28,14 @@ export class MisHorariosComponent implements OnInit {
   turnoService: TurnoService = inject(TurnoService);
   especialistaService: EspecialistaService = inject(EspecialistaService);
   turnos: Turno[] = [];
+  turnosExistentes: Turno[] = [];
 
   constructor() {
     this.especialista = this.userService.personaLogeada;
     this.loadEspecialidades();
     this.generateDias();
     this.initializeSelectedTurnos();
+    this.loadTurnosExistentes();
   }
 
   ngOnInit(): void {
@@ -47,6 +49,13 @@ export class MisHorariosComponent implements OnInit {
     console.log(this.especialista.especialidades[0]);
     this.selectedEspecialidad = this.especialidades[0];
     console.log(this.selectedEspecialidad);
+  }
+
+  loadTurnosExistentes(): void {
+    this.turnoService.obtenerTurnosPorEspecialista(this.especialista.nroDocumento).subscribe(turnos => {
+      this.turnosExistentes = turnos;
+      console.log('Turnos existentes:', this.turnosExistentes);
+    });
   }
 
   selectEspecialidad(especialidad: Especialidad): void {
@@ -72,8 +81,8 @@ export class MisHorariosComponent implements OnInit {
     this.selectedTurnos = [];
   }  
 
-  getHorasDisponibles(dia: string): string[] {
-    const [weekday] = dia.split(' ');
+  getHorasDisponibles(fecha: string): string[] {
+    const [weekday] = fecha.split(' ');
     const isSaturday = weekday.toLowerCase() === 'sábado';
     const horas = [
       '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
@@ -84,51 +93,52 @@ export class MisHorariosComponent implements OnInit {
       '16:30', '17:00', '17:30', '18:00', '18:30'];
   }
 
-  isSunday(dia: string): boolean {
-    const [weekday] = dia.split(' ');
+  isSunday(fecha: string): boolean {
+    const [weekday] = fecha.split(' ');
     return weekday.toLowerCase() === 'domingo';
   }
 
-  setActiveDay(dia: string): void {
-    this.activeDay = dia;
+  setActiveDay(fecha: string): void {
+    this.activeDay = fecha;
     console.log(this.activeDay);
   }
 
-  isTurnoSeleccionado(dia: string, hora: string): boolean {
+  isTurnoSeleccionado(fecha: string, hora: string): boolean {
     if (!this.selectedEspecialidad) return false;
   
-    const formattedDia = `${dia.split(' ')[0]} ${dia.split(' ')[1]}`;
+    const formattedFecha = `${fecha.split(' ')[0]} ${fecha.split(' ')[1]}`;
     const formattedHora = `${hora} hs`;
   
     return this.selectedTurnos.some(
-      t => t.especialidad === this.selectedEspecialidad?.especialidad && t.dia === formattedDia && t.hora === formattedHora
+      t => t.especialidad === this.selectedEspecialidad?.especialidad && t.fecha === formattedFecha && t.hora === formattedHora
     );
   }
 
-  toggleTurno(dia: string, hora: string): void {
+  toggleTurno(fecha: string, hora: string): void {
     if (!this.selectedEspecialidad) return;
   
     console.log("toggleTurno:");
   
-    const formattedDia = `${dia.split(' ')[0]} ${dia.split(' ')[1]}`;
+    const formattedFecha = `${fecha.split(' ')[0]} ${fecha.split(' ')[1]}`;
     const formattedHora = `${hora} hs`;
+
   
-    console.log('Formatted Día:', formattedDia);
+    console.log('Formatted Día:', formattedFecha);
     console.log('Formatted Hora:', formattedHora);
   
     let turno = {
       especialidad: String(this.selectedEspecialidad),
-      dia: formattedDia,
+      fecha: formattedFecha,
       hora: formattedHora
     };
   
-    console.log('Turno creado:', turno);
+    console.log('Turno seleccionado:', turno);
   
     const index = this.selectedTurnos.findIndex(
-      t => t.especialidad === turno.especialidad && t.dia === turno.dia && t.hora === turno.hora
+      t => t.especialidad === turno.especialidad && t.fecha === turno.fecha && t.hora === turno.hora
     );
   
-    console.log('Índice encontrado:', index);
+    console.log('Índice buscado:', index);
   
     if (index > -1) {
       console.log('Turno encontrado, eliminando...');
@@ -142,15 +152,29 @@ export class MisHorariosComponent implements OnInit {
   }
   
 
-  isTurnoDisponible(dia: string, hora: string): boolean {
-    if (!this.selectedEspecialidad) return false;
+  isTurnoDisponible(fecha: string, hora: string): boolean {
+    //if (!this.selectedEspecialidad) return false;
 
-    const formattedDia = `${dia.split(' ')[0]} ${dia.split(' ')[1]}`;
-    const formattedHora = `${hora} hs`;
-  
-    return !this.selectedTurnos.some(
-      t => t.especialidad === String(this.selectedEspecialidad) && t.dia === formattedDia && t.hora === formattedHora
+/*     console.log("turnos existentes: ");
+    console.log(this.turnosExistentes); */
+
+    const turnoExistente = this.turnosExistentes.some(
+      t => t.fecha === fecha &&
+           t.hora === hora
     );
+
+/*     console.log("turnos seleccionados: ");
+    console.log(this.selectedTurnos); */
+
+    const turnoSeleccionado = this.selectedTurnos.some(
+      t => t.fecha === fecha &&
+           t.hora === hora
+    );
+
+/*     console.log('Turno existente: ', turnoExistente, fecha, hora);
+    console.log('Turno seleccionado:', turnoSeleccionado, fecha, hora); */
+
+    return (!turnoExistente || !turnoSeleccionado);
   }
 
   saveHorarios(): void {
@@ -163,10 +187,12 @@ export class MisHorariosComponent implements OnInit {
         especialistaId: this.especialista.nroDocumento,
         especialistaNombre: `${this.especialista.apellido} ${this.especialista.nombre}`,
         especialidad: turno.especialidad,
-        fecha: turno.dia,
+        fecha: turno.fecha,
         hora: turno.hora,
-        estado: 'Libre'
-        
+        estado: 'Libre',
+        comentario: '',
+        calificacion: '',
+        encuesta: ''
       };
       console.log('Turno creado:');
       console.log('ID:', turnoNuevo.id);

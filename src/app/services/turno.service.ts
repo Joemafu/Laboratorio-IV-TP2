@@ -97,3 +97,7 @@ export class TurnoService {
 }
 
 /* BORRADOR - REVISAR */
+
+
+/* color primario seleccion : hover */
+/* #1c79b8 */
