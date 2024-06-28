@@ -67,7 +67,7 @@ export class MisHorariosComponent implements OnInit {
 
   generateDias(): void {
     const start = new Date();
-    for (let i = 0; i < 14; i++) {
+    for (let i = 1; i < 15; i++) {
       const day = new Date(start);
       day.setDate(start.getDate() + i);
       const diaStr = `${day.toLocaleString('default', { weekday: 'long' })} ${day.getDate()}/${day.getMonth() + 1}`;
@@ -79,6 +79,7 @@ export class MisHorariosComponent implements OnInit {
 
   initializeSelectedTurnos(): void {
     this.selectedTurnos = [];
+    this.turnos = [];
   }  
 
   getHorasDisponibles(fecha: string): string[] {
@@ -100,31 +101,26 @@ export class MisHorariosComponent implements OnInit {
 
   setActiveDay(fecha: string): void {
     this.activeDay = fecha;
+    console.log("activeDay: ");
     console.log(this.activeDay);
   }
 
   isTurnoSeleccionado(fecha: string, hora: string): boolean {
     if (!this.selectedEspecialidad) return false;
   
-    const formattedFecha = `${fecha.split(' ')[0]} ${fecha.split(' ')[1]}`;
-    const formattedHora = `${hora} hs`;
+    const formattedFecha = this.formatFecha(fecha);
+    const formattedHora = this.formatHora(hora);
   
     return this.selectedTurnos.some(
-      t => t.especialidad === this.selectedEspecialidad?.especialidad && t.fecha === formattedFecha && t.hora === formattedHora
+      t => /* t.especialidad === String(this.selectedEspecialidad) && */ t.fecha === formattedFecha && t.hora === formattedHora
     );
   }
 
   toggleTurno(fecha: string, hora: string): void {
     if (!this.selectedEspecialidad) return;
   
-    console.log("toggleTurno:");
-  
-    const formattedFecha = `${fecha.split(' ')[0]} ${fecha.split(' ')[1]}`;
-    const formattedHora = `${hora} hs`;
-
-  
-    console.log('Formatted Día:', formattedFecha);
-    console.log('Formatted Hora:', formattedHora);
+    const formattedFecha = this.formatFecha(fecha);
+    const formattedHora = this.formatHora(hora);
   
     let turno = {
       especialidad: String(this.selectedEspecialidad),
@@ -132,19 +128,13 @@ export class MisHorariosComponent implements OnInit {
       hora: formattedHora
     };
   
-    console.log('Turno seleccionado:', turno);
-  
     const index = this.selectedTurnos.findIndex(
-      t => t.especialidad === turno.especialidad && t.fecha === turno.fecha && t.hora === turno.hora
+      t => /* t.especialidad === turno.especialidad && */ t.fecha === turno.fecha && t.hora === turno.hora
     );
   
-    console.log('Índice buscado:', index);
-  
     if (index > -1) {
-      console.log('Turno encontrado, eliminando...');
-      this.selectedTurnos.splice(index, 1);  
+      this.selectedTurnos.splice(index, 1);
     } else {
-      console.log('Turno no encontrado, agregando...');
       this.selectedTurnos.push(turno);
     }
   
@@ -152,29 +142,31 @@ export class MisHorariosComponent implements OnInit {
   }
   
 
+  // Compara si ya hay un turno cargado para ese especialista a esa hora y en ese día en la BD
   isTurnoDisponible(fecha: string, hora: string): boolean {
-    //if (!this.selectedEspecialidad) return false;
-
-/*     console.log("turnos existentes: ");
-    console.log(this.turnosExistentes); */
-
-    const turnoExistente = this.turnosExistentes.some(
-      t => t.fecha === fecha &&
-           t.hora === hora
-    );
-
-/*     console.log("turnos seleccionados: ");
-    console.log(this.selectedTurnos); */
-
-    const turnoSeleccionado = this.selectedTurnos.some(
-      t => t.fecha === fecha &&
-           t.hora === hora
-    );
-
-/*     console.log('Turno existente: ', turnoExistente, fecha, hora);
-    console.log('Turno seleccionado:', turnoSeleccionado, fecha, hora); */
-
-    return (!turnoExistente || !turnoSeleccionado);
+    const formattedFecha = this.formatFecha(fecha);
+    const formattedHora = this.formatHora(hora);
+  
+    /* console.log('Comparando turno:', formattedFecha, formattedHora); */
+  
+    const turnoExistente = this.turnosExistentes.some(t => {
+      const tFecha = this.formatFecha(t.fecha);
+      const tHora = this.formatHora(t.hora);
+      /* console.log('Turno existente:', tFecha, tHora); */
+      return tFecha === formattedFecha && tHora === formattedHora;
+    });
+  
+    /* console.log('Turno existente:', turnoExistente); */
+  
+    return !turnoExistente;
+  }
+  
+  private formatFecha(fecha: string): string {
+    return fecha.trim();
+  }
+  
+  private formatHora(hora: string): string {
+    return hora.replace(/\s*hs$/, '').trim();
   }
 
   saveHorarios(): void {
@@ -216,7 +208,11 @@ export class MisHorariosComponent implements OnInit {
     console.log(this.especialista);
 
     this.turnoService.agregarTurnos(this.turnos).then(() => {
-      console.log('Horarios guardados exitosamente');
+      console.log('Horarios guardados correctamente.');
+      this.initializeSelectedTurnos();
+      console.log('Selected Turnos inicializados.');
+      console.log(this.selectedTurnos);
+      console.log('------------------------');
     }).catch(error => {
       console.error('Error al guardar horarios: ', error);
     });

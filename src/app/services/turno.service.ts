@@ -8,6 +8,7 @@ import { PacienteService } from './paciente.service';
 import { EspecialistaService } from './especialista.service';
 import { Paciente } from '../models/paciente';
 import { Especialista } from '../models/especialista';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,15 @@ export class TurnoService {
       if (querySnapshot.empty) {
         const turnoDocRef = doc( this.firestore, `${this.PATH}/${this.firestore.app.options.projectId}_${Date.now()}`);
         batch.set(turnoDocRef, { ...turno, id: turnoDocRef.id });
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Se han guardado sus horarios.",
+          showConfirmButton: false,
+          timer: 2500
+        });
+
       } else {
         throw new Error(`El turno ya está ocupado: ${turno.fecha} ${turno.hora}`);
       }

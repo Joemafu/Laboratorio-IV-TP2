@@ -5,9 +5,15 @@
     @if(authService.currentUserSig() == null)
     {
       <button routerLink="/login" class="mx-1 btn btn-primary mr-2">Iniciar Sesión</button>
-
     }
-    <button routerLink="/registrar" class="mx-1 btn btn-secondary">Registro</button>
+
+    @if(authService.currentUserSig() == null || userService.personaLogeada.rol == 'Admin')
+    {
+      <button routerLink="/registrar" class="mx-1 btn btn-secondary">Registro</button>
+    }
+    @else {
+      <button routerLink="/turnos" class="mx-1 btn btn-secondary">Turnos</button>
+    }
 <!--     <button routerLink="/registrar/paciente" class="mx-1 btn btn-secondary">Registro Paciente</button>
     <button routerLink="/registrar/especialista" class="mx-1 btn btn-secondary">Registro Especialista</button> -->
     @if(authService.currentUserSig() != null)

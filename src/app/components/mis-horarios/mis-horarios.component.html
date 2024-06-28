@@ -53,7 +53,7 @@
           <button
             class="btn horario-btn"
             [ngClass]="{
-              'btn-primary': !isTurnoSeleccionado(dia, hora),
+              'btn-primary': isTurnoDisponible(dia, hora) && !isTurnoSeleccionado(dia, hora),
               'btn-secondary': isTurnoSeleccionado(dia, hora),
               'disabled': !isTurnoDisponible(dia, hora)
             }"
@@ -67,6 +67,8 @@
     </div>
   </div>
 </div>
+
+
 
 <div class="container-fluid d-flex justify-content-center align-items-center full-width save-cancel-btns">
   <button (click)="saveHorarios()" class="btn btn-success">Guardar Horarios</button>
