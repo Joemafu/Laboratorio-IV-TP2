@@ -49,10 +49,4 @@ export class EspecialistaService {
     const docRef = doc(this.firestore, `especialistas/${especialistaId}`);
     return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Especialista));
   }
-
-  //revisar esta funcion
-  getEspecialidadesByEspecialistaId(especialistaId: string): Observable<Especialidad[]> {
-    const col = collection(this.firestore, `especialistas/${especialistaId}/especialidades`);
-    return collectionData(col, { idField: 'id' }) as Observable<Especialidad[]>;
-  }
 }

@@ -42,7 +42,6 @@
     opacity: 0.6;
   }
 
-
   .active {
     background-color: #114d79; 
     color: white; 
@@ -65,5 +64,3 @@
     background-color: #6c757d !important;
     color: white;
   }
-  
-  /* BORRADOR - REVISAR */

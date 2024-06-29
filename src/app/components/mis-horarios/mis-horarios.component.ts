@@ -112,7 +112,7 @@ export class MisHorariosComponent implements OnInit {
     const formattedHora = this.formatHora(hora);
   
     return this.selectedTurnos.some(
-      t => /* t.especialidad === String(this.selectedEspecialidad) && */ t.fecha === formattedFecha && t.hora === formattedHora
+      t => t.fecha === formattedFecha && t.hora === formattedHora
     );
   }
 
@@ -129,7 +129,7 @@ export class MisHorariosComponent implements OnInit {
     };
   
     const index = this.selectedTurnos.findIndex(
-      t => /* t.especialidad === turno.especialidad && */ t.fecha === turno.fecha && t.hora === turno.hora
+      t => t.fecha === turno.fecha && t.hora === turno.hora
     );
   
     if (index > -1) {
@@ -147,16 +147,11 @@ export class MisHorariosComponent implements OnInit {
     const formattedFecha = this.formatFecha(fecha);
     const formattedHora = this.formatHora(hora);
   
-    /* console.log('Comparando turno:', formattedFecha, formattedHora); */
-  
     const turnoExistente = this.turnosExistentes.some(t => {
       const tFecha = this.formatFecha(t.fecha);
       const tHora = this.formatHora(t.hora);
-      /* console.log('Turno existente:', tFecha, tHora); */
       return tFecha === formattedFecha && tHora === formattedHora;
     });
-  
-    /* console.log('Turno existente:', turnoExistente); */
   
     return !turnoExistente;
   }
@@ -222,5 +217,3 @@ export class MisHorariosComponent implements OnInit {
     this.initializeSelectedTurnos();
   }
 }
-
-/* BORRADOR - REVISAR */
