@@ -28,28 +28,56 @@
                 style="background-color: #114d79;">
                 <p>{{ seleccionadaEspecialidad }}<p>
             </button>
+            <button *ngIf="fechaSelected && horaSelected" (click)="deseleccionarTurno()">
+                <p>{{ fechaSelected }} {{ horaSelected }}</p>
+            </button>
+            <button *ngIf="seleccionadoPaciente" (click)="deseleccionarPaciente()">
+                <img [src]="seleccionadoPaciente.fotoPerfil || '../../../assets/paciente.svg'" 
+                [alt]="'Paciente '+seleccionadoPaciente.apellido" style="background-color: #114d79;">
+                <p>{{ seleccionadoPaciente.nombre }} {{ seleccionadoPaciente.apellido }}</p>
+            </button>
         </div>
     </div>
 
     <div *ngIf="seleccionadoEspecialista && !seleccionadaEspecialidad">
         <h3>Seleccionar Especialidad</h3>
         <div class="especialidades">
-            <button *ngFor="let especialidad of especialidades" (click)="onEspecialidadSelect(especialidad)">
-                <img src="../../../assets/especialista.svg" [alt]="especialidad"
-                style="background-color: #114d79;">
+            <div *ngFor="let especialidad of especialidades" class="especialidad-container">
                 <p>{{ especialidad }}</p>
+                <button (click)="onEspecialidadSelect(especialidad)">
+                    <img src="../../../assets/especialista.svg" [alt]="especialidad" style="background-color: #114d79;">
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    <div *ngIf="seleccionadoEspecialista && seleccionadaEspecialidad && horaSelected == '' && fechaSelected == ''">
+        <h3 *ngIf="horariosDisponibles.length==0">Este profesional no cuenta con turnos disponibles en la especialidad seleccionada.</h3>
+        <h3 *ngIf="horariosDisponibles.length!=0">Seleccionar Fecha y Hora</h3>
+        <div class="horarios">
+            <button *ngFor="let horario of horariosDisponibles" (click)="onFechaSelect(horario.fecha, horario.hora)">
+                <p>{{ horario.fecha + ' ' + horario.hora | formatearFecha}}</p>
+            </button>
+           
+        </div>
+    </div>
+
+    <div *ngIf="seleccionadoEspecialista && seleccionadaEspecialidad && horaSelected && fechaSelected && userService.personaLogeada.rol == 'Admin' && !seleccionadoPaciente">
+        <h3>Seleccionar Paciente</h3>
+        <div class="profesionales">
+            <button *ngFor="let paciente of pacientes" (click)="onPacienteSelect(paciente)"
+            [disabled]="!paciente.activo" [ngClass]="{'inactive': !paciente.activo}">
+                <img [src]="paciente.fotoPerfil || '../../../assets/especialista.svg'" 
+                [ngClass]="{'inactive': !paciente.activo}" alt="Imagen Profesional" style="background-color: #114d79;">
+                <p *ngIf="paciente.activo">{{ paciente.nombre }} {{ paciente.apellido }}</p>
+                <p *ngIf="!paciente.activo">{{ paciente.nombre }} {{ paciente.apellido }} (inactivo)</p>
             </button>
         </div>
     </div>
 
-    <div *ngIf="seleccionadoEspecialista && seleccionadaEspecialidad">
-        <h3>Seleccionar Fecha y Hora</h3>
-        <div class="horarios">
-            <button *ngFor="let horario of horariosDisponibles" (click)="onFechaSelect(horario.fecha, horario.hora)">
-                <p>{{ horario.fecha }} {{ horario.hora }}</p>
-            </button>
-        </div>
-        <button (click)="onSubmit()" class="btn btn-primary">Solicitar Turno</button>
+    <div>
+        <button *ngIf="horaSelected && fechaSelected" (click)="onSubmit()" class="btn btn-primary">Confirmar Turno</button>
     </div>
 </div>
 

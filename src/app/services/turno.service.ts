@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, writeBatch, addDoc, collection, collectionData, getDoc, getDocs, query, where, updateDoc, doc, orderBy } from '@angular/fire/firestore';
 import { Turno } from '../interfaces/turno';
-
 import { from, Observable, throwError } from 'rxjs';
 import { mergeMap, map, catchError } from 'rxjs/operators';
 import { PacienteService } from './paciente.service';
@@ -51,21 +50,28 @@ export class TurnoService {
     await batch.commit();
   }
 
-  // BETA
+  //OK
   obtenerTurnosEspecialistaEspecialidad(especialistaId: string, especialidad: string): Observable<{ fecha: string, hora: string }[]> {
     const col = collection(this.firestore, this.PATH);
     const q = query(col, where('especialistaId', '==', especialistaId), where('especialidad', '==', especialidad));
     return collectionData(q, { idField: 'id' }) as Observable<{ fecha: string, hora: string }[]>;
   }
 
-  // BETA
+  //OK
+  obtenerTurnosEspecialistaEspecialidadLibres(especialistaId: string, especialidad: string): Observable<{ fecha: string, hora: string }[]> {
+    const col = collection(this.firestore, this.PATH);
+    const q = query(col, where('especialistaId', '==', especialistaId), where('especialidad', '==', especialidad), where('estado', '==', 'Libre'));
+    return collectionData(q, { idField: 'id' }) as Observable<{ fecha: string, hora: string }[]>;
+  }
+
+  //OK
   asignarTurnoAPaciente(
     dia: string,
     hora: string,
     especialistaDNI: string,
     especialidad: string,
     pacienteId: string,
-    pacienteNombreCompleto: string
+    pacienteNombre: string
   ): Observable<void> {
     const col = collection(this.firestore, this.PATH);
     const q = query(
@@ -82,7 +88,8 @@ export class TurnoService {
           return throwError(new Error('No se encontró el turno'));
         }
         const turno = querySnapshot.docs[0].data() as { id: string };
-        return from(updateDoc(doc(this.firestore, `${this.PATH}/${turno.id}`), { pacienteId, pacienteNombreCompleto }));
+        const estado = 'Pendiente' 
+        return from(updateDoc(doc(this.firestore, `${this.PATH}/${turno.id}`), { pacienteId, pacienteNombre, estado }));
       }),
       catchError(error => {
         console.error('Error al asignar el turno al paciente:', error);
