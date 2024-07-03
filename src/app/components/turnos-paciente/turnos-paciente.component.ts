@@ -30,7 +30,6 @@ export class TurnosPacienteComponent implements OnInit{
     this.cargarTurnos();
   }
 
-  //OK
   cargarTurnos(): void {
     const pacienteId = this. userService.personaLogeada.nroDocumento;
     this.turnoService.obtenerTurnosPorPaciente(pacienteId).subscribe(turnos => {
@@ -182,5 +181,3 @@ export class TurnosPacienteComponent implements OnInit{
     });
   }
 }
-
-/* BORRADOR - REVISAR */

@@ -141,8 +141,6 @@ export class MisHorariosComponent implements OnInit {
     console.log('Selected Turnos actualizados:', this.selectedTurnos);
   }
   
-
-  // Compara si ya hay un turno cargado para ese especialista a esa hora y en ese día en la BD
   isTurnoDisponible(fecha: string, hora: string): boolean {
     const formattedFecha = this.formatFecha(fecha);
     const formattedHora = this.formatHora(hora);

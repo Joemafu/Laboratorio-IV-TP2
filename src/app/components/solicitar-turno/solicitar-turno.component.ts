@@ -37,18 +37,15 @@ export class SolicitarTurnoComponent implements OnInit{
 
   constructor() {}
 
-  //OK
   ngOnInit() {
     this.loadEspecialistas();
     this.loadPacientes();
   }
 
-  //OK
   loadEspecialidades(especialista: Especialista) {
     this.especialidades = especialista.especialidades;
   }
 
-  //OK
   loadEspecialistas() {
     this.especialistaService.getEspecialistas().subscribe(data => {
       this.especialistas = data;
@@ -61,7 +58,6 @@ export class SolicitarTurnoComponent implements OnInit{
     });
   }
 
-  //OK
   onEspecialistaSelect(especialista: Especialista) {
     this.seleccionadoEspecialista = especialista;
     this.loadEspecialidades(especialista);
@@ -71,18 +67,15 @@ export class SolicitarTurnoComponent implements OnInit{
     }
   }
 
-    //OK
-    onPacienteSelect(paciente: Paciente) {
-      this.seleccionadoPaciente = paciente;
-    }
+  onPacienteSelect(paciente: Paciente) {
+    this.seleccionadoPaciente = paciente;
+  }
 
-  //OK
   onEspecialidadSelect(especialidad: Especialidad) {
     this.seleccionadaEspecialidad = especialidad;
     this.loadHorariosDisponibles(this.seleccionadoEspecialista!.nroDocumento, String(this.seleccionadaEspecialidad));
   }
 
-  //OK
   loadHorariosDisponibles(especialistaId: string, especialidadId: string) {
     this.turnoService.obtenerTurnosEspecialistaEspecialidadLibres(especialistaId, especialidadId).subscribe(data => {
       this.horariosDisponibles = data;
@@ -90,40 +83,34 @@ export class SolicitarTurnoComponent implements OnInit{
     });
   }
 
-  //OK
   onFechaSelect(fecha: string, hora: string) {
     this.fechaSelected = fecha;
     this.horaSelected = hora;
   }
 
-  //OK
   deseleccionarEspecialista()
   {
     this.seleccionadoEspecialista = null;
     this.deseleccionarEspecialidad();
   }  
   
-  //OK
   deseleccionarEspecialidad()
   {
     this.seleccionadaEspecialidad = null;
     this.deseleccionarTurno();
   }
 
-  //OK
   deseleccionarTurno()
   {
     this.fechaSelected = '';
     this.horaSelected = '';
   }
 
-    //OK
-    deseleccionarPaciente()
-    {
-      this.seleccionadoPaciente = null;
-    }
+  deseleccionarPaciente()
+  {
+    this.seleccionadoPaciente = null;
+  }
 
-  //OK
   onSubmit() {
       this.turnoService.asignarTurnoAPaciente(
         this.fechaSelected, 
@@ -145,5 +132,3 @@ export class SolicitarTurnoComponent implements OnInit{
     this.deseleccionarEspecialista();
   }
 }
-
-/* <!-- BORRADOR - REVISAR --> */

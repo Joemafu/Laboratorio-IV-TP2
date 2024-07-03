@@ -1,12 +1,10 @@
 <div class="container">
     <h2>Mis Turnos</h2>
-  
-    <!-- Filtro de Turnos -->
+
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Buscar por especialidad o paciente" onchange="filtrarTurnos()" [(ngModel)]="filtro" (ngModelChange)="filtrarTurnos($event)">
     </div>
-  
-    <!-- Listado de Turnos -->
+
     <table class="table table-striped">
       <thead>
         <tr>
@@ -36,6 +34,3 @@
       </tbody>
     </table>
   </div>
-
-  
-  <!-- BORRADOR - REVISAR -->

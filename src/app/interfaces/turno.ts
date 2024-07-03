@@ -13,5 +13,3 @@ export interface Turno {
     reseniaMedico?: string;
     encuesta?: string;
 }
-
-/* BORRADOR - REVISAR */

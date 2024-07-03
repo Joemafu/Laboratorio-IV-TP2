@@ -7,8 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { recaptchaSecretKey } from '../../environments/environment.development';
 import  Swal from 'sweetalert2';
 import { UserService } from './user.service';
-import { Subscription } from 'rxjs';
-
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +39,6 @@ export class AuthService {
 
         this.sendVerificationEmail(userCredential.user).then(() => {
           resolve('');
-          //this.logout();
         });
         })
         .catch(err => {
@@ -117,7 +114,6 @@ export class AuthService {
 
   logout() {
     signOut(this.firebaseAuth).then(() => {
-      //this.personaLogeada = null;
       this.currentUserSig.set(null);
       this.router.navigate(['/login']);
       this.userService.borrarPersonaLogeada();

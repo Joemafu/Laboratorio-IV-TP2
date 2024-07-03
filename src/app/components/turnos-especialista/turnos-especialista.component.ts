@@ -185,5 +185,3 @@ export class TurnosEspecialistaComponent implements OnInit {
     });
   }
 }
-
-/* BORRADOR - REVISAR */

@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDoc, query, collectionData, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Admin } from '../models/admin';
 import { map } from 'rxjs/operators';
-import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -36,14 +35,9 @@ export class AdminService {
     }
   }
 
-  /* deleteAdmin(id: number): Promise<void> {
-    const adminDocRef = doc(this.firestore, `admins/${id}`);
-    return deleteDoc(adminDocRef);
-  } */
-
-    getAdminById(adminId: string): Observable<Admin> {
-      const docRef = doc(this.firestore, `admins/${adminId}`);
-      return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Admin));
-    }
+  getAdminById(adminId: string): Observable<Admin> {
+    const docRef = doc(this.firestore, `admins/${adminId}`);
+    return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Admin));
+  }
 }
 

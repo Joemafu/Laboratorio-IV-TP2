@@ -4,13 +4,11 @@ import { CommonModule } from '@angular/common';
 import { TurnosPacienteComponent } from '../turnos-paciente/turnos-paciente.component';
 import { TurnosEspecialistaComponent } from '../turnos-especialista/turnos-especialista.component';
 import { TurnosAdminComponent } from '../turnos-admin/turnos-admin.component';
-import { AuthService } from '../../services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { SolicitarTurnoComponent } from '../solicitar-turno/solicitar-turno.component';
 import { UserService } from '../../services/user.service';
-
 
 @Component({
   selector: 'app-turnos',
@@ -24,11 +22,11 @@ export class TurnosComponent implements OnInit{
   agregarTurno: boolean = false;
   rol?: string;
   userService: UserService = inject(UserService);
+  router: Router = inject(Router);
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {
-    //this.rol = this.authService.personaLogeada?.rol;
     this.rol = this.userService.personaLogeada?.rol;
     if (!this.rol) {
       this.router.navigate(['/login']);
@@ -39,5 +37,3 @@ export class TurnosComponent implements OnInit{
     this.agregarTurno = !this.agregarTurno;
   }
 }
-
-/* BORRADOR - REVISAR */

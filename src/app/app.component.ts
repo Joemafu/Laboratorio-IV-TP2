@@ -22,9 +22,7 @@ export class AppComponent implements OnInit {
   public router = inject(Router);
   public personaLogeada: any;
 
-  constructor(){
-
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.subscription = this.authService.user$.subscribe((user) => {
@@ -43,10 +41,6 @@ export class AppComponent implements OnInit {
         this.authService.currentUserSig.set(null);    
       }
     });
-    
-
-
-    //this.userService.personaLogeada = this.personaLogeada;
   }
 
   ngOnDestroy(): void {

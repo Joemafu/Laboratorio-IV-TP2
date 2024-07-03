@@ -6,7 +6,7 @@
   }
   
   .table th, .table td {
-    background-color: rgba(17, 77, 121, .8); /* Fondo blanco con transparencia */
+    background-color: rgba(17, 77, 121, .8);
     color: white;
   }
   

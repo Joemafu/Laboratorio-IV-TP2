@@ -91,5 +91,3 @@ export class TurnosAdminComponent implements OnInit {
     alert('Funcionalidad no implementada');
   }
 }
-
-/* BORRADOR - REVISAR */

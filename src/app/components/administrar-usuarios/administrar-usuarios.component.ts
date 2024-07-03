@@ -1,10 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { Usuario } from '../../models/usuario';
 import { CommonModule } from '@angular/common';
 import { Paciente } from '../../models/paciente';
 import { Especialista } from '../../models/especialista';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
@@ -22,9 +21,7 @@ export class AdministrarUsuariosComponent implements OnInit {
   private pacienteSubscription: Subscription = new Subscription();
   private especialistaSubscription: Subscription = new Subscription();
 
-  constructor() {
-
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.especialistaSubscription = this.userService.especialistas$.subscribe((especialistas) => {
@@ -58,20 +55,4 @@ export class AdministrarUsuariosComponent implements OnInit {
       console.error('Error actualizando estado: ', error);
     });
   }
-
-  /* activarUsuario(usuario: Usuario) {
-    if (usuario.rol === 'Paciente') {
-      this.userService.activarPaciente(usuario);
-    } else if (usuario.rol === 'Especialista') {
-      this.userService.activarEspecialista(usuario);
-    }
-  }
-
-  desactivarUsuario(usuario: Usuario) {
-    if (usuario.rol === 'Paciente') {
-      this.userService.desactivarPaciente(usuario);
-    } else if (usuario.rol === 'Especialista') {
-      this.userService.desactivarEspecialista(usuario);
-    }
-  } */
 }

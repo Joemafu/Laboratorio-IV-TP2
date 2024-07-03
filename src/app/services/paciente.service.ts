@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDoc, query, collectionData, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Paciente } from '../models/paciente';
 import { map } from 'rxjs/operators';
-import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -36,17 +35,8 @@ export class PacienteService {
     }
   }
 
-  /* deletePaciente(id: number): Promise<void> {
-    const pacienteDocRef = doc(this.firestore, `pacientes/${id}`);
-    return deleteDoc(pacienteDocRef);
-  } */
-
-    getPacienteById(pacienteId: string): Observable<Paciente> {
-      const docRef = doc(this.firestore, `pacientes/${pacienteId}`);
-      return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Paciente));
-    }
-
-    
-
+  getPacienteById(pacienteId: string): Observable<Paciente> {
+    const docRef = doc(this.firestore, `pacientes/${pacienteId}`);
+    return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Paciente));
+  }
 }
-

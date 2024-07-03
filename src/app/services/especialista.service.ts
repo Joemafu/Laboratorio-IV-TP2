@@ -1,8 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, where, collectionData, setDoc, deleteDoc, updateDoc, orderBy } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDoc, query, collectionData, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Especialista } from '../models/especialista';
-import { Especialidad } from '../interfaces/especialidad';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -16,11 +15,8 @@ export class EspecialistaService {
   public especialistas: Especialista[] = [];
   public especialistas$!: Observable<Especialista[]>;
 
-  //private especialistasCollection;
-
   constructor() { 
     this.especialistas$ = this.getEspecialistas();
-    //this.especialistasCollection = collection(this.firestore, this.PATH);
   }
 
   getEspecialistas(): Observable<Especialista[]> {
@@ -39,11 +35,6 @@ export class EspecialistaService {
       return '';
     }
   }
-
-  /* deleteEspecialista(id: number): Promise<void> {
-    const especialistaDocRef = doc(this.firestore, `especialistas/${id}`);
-    return deleteDoc(especialistaDocRef);
-  } */
 
   getEspecialistaById(especialistaId: string): Observable<Especialista> {
     const docRef = doc(this.firestore, `especialistas/${especialistaId}`);
