@@ -26,11 +26,11 @@
           <td>{{ turno.hora }}</td>
           <td>{{ turno.estado }}</td>
           <td>
-            <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm">Cancelar</button>
-            <button *ngIf="puedeVerResenia(turno)" (click)="verResenia(turno)" class="btn btn-info btn-sm">Ver Reseña</button>
-            <button *ngIf="puedeVerComentario(turno)" (click)="verComentario(turno)" class="btn btn-info btn-sm">Ver Comentario</button>
-            <button *ngIf="puedeCompletarEncuesta(turno)" (click)="completarEncuesta(turno)" class="btn btn-primary btn-sm">Completar Encuesta</button>
-            <button *ngIf="puedeCalificar(turno)" (click)="calificarAtencion(turno)" class="btn btn-success btn-sm">Calificar Atención</button>
+            <button *ngIf="puedeCalificar(turno)" (click)="calificarAtencion(turno)" class="btn btn-success btn-sm btnTurno">Calificar Atención</button>
+            <button *ngIf="puedeCompletarEncuesta(turno)" (click)="completarEncuesta(turno)" class="btn btn-info btn-sm btnTurno">Completar Encuesta</button>
+            <button *ngIf="puedeVerComentario(turno)" (click)="verComentario(turno)" class="btn btn-primary btn-sm btnTurno">Ver Comentario</button>
+            <button *ngIf="puedeVerResenia(turno)" (click)="verResenia(turno)" class="btn btn-primary btn-sm btnTurno">Ver Reseña</button>
+            <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm btnTurno">Cancelar</button>
           </td>
         </tr>
       </tbody>

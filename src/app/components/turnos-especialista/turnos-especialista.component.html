@@ -26,11 +26,11 @@
           <td>{{ turno.hora }}</td>
           <td>{{ turno.estado }}</td>
           <td>
-            <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm">Cancelar</button>
-            <button *ngIf="puedeRechazar(turno)" (click)="rechazarTurno(turno)" class="btn btn-warning btn-sm">Rechazar</button>
-            <button *ngIf="puedeAceptar(turno)" (click)="aceptarTurno(turno)" class="btn btn-success btn-sm">Aceptar</button>
-            <button *ngIf="puedeFinalizar(turno)" (click)="finalizarTurno(turno)" class="btn btn-primary btn-sm">Finalizar</button>
-            <button *ngIf="puedeVerResenia(turno)" (click)="verResenia(turno)" class="btn btn-primary btn-sm">Ver Reseña</button>
+            <button *ngIf="puedeAceptar(turno)" (click)="aceptarTurno(turno)" class="btn btn-success btn-sm btnTurno">Aceptar</button>
+            <button *ngIf="puedeRechazar(turno)" (click)="rechazarTurno(turno)" class="btn btn-warning btn-sm btnTurno">Rechazar</button>
+            <button *ngIf="puedeFinalizar(turno)" (click)="finalizarTurno(turno)" class="btn btn-primary btn-sm btnTurno">Finalizar</button>
+            <button *ngIf="puedeVerResenia(turno)" (click)="verResenia(turno)" class="btn btn-primary btn-sm btnTurno">Ver Reseña</button>
+            <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm btnTurno">Cancelar</button>
           </td>
         </tr>
       </tbody>
