@@ -31,7 +31,7 @@
             <button *ngIf="fechaSelected && horaSelected" (click)="deseleccionarTurno()">
                 <p>{{ fechaSelected }} {{ horaSelected }}</p>
             </button>
-            <button *ngIf="seleccionadoPaciente" (click)="deseleccionarPaciente()">
+            <button *ngIf="seleccionadoPaciente && userService.personaLogeada.rol == 'Admin'" (click)="deseleccionarPaciente()">
                 <img [src]="seleccionadoPaciente.fotoPerfil || '../../../assets/paciente.svg'" 
                 [alt]="'Paciente '+seleccionadoPaciente.apellido" style="background-color: #114d79;">
                 <p>{{ seleccionadoPaciente.nombre }} {{ seleccionadoPaciente.apellido }}</p>

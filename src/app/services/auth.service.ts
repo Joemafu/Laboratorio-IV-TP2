@@ -150,11 +150,11 @@ export class AuthService {
   sendVerificationEmail(user: any): Promise<string> {
     sendEmailVerification(user).then(() => {
       Swal.fire({
-        position: "top-end",
+        position: "center",
         icon: "success",
         title: "Se ha enviado un correo de validación.",
         showConfirmButton: false,
-        timer: 2500
+        timer: 1500
       });
     })
     .catch(err => {

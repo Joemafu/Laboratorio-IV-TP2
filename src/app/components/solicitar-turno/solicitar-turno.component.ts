@@ -136,11 +136,11 @@ export class SolicitarTurnoComponent implements OnInit{
     });
 
     Swal.fire({
-      position: "top-end",
+      position: "center",
       icon: "success",
       title: "El turno fue asignado correctamente.",
       showConfirmButton: false,
-      timer: 2500
+      timer: 1500
     });
     this.deseleccionarEspecialista();
   }

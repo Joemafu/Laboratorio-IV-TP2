@@ -4,9 +4,7 @@ import { Turno } from '../interfaces/turno';
 import { from, Observable, throwError } from 'rxjs';
 import { mergeMap, map, catchError } from 'rxjs/operators';
 import { PacienteService } from './paciente.service';
-import { EspecialistaService } from './especialista.service';
 import { Paciente } from '../models/paciente';
-import { Especialista } from '../models/especialista';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -18,7 +16,6 @@ export class TurnoService {
   private PATH: string = 'turnos';
 
   private pacienteService: PacienteService = inject(PacienteService);
-  private especialistaService: EspecialistaService = inject(EspecialistaService);
   
   constructor() {}
 
@@ -34,20 +31,18 @@ export class TurnoService {
       if (querySnapshot.empty) {
         const turnoDocRef = doc( this.firestore, `${this.PATH}/${this.firestore.app.options.projectId}_${Date.now()}`);
         batch.set(turnoDocRef, { ...turno, id: turnoDocRef.id });
-
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Se han guardado sus horarios.",
-          showConfirmButton: false,
-          timer: 2500
-        });
-
       } else {
         throw new Error(`El turno ya está ocupado: ${turno.fecha} ${turno.hora}`);
       }
     }
     await batch.commit();
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Se han guardado sus horarios.",
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   //OK
@@ -98,7 +93,7 @@ export class TurnoService {
     );
   }
 
-  // BETA
+  //OK
   obtenerTurnosPorPaciente(pacienteId: string): Observable<Turno[]> {
     const col = collection(this.firestore, this.PATH);
     const q = query(col, where('pacienteId', '==', pacienteId), orderBy('fecha', 'asc'));
@@ -112,10 +107,17 @@ export class TurnoService {
     return collectionData(q, { idField: 'id' }) as Observable<Turno[]>;
   }
 
+  //OK
+  obtenerTurnosTomadosPorEspecialista(especialistaId: string): Observable<Turno[]> {
+    const col = collection(this.firestore, this.PATH);
+    const q = query(col, where('especialistaId', '==', especialistaId), where('pacienteNombre', '!=', ''), orderBy('fecha', 'asc'));
+    return collectionData(q, { idField: 'id' }) as Observable<Turno[]>;
+  }
+
   // BETA
   obtenerTodosLosTurnos(): Observable<Turno[]> {
     const col = collection(this.firestore, this.PATH);
-    const q = query(col, orderBy('fecha', 'asc'));
+    const q = query(col, where('pacienteNombre', '!=', ''), orderBy('fecha', 'asc'));
     return collectionData(q, { idField: 'id' }) as Observable<Turno[]>;
   }
 
@@ -126,18 +128,18 @@ export class TurnoService {
   }
 
   // BETA
-  obtenerNombreEspecialista(especialistaId: string): Observable<string> {
+/*   obtenerNombreEspecialista(especialistaId: string): Observable<string> {
     return this.especialistaService.getEspecialistaById(especialistaId).pipe(
       map((especialista: Especialista) => `${especialista.nombre} ${especialista.apellido}`)
     );
-  }
+  } */
 
   // BETA
-  obtenerNombrePaciente(pacienteId: string): Observable<string> {
+/*   obtenerNombrePaciente(pacienteId: string): Observable<string> {
     return this.pacienteService.getPacienteById(pacienteId).pipe(
       map((paciente: Paciente) => `${paciente.nombre} ${paciente.apellido}`)
     );
-  }
+  } */
 }
 
 /* BORRADOR - REVISAR */

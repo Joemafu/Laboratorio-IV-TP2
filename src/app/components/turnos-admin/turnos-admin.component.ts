@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
 import { Turno } from '../../interfaces/turno';
-import { forkJoin } from 'rxjs';
+import Swal from 'sweetalert2';
+import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
+import moment from 'moment';
+
 @Component({
   selector: 'app-turnos-admin',
   standalone: true,
@@ -15,10 +18,11 @@ export class TurnosAdminComponent implements OnInit {
 
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
-  filtroEspecialidad: string = '';
-  filtroEspecialista: string = '';
+  filtro: string = '';
+  turnoService: TurnoService = inject(TurnoService);
+  pipe: FormatearFechaPipe = new FormatearFechaPipe();
 
-  constructor(private turnoService: TurnoService) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.cargarTurnos();
@@ -27,44 +31,59 @@ export class TurnosAdminComponent implements OnInit {
   cargarTurnos(): void {
     this.turnoService.obtenerTodosLosTurnos().subscribe(turnos => {
       this.turnos = turnos;
-      this.obtenerNombresEspecialistasYPacientes();
+      this.turnosFiltrados = turnos;
+      this.filtrarTurnos('');
     });
   }
 
-  obtenerNombresEspecialistasYPacientes(): void {
-    const especialistaRequests = this.turnos.map(turno =>
-      this.turnoService.obtenerNombreEspecialista(turno.especialistaId)
-    );
-
-    const pacienteRequests = this.turnos.map(turno =>
-      this.turnoService.obtenerNombrePaciente(turno.pacienteId!)
-    );
-
-    forkJoin([...especialistaRequests, ...pacienteRequests]).subscribe(nombres => {
-      const mitad = nombres.length / 2;
-      this.turnos.forEach((turno, index) => {
-        turno.especialistaId = nombres[index];
-        turno.pacienteId = nombres[index + mitad];
-      });
-      this.filtrarTurnos();
-    });
-  }
-
-  filtrarTurnos(): void {
+  filtrarTurnos(string:string): void {
+    this.filtro = this.filtro.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(turno =>
-      turno.especialidad.toLowerCase().includes(this.filtroEspecialidad.toLowerCase()) &&
-      turno.especialistaId.toLowerCase().includes(this.filtroEspecialista.toLowerCase())
+      turno.especialidad.toLowerCase().includes(this.filtro.toLowerCase()) ||
+      turno.pacienteNombre?.toLowerCase().includes(this.filtro.toLowerCase()) ||
+      turno.especialistaNombre.toLowerCase().includes(this.filtro.toLowerCase())
     );
+    this.ordenarTurnosPorFecha();
+  }
+
+  ordenarTurnosPorFecha(): Turno[] {
+    return this.turnosFiltrados.sort((a, b) => {
+      const fechaA = moment(this.pipe.transform(`${a.fecha} ${a.hora} hs`), 'YYYY-MM-DD h:mm A');
+      const fechaB = moment(this.pipe.transform(`${b.fecha} ${b.hora} hs`), 'YYYY-MM-DD h:mm A');
+  
+      return fechaA.diff(fechaB);
+    });
   }
 
   puedeCancelar(turno: Turno): boolean {
-    return turno.estado !== 'Aceptado' && turno.estado !== 'Realizado' && turno.estado !== 'Rechazado';
+    return turno.estado !== 'Aceptado' && turno.estado !== 'Realizado' && turno.estado !== 'Rechazado' && turno.estado !== 'Finalizado' && turno.estado !== 'Cancelado';
   }
 
   cancelarTurno(turno: Turno): void {
-    turno.estado = 'Cancelado';
-    this.turnoService.actualizarTurno(turno.id, { estado: 'Cancelado', comentario: 'Cancelado por el administrador' }).subscribe(() => {
-      this.cargarTurnos();
+    Swal.fire({
+      title: 'Cancelar turno',
+      text: 'Motivo de cancelación',
+      input: 'text',
+      showCancelButton: true,
+      confirmButtonText: 'Cancelar Turno',
+      cancelButtonText: 'Mantener Turno',
+      showLoaderOnConfirm: true,
+      preConfirm: (motivo) => {
+        if (!motivo || motivo.trim() === '') {
+          Swal.showValidationMessage('El motivo de cancelación es obligatorio');
+          return false;
+        } else {
+          return this.turnoService.actualizarTurno(turno.id, { estado: 'Cancelado', comentario: 'Motivo de la cancelación: '+motivo }).toPromise();
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Turno cancelado',
+          icon: 'success'
+        });
+      }
     });
   }
 

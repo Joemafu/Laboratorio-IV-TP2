@@ -3,8 +3,7 @@
   
     <!-- Filtro de Turnos -->
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Buscar por especialidad" [(ngModel)]="filtroEspecialidad">
-      <input type="text" class="form-control" placeholder="Buscar por especialista" [(ngModel)]="filtroEspecialista">
+      <input type="text" class="form-control" placeholder="Buscar por especialidad o especialista" onchange="filtrarTurnos()" [(ngModel)]="filtro" (ngModelChange)="filtrarTurnos($event)">
     </div>
   
     <!-- Listado de Turnos -->
@@ -14,6 +13,7 @@
           <th>Especialidad</th>
           <th>Especialista</th>
           <th>Fecha</th>
+          <th>Hora</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
@@ -21,12 +21,14 @@
       <tbody>
         <tr *ngFor="let turno of turnosFiltrados">
           <td>{{ turno.especialidad }}</td>
-          <td>{{ turno.especialistaId }}</td>
-          <td>{{ turno.fecha | date:'short' }}</td>
+          <td>{{ turno.especialistaNombre }}</td>
+          <td>{{ turno.fecha }}</td>
+          <td>{{ turno.hora }}</td>
           <td>{{ turno.estado }}</td>
           <td>
             <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm">Cancelar</button>
             <button *ngIf="puedeVerResenia(turno)" (click)="verResenia(turno)" class="btn btn-info btn-sm">Ver Reseña</button>
+            <button *ngIf="puedeVerComentario(turno)" (click)="verComentario(turno)" class="btn btn-info btn-sm">Ver Comentario</button>
             <button *ngIf="puedeCompletarEncuesta(turno)" (click)="completarEncuesta(turno)" class="btn btn-primary btn-sm">Completar Encuesta</button>
             <button *ngIf="puedeCalificar(turno)" (click)="calificarAtencion(turno)" class="btn btn-success btn-sm">Calificar Atención</button>
           </td>

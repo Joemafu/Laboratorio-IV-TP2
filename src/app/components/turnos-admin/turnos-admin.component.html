@@ -1,10 +1,10 @@
 <div class="container">
+  <h2>Turnos Activos</h2>
   
   
     <!-- Filtro de Turnos -->
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Buscar por especialidad" [(ngModel)]="filtroEspecialidad">
-      <input type="text" class="form-control" placeholder="Buscar por especialista" [(ngModel)]="filtroEspecialista">
+      <input type="text" class="form-control" placeholder="Buscar por especialidad, especialista o paciente" [(ngModel)]="filtro" (ngModelChange)="filtrarTurnos($event)">
     </div>
   
     <!-- Listado de Turnos -->
@@ -15,6 +15,7 @@
           <th>Especialista</th>
           <th>Paciente</th>
           <th>Fecha</th>
+          <th>Hora</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
@@ -22,9 +23,10 @@
       <tbody>
         <tr *ngFor="let turno of turnosFiltrados">
           <td>{{ turno.especialidad }}</td>
-          <td>{{ turno.especialistaId }}</td>
-          <td>{{ turno.pacienteId }}</td>
-          <td>{{ turno.fecha | date:'short' }}</td>
+          <td>{{ turno.especialistaNombre }}</td>
+          <td>{{ turno.pacienteNombre }}</td>
+          <td>{{ turno.fecha  }}</td>
+          <td>{{ turno.hora }}</td>
           <td>{{ turno.estado }}</td>
           <td>
             <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm">Cancelar</button>

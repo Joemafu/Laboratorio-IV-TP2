@@ -178,6 +178,7 @@ export class MisHorariosComponent implements OnInit {
         hora: turno.hora,
         estado: 'Libre',
         comentario: '',
+        reseniaMedico: '',
         calificacion: '',
         encuesta: ''
       };

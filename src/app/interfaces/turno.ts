@@ -10,6 +10,7 @@ export interface Turno {
     estado: 'Libre' | 'Pendiente' | 'Aceptado' | 'Cancelado' | 'Rechazado' | 'Realizado' | 'Finalizado';
     comentario?: string;
     calificacion?: string;
+    reseniaMedico?: string;
     encuesta?: string;
 }
 
