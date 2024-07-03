@@ -13,7 +13,7 @@
           <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">{{usuario?.rol}}</h1>
           <p class="lead"><strong>Nombre: {{usuario?.nombre}}</strong></p>
           <p class="lead"><strong>Apellido: {{usuario?.apellido}}</strong></p>
-          <p class="lead"><strong>Edad: {{usuario?.fechaNac}}</strong></p>
+          <p class="lead"><strong>Edad: {{usuario?.fechaNac | calcularEdad }}</strong></p>
           <p class="lead"><strong>DNI: {{usuario?.nroDocumento}}</strong></p>
           <p class="lead"><strong>Correo: {{usuario?.mail}}</strong></p>
   
