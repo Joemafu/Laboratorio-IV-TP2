@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="!historiaClinicaToogle" class="container">
     <h2>Mis Turnos</h2>
 
     <div class="input-group mb-3">
@@ -36,4 +36,8 @@
 
       </tbody>
     </table>
+  </div>
+
+  <div *ngIf="historiaClinicaToogle">
+    <app-form-historia-clinica *ngIf="turnoAux" [turno]="turnoAux" (historiaClinicaGuardada)="guardarHistoriaClinica($event)"></app-form-historia-clinica>
   </div>

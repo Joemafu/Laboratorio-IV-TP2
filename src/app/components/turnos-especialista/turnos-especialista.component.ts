@@ -29,6 +29,8 @@ export class TurnosEspecialistaComponent implements OnInit {
   historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
 
   historiaClinica: HistoriaClinica | null = null;
+  historiaClinicaToogle: boolean = false;
+  turnoAux: Turno | null = null;
 
   constructor() {}
 
@@ -192,51 +194,21 @@ export class TurnosEspecialistaComponent implements OnInit {
   }  */
 
     finalizarTurno(turno: Turno): void {
-      Swal.fire({
-        title: 'Finalizar turno',
-        text: 'Reseña/Diagnóstico:',
-        input: 'text',
-        showCancelButton: true,
-        confirmButtonText: 'Finalizar Turno',
-        cancelButtonText: 'Cancelar',
-        showLoaderOnConfirm: true,
-        preConfirm: (comentario) => {
-          if (!comentario || comentario.trim() === '') {
-            Swal.showValidationMessage('La reseña es obligatoria');
-            return false;
-          } else {
-            this.historiaClinica = {
-              turnoId: turno.id,
-              fechaTurno: turno.fecha,
-              altura: 0,
-              peso: 0,
-              temperatura: 0,
-              presion: '',
-              datoDinamicoUno: { clave: '', valor: '' },
-              datoDinamicoDos: { clave: '', valor: '' },
-              datoDinamicoTres: { clave: '', valor: '' }
-            };
-            return Promise.resolve();
-          }
-        },
-        allowOutsideClick: () => !Swal.isLoading()
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: 'Turno finalizado',
-            icon: 'success'
-          });
-        }
-      });
+      this.turnoAux = turno;
+      this.historiaClinicaToogle = !this.historiaClinicaToogle;
     }
 
+    //BETA
+    emitirTurno(turno: Turno): void {
+
+    }
+
+    //BETA
     guardarHistoriaClinica(historiaClinica: HistoriaClinica): void {
-      this.historiaClinicaService.agregarHistoriaClinica(historiaClinica).subscribe(() => {
-        Swal.fire({
-          title: 'Historia clínica guardada',
-          icon: 'success'
-        });
+      // Lógica para guardar la historia clínica
+      this.historiaClinicaService.agregarHistoriaClinica(historiaClinica).subscribe(response => {
+        // Manejar la respuesta si es necesario
+        this.historiaClinicaToogle = !this.historiaClinicaToogle; // Volver a la vista anterior
       });
-      this.historiaClinica = null;
     }
 }
