@@ -55,4 +55,8 @@ export class AdministrarUsuariosComponent implements OnInit {
       console.error('Error actualizando estado: ', error);
     });
   }
+
+  verHistoriaClinica(paciente: Paciente) {
+    console.log('Ver historia clinica de: ', paciente);
+  }
 }

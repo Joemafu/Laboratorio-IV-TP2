@@ -7,11 +7,14 @@ import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
 import moment from 'moment';
+import { HistoriaClinicaService } from '../../services/historia-clinica.service';
+import { FormHistoriaClinicaComponent } from '../form-historia-clinica/form-historia-clinica.component';
+import { HistoriaClinica } from '../../interfaces/historia-clinica';
 
 @Component({
   selector: 'app-turnos-especialista',
   standalone: true,
-  imports: [ CommonModule, FormsModule ],
+  imports: [ CommonModule, FormsModule, FormatearFechaPipe, FormHistoriaClinicaComponent ],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.css'
 })
@@ -23,6 +26,11 @@ export class TurnosEspecialistaComponent implements OnInit {
   userService: UserService = inject(UserService);
   turnoService: TurnoService = inject(TurnoService);
   pipe: FormatearFechaPipe = new FormatearFechaPipe();
+  historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
+
+  historiaClinica: HistoriaClinica | null = null;
+  historiaClinicaToogle: boolean = false;
+  turnoAux: Turno | null = null;
 
   constructor() {}
 
@@ -157,7 +165,7 @@ export class TurnosEspecialistaComponent implements OnInit {
     });
   }
 
-  finalizarTurno(turno: Turno): void {
+   /* finalizarTurno(turno: Turno): void {
     Swal.fire({
       title: 'Finalizar turno',
       text: 'Reseña/Diagnóstico:',
@@ -183,5 +191,24 @@ export class TurnosEspecialistaComponent implements OnInit {
         });
       }
     });
-  }
+  }  */
+
+    finalizarTurno(turno: Turno): void {
+      this.turnoAux = turno;
+      this.historiaClinicaToogle = !this.historiaClinicaToogle;
+    }
+
+    //BETA
+    emitirTurno(turno: Turno): void {
+
+    }
+
+    //BETA
+    guardarHistoriaClinica(historiaClinica: HistoriaClinica): void {
+      // Lógica para guardar la historia clínica
+      this.historiaClinicaService.agregarHistoriaClinica(historiaClinica).subscribe(response => {
+        // Manejar la respuesta si es necesario
+        this.historiaClinicaToogle = !this.historiaClinicaToogle; // Volver a la vista anterior
+      });
+    }
 }

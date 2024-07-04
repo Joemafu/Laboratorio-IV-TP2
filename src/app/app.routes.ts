@@ -37,6 +37,11 @@ export const routes: Routes = [
       ...canActivate(() => redirectUnauthorizedToLogin()),
   },
   { 
+      path: 'usuarios',
+      loadComponent: () => import('./components/usuarios/usuarios.component').then(c => c.UsuariosComponent),
+      ...canActivate(() => redirectUnauthorizedToLogin()),
+  },
+  { 
       path: '**', redirectTo: 'error'
   }
 ];

@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="py-5 text-center">
+    <h2 class="text-primary">Registro de historia clínica</h2>
+  </div>
+
+  <div class="row g-5 container-fluid d-flex justify-content-center align-items-center full-width">
+    <h4 class="text-primary">Ingrese los datos de {{ turno.pacienteNombre }}:</h4>
+    <div class="col-md-7 col-lg-8">
+      <div *ngIf="errorMensaje !== ''" class="alert alert-danger">
+        {{ errorMensaje }}
+      </div>
+      <form [formGroup]="historiaClinicaForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+        <div class="row g-3">
+          <div class="col-sm-12">
+            <label for="altura" class="form-label">Altura (Cms)</label>
+            <input formControlName="altura" type="number" class="form-control" id="altura" required>
+            <div *ngIf="historiaClinicaForm.get('altura')?.invalid && (historiaClinicaForm.get('altura')?.dirty || historiaClinicaForm.get('altura')?.touched)" class="alert alert-danger">
+              Ingrese la altura.
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="peso" class="form-label">Peso (Kgs)</label>
+            <input formControlName="peso" type="number" class="form-control" id="peso" required>
+            <div *ngIf="historiaClinicaForm.get('peso')?.invalid && (historiaClinicaForm.get('peso')?.dirty || historiaClinicaForm.get('peso')?.touched)" class="alert alert-danger">
+              Ingrese el peso.
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="temperatura" class="form-label">Temperatura (ºC)</label>
+            <input formControlName="temperatura" type="number" class="form-control" id="temperatura" required>
+            <div *ngIf="historiaClinicaForm.get('temperatura')?.invalid && (historiaClinicaForm.get('temperatura')?.dirty || historiaClinicaForm.get('temperatura')?.touched)" class="alert alert-danger">
+              Ingrese la temperatura.
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="presion" class="form-label">Presión (mm Hg)</label>
+            <input formControlName="presion" type="number" class="form-control" id="presion" required>
+            <div *ngIf="historiaClinicaForm.get('presion')?.invalid && (historiaClinicaForm.get('presion')?.dirty || historiaClinicaForm.get('presion')?.touched)" class="alert alert-danger">
+              Ingrese la presión.
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <label for="claveUno" class="form-label">Dato extra (nombre):</label>
+            <input formControlName="claveUno" type="text" class="form-control" id="claveUno">
+            <div *ngIf="historiaClinicaForm.get('valorUno')!.value != ''" class="alert alert-danger">
+              Ingrese el nombre del dato.
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <label for="valorUno" class="form-label">Dato extra (valor):</label>
+            <input formControlName="valorUno" type="text" class="form-control" id="valorUno">
+            <div *ngIf="historiaClinicaForm.get('claveUno')!.value != ''" class="alert alert-danger">
+              Ingrese el valor del dato.
+            </div>
+          </div>
+
+          <div *ngIf="historiaClinicaForm.get('claveUno')?.valid && historiaClinicaForm.get('valorUno')?.valid" class="col-sm-6">
+            <label for="claveDos" class="form-label">Dato extra (nombre):</label>
+            <input formControlName="claveDos" type="text" class="form-control" id="claveDos">
+            <div *ngIf="historiaClinicaForm.get('valorDos')!.value != ''" class="alert alert-danger">
+              Ingrese el nombre del dato.
+            </div>
+          </div>
+
+          <div *ngIf="historiaClinicaForm.get('claveUno')?.valid && historiaClinicaForm.get('valorUno')?.valid" class="col-sm-6">
+            <label for="valorDos" class="form-label">Dato extra (valor):</label>
+            <input formControlName="valorDos" type="text" class="form-control" id="valorDos">
+            <div *ngIf="historiaClinicaForm.get('claveDos')!.value != ''" class="alert alert-danger">
+              Ingrese el valor del dato.
+            </div>
+          </div>
+
+          <div *ngIf="historiaClinicaForm.get('claveDos')?.valid && historiaClinicaForm.get('valorDos')?.valid" class="col-sm-6">
+            <label for="claveTres" class="form-label">Dato extra (nombre):</label>
+            <input formControlName="claveTres" type="text" class="form-control" id="claveTres">
+            <div *ngIf="historiaClinicaForm.get('valorTres')!.value != ''" class="alert alert-danger">
+              Ingrese el nombre del dato.
+            </div>
+          </div>
+
+          <div *ngIf="historiaClinicaForm.get('claveDos')?.valid && historiaClinicaForm.get('valorDos')?.valid" class="col-sm-6">
+            <label for="valorTres" class="form-label">Dato extra (valor):</label>
+            <input formControlName="valorTres" type="text" class="form-control" id="valorTres">
+            <div *ngIf="historiaClinicaForm.get('claveTres')!.value != ''" class="alert alert-danger">
+              Ingrese el valor del dato.
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="resenia" class="form-label">Reseña / Diagnóstico:</label>
+            <input formControlName="resenia" type="text" class="form-control" id="resenia" required>
+            <div *ngIf="historiaClinicaForm.get('resenia')?.invalid && (historiaClinicaForm.get('resenia')?.dirty || historiaClinicaForm.get('resenia')?.touched)" class="alert alert-danger">
+              Ingrese un comentario/diagnóstico.
+            </div>
+          </div>
+
+          
+        </div>
+
+        <hr class="my-4">
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Guardar Historia Clínica</button>
+      </form>
+    </div>
+  </div>
+</div>

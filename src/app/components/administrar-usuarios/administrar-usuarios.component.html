@@ -9,7 +9,8 @@
         <th>Numero doc</th>
         <th>Email</th>
         <th>Rol</th>
-        <th>Acciones</th>
+        <th>Habilitado</th>
+        <th>Historia Clínica</th>
       </tr>
     </thead>
     <tbody>
@@ -27,6 +28,8 @@
                 [checked]="especialista.activo"
                 (change)="toggleUsuarioActivo(especialista, $event.checked)">
               </mat-slide-toggle>
+            </td>
+            <td>
             </td>
           </tr>
         }
@@ -47,10 +50,12 @@
                 (change)="toggleUsuarioActivo(paciente, $event.checked)">
               </mat-slide-toggle>
             </td>
+            <td>
+              <button class="btn btn-primary" (click)="verHistoriaClinica(paciente)">Ver</button>
+            </td>
           </tr>
         }
-      }   
-      
+      }         
     </tbody>
   </table>
 </div>
