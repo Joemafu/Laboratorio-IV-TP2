@@ -31,6 +31,9 @@
             <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm btnTurno">Cancelar</button>
           </td>
         </tr>
+
+        <app-form-historia-clinica *ngIf="historiaClinica" (historiaClinicaGuardada)="guardarHistoriaClinica($event)"></app-form-historia-clinica>
+
       </tbody>
     </table>
   </div>

@@ -7,11 +7,14 @@ import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
 import moment from 'moment';
+import { HistoriaClinicaService } from '../../services/historia-clinica.service';
+import { FormHistoriaClinicaComponent } from '../form-historia-clinica/form-historia-clinica.component';
+import { HistoriaClinica } from '../../interfaces/historia-clinica';
 
 @Component({
   selector: 'app-turnos-especialista',
   standalone: true,
-  imports: [ CommonModule, FormsModule ],
+  imports: [ CommonModule, FormsModule, FormatearFechaPipe, FormHistoriaClinicaComponent ],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.css'
 })
@@ -23,6 +26,9 @@ export class TurnosEspecialistaComponent implements OnInit {
   userService: UserService = inject(UserService);
   turnoService: TurnoService = inject(TurnoService);
   pipe: FormatearFechaPipe = new FormatearFechaPipe();
+  historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
+
+  historiaClinica: HistoriaClinica | null = null;
 
   constructor() {}
 
@@ -157,7 +163,7 @@ export class TurnosEspecialistaComponent implements OnInit {
     });
   }
 
-  finalizarTurno(turno: Turno): void {
+   /* finalizarTurno(turno: Turno): void {
     Swal.fire({
       title: 'Finalizar turno',
       text: 'Reseña/Diagnóstico:',
@@ -183,5 +189,54 @@ export class TurnosEspecialistaComponent implements OnInit {
         });
       }
     });
-  }
+  }  */
+
+    finalizarTurno(turno: Turno): void {
+      Swal.fire({
+        title: 'Finalizar turno',
+        text: 'Reseña/Diagnóstico:',
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: 'Finalizar Turno',
+        cancelButtonText: 'Cancelar',
+        showLoaderOnConfirm: true,
+        preConfirm: (comentario) => {
+          if (!comentario || comentario.trim() === '') {
+            Swal.showValidationMessage('La reseña es obligatoria');
+            return false;
+          } else {
+            this.historiaClinica = {
+              turnoId: turno.id,
+              fechaTurno: turno.fecha,
+              altura: 0,
+              peso: 0,
+              temperatura: 0,
+              presion: '',
+              datoDinamicoUno: { clave: '', valor: '' },
+              datoDinamicoDos: { clave: '', valor: '' },
+              datoDinamicoTres: { clave: '', valor: '' }
+            };
+            return Promise.resolve();
+          }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Turno finalizado',
+            icon: 'success'
+          });
+        }
+      });
+    }
+
+    guardarHistoriaClinica(historiaClinica: HistoriaClinica): void {
+      this.historiaClinicaService.agregarHistoriaClinica(historiaClinica).subscribe(() => {
+        Swal.fire({
+          title: 'Historia clínica guardada',
+          icon: 'success'
+        });
+      });
+      this.historiaClinica = null;
+    }
 }

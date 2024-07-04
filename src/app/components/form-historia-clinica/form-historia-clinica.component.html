@@ -1,0 +1,38 @@
+<div class="container">
+    <h3>Registrar Historia Clínica</h3>
+    <form (ngSubmit)="onSubmit()" #historiaClinicaForm="ngForm">
+      <div class="form-group">
+        <label for="altura">Altura:</label>
+        <input type="number" id="altura" class="form-control" required [(ngModel)]="historiaClinica.altura" name="altura">
+      </div>
+      <div class="form-group">
+        <label for="peso">Peso:</label>
+        <input type="number" id="peso" class="form-control" required [(ngModel)]="historiaClinica.peso" name="peso">
+      </div>
+      <div class="form-group">
+        <label for="temperatura">Temperatura:</label>
+        <input type="number" id="temperatura" class="form-control" required [(ngModel)]="historiaClinica.temperatura" name="temperatura">
+      </div>
+      <div class="form-group">
+        <label for="presion">Presión:</label>
+        <input type="text" id="presion" class="form-control" required [(ngModel)]="historiaClinica.presion" name="presion">
+      </div>
+      <div class="form-group">
+        <label for="datoDinamicoUnoClave">Dato Dinámico 1 Clave:</label>
+        <input type="text" id="datoDinamicoUnoClave" class="form-control" [(ngModel)]="datoDinamicoUno.clave" name="datoDinamicoUnoClave">
+        <label for="datoDinamicoUnoValor">Dato Dinámico 1 Valor:</label>
+        <input type="text" id="datoDinamicoUnoValor" class="form-control" [(ngModel)]="datoDinamicoUno.valor" name="datoDinamicoUnoValor">
+      </div>
+      <div class="form-group">
+        <label for="datoDinamicoDosClave">Dato Dinámico 2 Clave:</label>
+        <input type="text" id="datoDinamicoDosClave" class="form-control" [(ngModel)]="datoDinamicoDos.clave" name="datoDinamicoDosClave">
+        <label for="datoDinamicoDosValor">Dato Dinámico 2 Valor:</label>
+        <input type="text" id="datoDinamicoDosValor" class="form-control" [(ngModel)]="datoDinamicoDos.valor" name="datoDinamicoDosValor">
+      </div>
+      <div class="form-group">
+        <label for="datoDinamicoTresClave">Dato Dinámico 3 Clave:</label>
+        <input type="text" id="datoDinamicoTresClave" class="form-control" [(ngModel)]="datoDinamicoTres.clave" name="datoDinamicoTresClave">
+        <label for="datoDinamicoTresValor">Dato Dinámico 3 Valor:</label>
+        <input type="text" id="datoDinamicoTresValor" class="form-control" [(ngModel)]="datoDinamicoTres.valor" name="datoDinamicoTresValor">
+      </div>
+  

@@ -48,6 +48,13 @@
             <li class="nav-item">
               <a class="nav-link" role="button" (click)="buttonTurnos()">Turnos</a>
             </li>
+
+            @if((userService.personaLogeada) && (userService.personaLogeada.rol) === 'Especialista')
+            {
+              <li class="nav-item">
+                <a class="nav-link" role="button" (click)="buttonUsuarios()">Usuarios</a>
+              </li>
+            }
             
             @if((userService.personaLogeada) && (userService.personaLogeada.rol) === 'Admin')
             {
