@@ -46,7 +46,7 @@
           <div class="col-sm-6">
             <label for="claveUno" class="form-label">Dato extra (nombre):</label>
             <input formControlName="claveUno" type="text" class="form-control" id="claveUno">
-            <div *ngIf="historiaClinicaForm.get('valorUno')!.value != ''" class="alert alert-danger">
+            <div *ngIf="historiaClinicaForm.get('valorUno')!.value != '' && historiaClinicaForm.get('claveUno')!.value == ''" class="alert alert-danger">
               Ingrese el nombre del dato.
             </div>
           </div>
@@ -54,7 +54,7 @@
           <div class="col-sm-6">
             <label for="valorUno" class="form-label">Dato extra (valor):</label>
             <input formControlName="valorUno" type="text" class="form-control" id="valorUno">
-            <div *ngIf="historiaClinicaForm.get('claveUno')!.value != ''" class="alert alert-danger">
+            <div *ngIf="historiaClinicaForm.get('claveUno')!.value != '' && historiaClinicaForm.get('valorUno')!.value == ''" class="alert alert-danger">
               Ingrese el valor del dato.
             </div>
           </div>
@@ -62,7 +62,7 @@
           <div *ngIf="historiaClinicaForm.get('claveUno')?.valid && historiaClinicaForm.get('valorUno')?.valid" class="col-sm-6">
             <label for="claveDos" class="form-label">Dato extra (nombre):</label>
             <input formControlName="claveDos" type="text" class="form-control" id="claveDos">
-            <div *ngIf="historiaClinicaForm.get('valorDos')!.value != ''" class="alert alert-danger">
+            <div *ngIf="historiaClinicaForm.get('valorDos')!.value != '' && historiaClinicaForm.get('claveDos')!.value == ''" class="alert alert-danger">
               Ingrese el nombre del dato.
             </div>
           </div>
@@ -70,7 +70,7 @@
           <div *ngIf="historiaClinicaForm.get('claveUno')?.valid && historiaClinicaForm.get('valorUno')?.valid" class="col-sm-6">
             <label for="valorDos" class="form-label">Dato extra (valor):</label>
             <input formControlName="valorDos" type="text" class="form-control" id="valorDos">
-            <div *ngIf="historiaClinicaForm.get('claveDos')!.value != ''" class="alert alert-danger">
+            <div *ngIf="historiaClinicaForm.get('claveDos')!.value != '' && historiaClinicaForm.get('valorDos')!.value == ''" class="alert alert-danger">
               Ingrese el valor del dato.
             </div>
           </div>
@@ -78,7 +78,7 @@
           <div *ngIf="historiaClinicaForm.get('claveDos')?.valid && historiaClinicaForm.get('valorDos')?.valid" class="col-sm-6">
             <label for="claveTres" class="form-label">Dato extra (nombre):</label>
             <input formControlName="claveTres" type="text" class="form-control" id="claveTres">
-            <div *ngIf="historiaClinicaForm.get('valorTres')!.value != ''" class="alert alert-danger">
+            <div *ngIf="historiaClinicaForm.get('valorTres')!.value != '' && historiaClinicaForm.get('claveTres')!.value == ''" class="alert alert-danger">
               Ingrese el nombre del dato.
             </div>
           </div>
@@ -86,7 +86,7 @@
           <div *ngIf="historiaClinicaForm.get('claveDos')?.valid && historiaClinicaForm.get('valorDos')?.valid" class="col-sm-6">
             <label for="valorTres" class="form-label">Dato extra (valor):</label>
             <input formControlName="valorTres" type="text" class="form-control" id="valorTres">
-            <div *ngIf="historiaClinicaForm.get('claveTres')!.value != ''" class="alert alert-danger">
+            <div *ngIf="historiaClinicaForm.get('claveTres')!.value != '' && historiaClinicaForm.get('valorTres')!.value == ''" class="alert alert-danger">
               Ingrese el valor del dato.
             </div>
           </div>
