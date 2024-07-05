@@ -5,14 +5,16 @@ import { Paciente } from '../../models/paciente';
 import { Especialista } from '../../models/especialista';
 import { Subscription } from 'rxjs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
 
 @Component({
   selector: 'app-administrar-usuarios',
   standalone: true,
-  imports: [ CommonModule, MatSlideToggleModule ],
+  imports: [ CommonModule, MatSlideToggleModule, HistoriasClinicasComponent ],
   templateUrl: './administrar-usuarios.component.html',
   styleUrl: './administrar-usuarios.component.css'
 })
+
 export class AdministrarUsuariosComponent implements OnInit {
 
   protected pacientes: Paciente[] = [];
@@ -20,6 +22,8 @@ export class AdministrarUsuariosComponent implements OnInit {
   private userService: UserService = inject(UserService);
   private pacienteSubscription: Subscription = new Subscription();
   private especialistaSubscription: Subscription = new Subscription();
+  protected toogleHistoriaClinica: boolean = false;
+  idPacienteSeleccionado: string = '';
 
   constructor() {}
 
@@ -57,6 +61,11 @@ export class AdministrarUsuariosComponent implements OnInit {
   }
 
   verHistoriaClinica(paciente: Paciente) {
-    console.log('Ver historia clinica de: ', paciente);
+    this.toggleHistoriasClinicas();
+    this.idPacienteSeleccionado = paciente.nroDocumento;
+  }
+
+  toggleHistoriasClinicas() {
+    this.toogleHistoriaClinica = !this.toogleHistoriaClinica;
   }
 }

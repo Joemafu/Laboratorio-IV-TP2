@@ -1,23 +1,30 @@
-<!-- BETA -->
-
-<div *ngIf="historiasClinicas.length > 0">
-    <h2>Historias Clínicas</h2>
-    <div *ngFor="let historia of historiasClinicas">
-      <h3>Turno del {{ historia.fechaTurno }}</h3>
-      <p>Altura: {{ historia.altura }}</p>
-      <p>Peso: {{ historia.peso }}</p>
-      <p>Temperatura: {{ historia.temperatura }}</p>
-      <p>Presión: {{ historia.presion }}</p>
-      <div *ngIf="historia.datoDinamicoUno">
-        <p>{{ historia.datoDinamicoUno.clave }}: {{ historia.datoDinamicoUno.valor }}</p>
-      </div>
-      <div *ngIf="historia.datoDinamicoDos">
-        <p>{{ historia.datoDinamicoDos.clave }}: {{ historia.datoDinamicoDos.valor }}</p>
-      </div>
-      <div *ngIf="historia.datoDinamicoTres">
-        <p>{{ historia.datoDinamicoTres.clave }}: {{ historia.datoDinamicoTres.valor }}</p>
+<div *ngIf="historiasClinicas.length==0" class="container-fluid d-flex justify-content-center align-items-center full-width">
+  <h3>Aún no hay historias clínicas para este paciente.</h3>
+</div>
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item" *ngFor="let historia of historiasClinicas; let i = index">
+      <h2 class="accordion-header" [id]="'heading' + i">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" [attr.aria-expanded]="i === 0 ? 'true' : 'false'" [attr.aria-controls]="'collapse' + i">
+          Historia Clínica {{i + 1}} - Turno del {{historia.fechaTurno}}
+        </button>
+      </h2>
+      <div [id]="'collapse' + i" class="accordion-collapse collapse" [class.show]="i === 0" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <p><strong>Altura (Cms):</strong> {{historia.altura}} cm</p>
+          <p><strong>Peso (Kgs):</strong> {{historia.peso}} kg</p>
+          <p><strong>Temperatura (ºC):</strong> {{historia.temperatura}} °C</p>
+          <p><strong>Presión (mm/Hg):</strong> {{historia.presion}}</p>
+          <div *ngIf="historia.datoDinamicoUno?.clave != ''">
+            <p><strong>{{ historia.datoDinamicoUno?.clave }}:</strong> {{ historia.datoDinamicoUno?.valor }}</p>
+          </div>
+          <div *ngIf="historia.datoDinamicoDos?.clave !=''">
+            <p><strong>{{ historia.datoDinamicoDos?.clave }}:</strong> {{ historia.datoDinamicoDos?.valor }}</p>
+          </div>
+          <div *ngIf="historia.datoDinamicoTres?.clave != ''">
+            <p><strong>{{ historia.datoDinamicoTres?.clave }}:</strong> {{ historia.datoDinamicoTres?.valor }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- BETA -->
+  

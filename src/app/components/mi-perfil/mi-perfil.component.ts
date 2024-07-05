@@ -4,26 +4,32 @@ import { FormsModule } from '@angular/forms';
 import { MisHorariosComponent } from '../mis-horarios/mis-horarios.component';
 import { UserService } from '../../services/user.service';
 import { CalcularEdadPipe } from '../../pipes/calcular-edad.pipe';
+import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [ CommonModule, FormsModule, MisHorariosComponent, CalcularEdadPipe ],
+  imports: [ CommonModule, FormsModule, MisHorariosComponent, CalcularEdadPipe, HistoriasClinicasComponent ],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })
 export class MiPerfilComponent implements OnInit{
 
-  /* Esto es para todos los usuarios */
   userService : UserService = inject(UserService);
   usuario = this.userService.personaLogeada;
   mostrarHorarios: boolean = false;
+  mostrarHistoriasClinicas: boolean = false;
+  pacienteId: string = this.userService.personaLogeada.nroDocumento;
 
-  ngOnInit(): void {
-  }
+  constructor() {}
 
-  /* Esto es para los especialistas */
+  ngOnInit(): void {}
+
   toggleHorarios() {
     this.mostrarHorarios = !this.mostrarHorarios;
+  }
+
+  toggleHistoriasClinicas() {
+    this.mostrarHistoriasClinicas = !this.mostrarHistoriasClinicas;
   }
 }

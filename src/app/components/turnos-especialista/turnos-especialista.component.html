@@ -28,12 +28,10 @@
             <button *ngIf="puedeRechazar(turno)" (click)="rechazarTurno(turno)" class="btn btn-warning btn-sm btnTurno">Rechazar</button>
             <button *ngIf="puedeFinalizar(turno)" (click)="finalizarTurno(turno)" class="btn btn-primary btn-sm btnTurno">Finalizar</button>
             <button *ngIf="puedeVerResenia(turno)" (click)="verResenia(turno)" class="btn btn-primary btn-sm btnTurno">Ver Reseña</button>
+            <button *ngIf="puedeVerComentario(turno)" (click)="verComentario(turno)" class="btn btn-primary btn-sm btnTurno">Ver Motivo</button>
             <button *ngIf="puedeCancelar(turno)" (click)="cancelarTurno(turno)" class="btn btn-danger btn-sm btnTurno">Cancelar</button>
           </td>
         </tr>
-
-        <app-form-historia-clinica *ngIf="historiaClinica" (historiaClinicaGuardada)="guardarHistoriaClinica($event)"></app-form-historia-clinica>
-
       </tbody>
     </table>
   </div>

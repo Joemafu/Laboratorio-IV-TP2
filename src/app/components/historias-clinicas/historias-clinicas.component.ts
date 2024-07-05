@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Input } from '@angular/core';
 import { HistoriaClinicaService } from '../../services/historia-clinica.service';
 import { HistoriaClinica } from '../../interfaces/historia-clinica';
 import { UserService } from '../../services/user.service';
@@ -12,17 +12,23 @@ import { CommonModule } from '@angular/common';
   styleUrl: './historias-clinicas.component.css'
 })
 export class HistoriasClinicasComponent implements OnInit {
-
+  @Input() pacienteId: string = '';
   protected historiasClinicas: HistoriaClinica[] = [];
   historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
   userService: UserService = inject(UserService);
+  documentoNro: string = '';
+  
 
   constructor() {}
 
   ngOnInit(): void {
-    const pacienteId = this.userService.personaLogeada.documentoNro;
-    this.historiaClinicaService.obtenerHistoriasClinicasPorPaciente(pacienteId).subscribe(historia => {
-      this.historiasClinicas = historia;
+    this.cargarHistoriasClinicas();
+  }
+
+  cargarHistoriasClinicas() {
+    this.historiaClinicaService.obtenerHistoriasClinicasPorPaciente(this.pacienteId).subscribe(historias => {
+      this.historiasClinicas = historias;
+      console.log("Historias Clinicas: ", this.historiasClinicas);
     });
-  }  
+  }
 }

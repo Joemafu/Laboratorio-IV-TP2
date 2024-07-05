@@ -86,6 +86,10 @@ export class TurnosEspecialistaComponent implements OnInit {
     return turno.reseniaMedico != undefined && turno.reseniaMedico != null && turno.reseniaMedico.length > 0;
   }
 
+  puedeVerComentario(turno: Turno): boolean {
+    return turno.comentario != undefined && turno.comentario != null && turno.comentario.length > 0;
+  }
+
   cancelarTurno(turno: Turno): void {
     Swal.fire({
       title: 'Cancelar turno',
@@ -165,50 +169,15 @@ export class TurnosEspecialistaComponent implements OnInit {
     });
   }
 
-   /* finalizarTurno(turno: Turno): void {
-    Swal.fire({
-      title: 'Finalizar turno',
-      text: 'Reseña/Diagnóstico:',
-      input: 'text',
-      showCancelButton: true,
-      confirmButtonText: 'Finalizar Turno',
-      cancelButtonText: 'Cancelar',
-      showLoaderOnConfirm: true,
-      preConfirm: (comentario) => {
-        if (!comentario || comentario.trim() === '') {
-          Swal.showValidationMessage('La reseña es obligatoria');
-          return false;
-        } else {
-          return this.turnoService.actualizarTurno(turno.id, { estado: 'Finalizado', reseniaMedico: comentario }).toPromise();
-        }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: 'Turno finalizado',
-          icon: 'success'
-        });
-      }
-    });
-  }  */
+  finalizarTurno(turno: Turno): void {
+    this.turnoAux = turno;
+    this.historiaClinicaToogle = !this.historiaClinicaToogle;
+  }
 
-    finalizarTurno(turno: Turno): void {
-      this.turnoAux = turno;
+  //OK
+  guardarHistoriaClinica(historiaClinica: HistoriaClinica): void {
+    this.historiaClinicaService.agregarHistoriaClinica(historiaClinica).subscribe(response => {
       this.historiaClinicaToogle = !this.historiaClinicaToogle;
-    }
-
-    //BETA
-    emitirTurno(turno: Turno): void {
-
-    }
-
-    //BETA
-    guardarHistoriaClinica(historiaClinica: HistoriaClinica): void {
-      // Lógica para guardar la historia clínica
-      this.historiaClinicaService.agregarHistoriaClinica(historiaClinica).subscribe(response => {
-        // Manejar la respuesta si es necesario
-        this.historiaClinicaToogle = !this.historiaClinicaToogle; // Volver a la vista anterior
-      });
-    }
+    });
+  }
 }

@@ -3,6 +3,7 @@ import { HistoriaClinica } from '../../interfaces/historia-clinica';
 import { Turno } from '../../interfaces/turno';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TurnoService } from '../../services/turno.service';
 
 @Component({
   selector: 'app-form-historia-clinica',
@@ -18,15 +19,17 @@ export class FormHistoriaClinicaComponent {
   errorMensaje: string = '';
   fb: FormBuilder = inject(FormBuilder);
   historiaClinicaForm: FormGroup;
+  turnoService = inject(TurnoService);
 
   constructor() {
     const required = Validators.required;
+    const valmin = Validators.min(0.1);
 
     this.historiaClinicaForm = this.fb.group({
-      altura: [0, [required]],
-      peso: [0, [required]],
-      temperatura: [0, [required]],
-      presion: [0, [required]],
+      altura: [0, [required, valmin]],
+      peso: [0, [required, valmin]],
+      temperatura: [0, [required, valmin]],
+      presion: [0, [required, valmin]],
       resenia: ['', [required]],
       claveUno: [''],
       valorUno: [''],
@@ -81,7 +84,8 @@ export class FormHistoriaClinicaComponent {
         this.historiaClinica.datoDinamicoTres = { clave: this.historiaClinicaForm.get('claveTres')?.value, valor: this.historiaClinicaForm.get('valorTres')?.value };
       }
       this.historiaClinicaGuardada.emit(this.historiaClinica);
+      return this.turnoService.actualizarTurno(this.turno.id, { estado: 'Finalizado', reseniaMedico: this.historiaClinicaForm.get("resenia")?.value }).toPromise();
     }
-
+    return this.errorMensaje = 'Por favor, complete los campos requeridos.';
   }
 }

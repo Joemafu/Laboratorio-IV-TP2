@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, doc, getDoc, query, collectionData, orderBy } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, where, getDocs, query, collectionData, orderBy } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Paciente } from '../models/paciente';
 import { map } from 'rxjs/operators';
@@ -36,7 +36,15 @@ export class PacienteService {
   }
 
   getPacienteById(pacienteId: string): Observable<Paciente> {
-    const docRef = doc(this.firestore, `pacientes/${pacienteId}`);
-    return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Paciente));
+    const pacientesRef = collection(this.firestore, 'pacientes');
+    const q = query(pacientesRef, where('nroDocumento', '==', pacienteId));
+    return from(getDocs(q)).pipe(
+      map(querySnapshot => {
+        if (querySnapshot.empty) {
+          throw new Error(`No patient found with nroDocumento: ${pacienteId}`);
+        }
+        return querySnapshot.docs[0].data() as Paciente;
+      })
+    );
   }
 }

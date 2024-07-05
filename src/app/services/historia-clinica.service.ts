@@ -16,6 +16,7 @@ export class HistoriaClinicaService {
 
   //BETA
   obtenerHistoriasClinicasPorPaciente(pacienteId: string): Observable<HistoriaClinica[]> {
+    //console.log("paciente ID: ", pacienteId)
     const colRef = collection(this.firestore, this.PATH);
     const q = query(colRef, where('pacienteId', '==', pacienteId));
     return from(getDocs(q)).pipe(
