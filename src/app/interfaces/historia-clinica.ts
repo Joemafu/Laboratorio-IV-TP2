@@ -1,6 +1,7 @@
 export interface HistoriaClinica {
     turnoId: string;
     pacienteId?: string | undefined;
+    especialistaId?: string | undefined
     pacienteNombre?: string | undefined;
     fechaTurno: string;
     altura: number;
@@ -11,5 +12,3 @@ export interface HistoriaClinica {
     datoDinamicoDos?: { clave: string, valor: string };
     datoDinamicoTres?: { clave: string, valor: string };
 }
-
-/* BORRADOR REVISAR */

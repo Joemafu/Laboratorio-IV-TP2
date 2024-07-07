@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, writeBatch, collection, collectionData, getDocs, query, where, updateDoc, doc, orderBy } from '@angular/fire/firestore';
+import { Firestore, writeBatch, collection, collectionData, getDocs, getDoc, query, where, updateDoc, doc, orderBy } from '@angular/fire/firestore';
 import { Turno } from '../interfaces/turno';
 import { from, Observable, throwError } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
+import { mergeMap, catchError, map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -111,7 +111,16 @@ export class TurnoService {
     const turnoDocRef = doc(this.firestore, `${this.PATH}/${turnoId}`);
     return from(updateDoc(turnoDocRef, cambios));
   }
-}
 
+  obtenerResenia(turnoId: string): Observable<string> {
+    const turnoDocRef = doc(this.firestore, `${this.PATH}/${turnoId}`);
+    return from(getDoc(turnoDocRef)).pipe(
+      map((docSnapshot) => {
+        const data = docSnapshot.data();
+        return data?.['reseniaMedico'] ?? '';
+      })
+    );
+  }
+}
 /* color primario seleccion : hover */
 /* #1c79b8 */

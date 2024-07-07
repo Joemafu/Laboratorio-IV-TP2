@@ -54,7 +54,6 @@ export class TurnosEspecialistaComponent implements OnInit {
   }
 
   cargarTurnos(): void {
-
     const especialistaId = this.userService.personaLogeada.nroDocumento;
     this.turnoService.obtenerTurnosTomadosPorEspecialista(especialistaId).subscribe(turnos => {
       this.turnos = turnos;
@@ -70,8 +69,8 @@ export class TurnosEspecialistaComponent implements OnInit {
   filtrarTurnos(string : string): void {
     this.filtro = this.filtro.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(turno =>
-      turno.especialidad.toLowerCase().includes(this.filtro.toLowerCase()) ||
-      turno.pacienteNombre?.toLowerCase().includes(this.filtro.toLowerCase())
+      turno.especialidad.toLowerCase().includes(this.filtro) ||
+      turno.pacienteNombre?.toLowerCase().includes(this.filtro)
     );
     this.ordenarTurnosPorFecha();
   }

@@ -14,7 +14,6 @@ export class HistoriaClinicaService {
 
   constructor() {}
 
-  //BETA
   obtenerHistoriasClinicasPorPaciente(pacienteId: string): Observable<HistoriaClinica[]> {
     const colRef = collection(this.firestore, this.PATH);
     const q = query(colRef, where('pacienteId', '==', pacienteId));
@@ -23,17 +22,21 @@ export class HistoriaClinicaService {
     );
   }
 
-  //BETA
+  obtenerHistoriasClinicasPorEspecialista(pacienteId: string, especialistaIdId: string): Observable<HistoriaClinica[]> {
+    const colRef = collection(this.firestore, this.PATH);
+    const q = query(colRef, where('especialistaId', '==', especialistaIdId), where('pacienteId', '==', pacienteId));
+    return from(getDocs(q)).pipe(
+      map(querySnapshot => querySnapshot.docs.map(docSnap => docSnap.data() as HistoriaClinica))
+    );
+  }
+
   agregarHistoriaClinica(historiaClinica: HistoriaClinica): Observable<void> {
     const colRef = collection(this.firestore, this.PATH);
     return from(addDoc(colRef, historiaClinica)).pipe(map(() => {}));
   }
 
-  //BETA
   actualizarHistoriaClinica(turnoId: string, historiaClinica: Partial<HistoriaClinica>): Observable<void> {
     const docRef = doc(this.firestore, `${this.PATH}/${turnoId}`);
     return from(updateDoc(docRef, historiaClinica)).pipe(map(() => {}));
   }
 }
-
-/* BORRADOR REVISAR */

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Input } from '@angular/core';
+import { Component, OnInit, inject, Input, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
@@ -8,11 +8,13 @@ import Swal from 'sweetalert2';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
 import moment from 'moment';
 import { Especialista } from '../../models/especialista';
+import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-turnos-paciente',
   standalone: true,
-  imports: [ CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule, HistoriasClinicasComponent],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.css'
 })
@@ -26,29 +28,41 @@ export class TurnosPacienteComponent implements OnInit{
   userService: UserService = inject(UserService);
   turnoService: TurnoService = inject(TurnoService);
   pipe: FormatearFechaPipe = new FormatearFechaPipe();
+  historialEspecialistaToggle: boolean = false;
+  pacienteId: string = '';
+  especialistaId: string = '';
 
   constructor() {}
 
   ngOnInit(): void {
     this.cargarTurnos();
   }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['especialistaSeleccionado'] && this.especialistaSeleccionado) {
+      this.cargarTurnos();
+      this.historialEspecialistaToggle = false;
+    }
+  }
 
   cargarTurnos(): void {
     const pacienteId = this. userService.personaLogeada.nroDocumento;
     this.turnoService.obtenerTurnosPorPaciente(pacienteId).subscribe(turnos => {
       this.turnos = turnos;
-      this.turnosFiltrados = turnos;
       this.filtrarTurnos('');
     });
-
+    if (this.especialistaSeleccionado) {
+      this.filtro = this.especialistaSeleccionado.apellido + ' ' + this.especialistaSeleccionado.nombre;
+      this.filtrarTurnos(this.filtro);
+    }
   }
 
   filtrarTurnos(filtro : string): void {
     this.filtro = this.filtro.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(turno =>
       turno.especialidad.toLowerCase().includes(this.filtro) ||
-      turno.especialistaNombre.toLowerCase().includes(this.filtro
-    ));
+      turno.especialistaNombre.toLowerCase().includes(this.filtro)
+    );
     this.ordenarTurnosPorFecha();
   }
 
@@ -182,5 +196,33 @@ export class TurnosPacienteComponent implements OnInit{
         });
       }
     });
+  }
+
+  verHistoriaClinica(especialistaId: string): void {
+    this.especialistaId = especialistaId;
+    this.toggleHistorialEspecialista();
+  }
+
+  toggleHistorialEspecialista(): void {
+    this.historialEspecialistaToggle = !this.historialEspecialistaToggle;
+  }
+
+  descargarHistorialTurnosExcel(): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.turnosFiltrados.map(turno => ({
+      Especialidad: turno.especialidad,
+      Paciente: turno.pacienteNombre,
+      "DNI Paciente": turno.pacienteId,
+      Fecha: turno.fecha,
+      Hora: turno.hora,
+      Estado: turno.estado,
+      Calificacion: turno.calificacion,
+      Comentario: turno.comentario,
+      Encuesta: turno.encuesta,
+      Especialista: turno.especialistaNombre,
+      "Reseña/Diagnóstico": turno.reseniaMedico,      
+    })));
+
+    const workbook: XLSX.WorkBook = { Sheets: { 'Historial de Turnos': worksheet }, SheetNames: ['Historial de Turnos'] };
+    XLSX.writeFile(workbook, `HistorialTurnos_${this.pacienteId}.xlsx`);
   }
 }

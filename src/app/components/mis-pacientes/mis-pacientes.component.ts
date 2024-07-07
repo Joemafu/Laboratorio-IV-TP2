@@ -7,11 +7,13 @@ import { Turno } from '../../interfaces/turno';
 import { TurnoService } from '../../services/turno.service';
 import { TurnosEspecialistaComponent } from '../turnos-especialista/turnos-especialista.component';
 import Swal from 'sweetalert2';
+import { PacienteService } from '../../services/paciente.service';
+import { TurnosAdminComponent } from '../turnos-admin/turnos-admin.component';
 
 @Component({
-  selector: 'app-pacientes',
+  selector: 'app-mis-pacientes',
   standalone: true,
-  imports: [ CommonModule, TurnosEspecialistaComponent ],
+  imports: [ CommonModule, TurnosEspecialistaComponent, TurnosAdminComponent ],
   templateUrl: './mis-pacientes.component.html',
   styleUrl: './mis-pacientes.component.css'
 })
@@ -29,13 +31,25 @@ export class MisPacientesComponent implements OnInit {
   especialistaService: EspecialistaService = inject(EspecialistaService);
   turnoService: TurnoService = inject(TurnoService);
 
+  pacienteService: PacienteService = inject(PacienteService);
+
   constructor() {}
 
   ngOnInit(): void {
-    this.cargarPacientes();
+    if(this.userService.personaLogeada.rol === 'Admin') {
+      this.cargarTodosLosPacientes();  
+    } else {
+      this.cargarPacientesPorEspecialista();
+    }    
   }
 
-  cargarPacientes(): void {
+  cargarTodosLosPacientes(): void {
+    this.pacienteService.getPacientes().subscribe((pacientes: Paciente[]) => {
+      this.pacientes = pacientes;
+    });
+  }
+
+  cargarPacientesPorEspecialista(): void {
     this.especialistaService.getPacientesByEspecialista(this.especialistaId).subscribe((pacientes: Paciente[]) => {
       this.pacientes = pacientes;
     });

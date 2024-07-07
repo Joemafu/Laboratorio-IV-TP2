@@ -1,10 +1,13 @@
-<div *ngIf="historiasClinicas.length==0" class="container-fluid d-flex justify-content-center align-items-center full-width">
+<div *ngIf="historiasClinicas.length==0 && userService.personaLogeada.rol=='Especialista'" class="container-fluid d-flex justify-content-center align-items-center full-width">
   <h3>Aún no hay historias clínicas para este paciente.</h3>
+</div>
+<div *ngIf="historiasClinicas.length==0 && especialistaId" class="container-fluid d-flex justify-content-center align-items-center full-width">
+  <h3>Aún no tienes historias clínicas con este especialista.</h3>
 </div>
 <div class="accordion" id="accordionExample">
     <div class="accordion-item" *ngFor="let historia of historiasClinicas; let i = index">
       <h2 class="accordion-header" [id]="'heading' + i">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" [attr.aria-expanded]="i === 0 ? 'true' : 'false'" [attr.aria-controls]="'collapse' + i">
+        <button (click)="obtenerResenia(historia.turnoId)" class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" [attr.aria-expanded]="i === 0 ? 'true' : 'false'" [attr.aria-controls]="'collapse' + i">
           Historia Clínica {{i + 1}} - Turno del {{historia.fechaTurno}}
         </button>
       </h2>
@@ -23,8 +26,19 @@
           <div *ngIf="historia.datoDinamicoTres?.clave != ''">
             <p><strong>{{ historia.datoDinamicoTres?.clave }}:</strong> {{ historia.datoDinamicoTres?.valor }}</p>
           </div>
+          <p><strong>Reseña/Diagnóstico:</strong> {{resenia}}</p>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="container-fluid d-flex justify-content-center align-items-center full-width">
+    <button 
+      *ngIf="userService.personaLogeada.rol == 'Paciente'" 
+      (click)="descargarHistoriaClinicaPdf(historiasClinicas)" 
+      type="button" 
+      class="btn btn-primary btn-sm btnTurno mx-1 my-3">
+      Descargar historia clínica con este especialista
+    </button>
   </div>
   

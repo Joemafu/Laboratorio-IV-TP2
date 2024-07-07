@@ -10,7 +10,6 @@
         <th>Email</th>
         <th>Rol</th>
         <th>Habilitado</th>
-        <th>Historia Clínica</th>
       </tr>
     </thead>
     <tbody>
@@ -28,8 +27,6 @@
                 [checked]="especialista.activo"
                 (change)="toggleUsuarioActivo(especialista, $event.checked)">
               </mat-slide-toggle>
-            </td>
-            <td>
             </td>
           </tr>
         }
@@ -50,9 +47,6 @@
                 (change)="toggleUsuarioActivo(paciente, $event.checked)">
               </mat-slide-toggle>
             </td>
-            <td>
-              <button class="btn btn-primary" (click)="verHistoriaClinica(paciente)">Ver</button>
-            </td>
           </tr>
         }
       }      
@@ -66,4 +60,12 @@
     </div>
   </div>
   <app-historias-clinicas [pacienteId]="idPacienteSeleccionado"></app-historias-clinicas>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center full-width">
+  <button (click)="descargarDatosusuariosExcel()" type="button" class="btn btn-primary btn-sm btnTurno mx-1 mb-3">Descargar datos de todos los usuarios</button>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center full-width">
+  <app-mis-pacientes></app-mis-pacientes>
 </div>

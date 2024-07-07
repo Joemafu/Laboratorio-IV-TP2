@@ -5,6 +5,10 @@
   </div>
 </div>
   
-<div *ngIf="selectedPaciente">  
+<div *ngIf="selectedPaciente && userService.personaLogeada.rol == 'Especialista'">  
   <app-turnos-especialista [pacienteSeleccionado]="selectedPaciente"></app-turnos-especialista>
+</div>
+
+<div *ngIf="selectedPaciente && userService.personaLogeada.rol == 'Admin'">  
+  <app-turnos-admin [pacienteSeleccionado]="selectedPaciente"></app-turnos-admin>
 </div>

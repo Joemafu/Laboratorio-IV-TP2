@@ -1,7 +1,7 @@
 <div class="container">
     <h2>Mis Turnos</h2>
 
-    <div class="input-group mb-3">
+    <div *ngIf="!especialistaSeleccionado" class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Buscar por especialidad o especialista" onchange="filtrarTurnos()" [(ngModel)]="filtro" (ngModelChange)="filtrarTurnos($event)">
     </div>
 
@@ -33,4 +33,14 @@
         </tr>
       </tbody>
     </table>
+
+    <div *ngIf="especialistaSeleccionado" class="container-fluid d-flex justify-content-center align-items-center full-width">
+      <button *ngIf="!historialEspecialistaToggle" (click)="verHistoriaClinica(especialistaSeleccionado.nroDocumento)" class="btn btn-primary btn-sm btnTurno mx-1 mb-3">Ver Historial clínico</button>
+      <button *ngIf="historialEspecialistaToggle" (click)="toggleHistorialEspecialista()" type="button" class="btn btn-primary btn-sm btnTurno mx-1 mb-3">Ocultar</button>
+      <button *ngIf="userService.personaLogeada.rol == 'Paciente'" (click)="descargarHistorialTurnosExcel()" type="button" class="btn btn-primary btn-sm btnTurno mx-1 mb-3">Descargar historial de turnos con este especialista</button>
+    </div>
+  </div>
+
+  <div *ngIf="historialEspecialistaToggle">
+    <app-historias-clinicas [especialistaId]="especialistaId"></app-historias-clinicas>
   </div>

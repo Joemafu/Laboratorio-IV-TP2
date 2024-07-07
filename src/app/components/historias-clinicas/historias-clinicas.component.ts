@@ -3,6 +3,8 @@ import { HistoriaClinicaService } from '../../services/historia-clinica.service'
 import { HistoriaClinica } from '../../interfaces/historia-clinica';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { TurnoService } from '../../services/turno.service';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-historias-clinicas',
@@ -13,11 +15,13 @@ import { CommonModule } from '@angular/common';
 })
 export class HistoriasClinicasComponent implements OnInit {
   @Input() pacienteId: string = '';
+  @Input() especialistaId: string = '';
   protected historiasClinicas: HistoriaClinica[] = [];
   historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
   userService: UserService = inject(UserService);
-  documentoNro: string = '';
-  
+  documentoNro: string = '';  
+  turnoService: TurnoService = inject(TurnoService);
+  resenia: string = '';
 
   constructor() {}
 
@@ -26,8 +30,76 @@ export class HistoriasClinicasComponent implements OnInit {
   }
 
   cargarHistoriasClinicas() {
-    this.historiaClinicaService.obtenerHistoriasClinicasPorPaciente(this.pacienteId).subscribe(historias => {
-      this.historiasClinicas = historias;
+    if (this.especialistaId) {
+      this.pacienteId = this.userService.personaLogeada.nroDocumento;
+      this.historiaClinicaService.obtenerHistoriasClinicasPorEspecialista(this.pacienteId, this.especialistaId).subscribe(historias => {
+        this.historiasClinicas = historias;
+        this.obtenerResenia(historias[0].turnoId);
+      });
+    } else if (this.pacienteId){
+      this.historiaClinicaService.obtenerHistoriasClinicasPorPaciente(this.pacienteId).subscribe(historias => {
+        this.historiasClinicas = historias;
+      });
+    }
+  }
+
+  public descargarHistoriaClinicaPdf(historiasClinicas: HistoriaClinica[]) {
+    const doc = new jsPDF();
+
+    // Agregar logo
+    const imgData = '../../../assets/img/logo.png'; // Base64 de la imagen del logo
+    doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
+
+    // Título y fecha
+    doc.setFontSize(16);
+    doc.text('Informe de Historias Clínicas', 70, 20);
+    doc.setFontSize(12);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
+
+    // Información de cada historia clínica
+    let y = 50;
+    historiasClinicas.forEach((historia, index) => {
+      doc.setFontSize(14);
+      doc.text(`Historia Clínica ${index + 1} - Turno del ${historia.fechaTurno}`, 10, y);
+      doc.setFontSize(12);
+      y += 10;
+      doc.text(`Altura: ${historia.altura} cm`, 10, y);
+      y += 10;
+      doc.text(`Peso: ${historia.peso} kg`, 10, y);
+      y += 10;
+      doc.text(`Temperatura: ${historia.temperatura} °C`, 10, y);
+      y += 10;
+      doc.text(`Presión: ${historia.presion} mm/Hg`, 10, y);
+      y += 10;
+      if (historia.datoDinamicoUno?.clave) {
+        doc.text(`${historia.datoDinamicoUno.clave}: ${historia.datoDinamicoUno.valor}`, 10, y);
+        y += 10;
+      }
+      if (historia.datoDinamicoDos?.clave) {
+        doc.text(`${historia.datoDinamicoDos.clave}: ${historia.datoDinamicoDos.valor}`, 10, y);
+        y += 10;
+      }
+      if (historia.datoDinamicoTres?.clave) {
+        doc.text(`${historia.datoDinamicoTres.clave}: ${historia.datoDinamicoTres.valor}`, 10, y);
+        y += 10;
+      }
+      doc.text(`Reseña/Diagnóstico: ${this.resenia}`, 10, y);
+      y += 20; // Espacio entre historias clínicas
+
+      // Agregar nueva página si es necesario
+      if (y > 270) {
+        doc.addPage();
+        y = 10; // Reiniciar la posición vertical
+      }
+    });
+
+    doc.save('historias_clinicas.pdf');
+  }
+
+  obtenerResenia(id : string)
+  {
+    this.turnoService.obtenerResenia(id).subscribe(resenia => {
+      this.resenia = resenia;
     });
   }
 }

@@ -5,7 +5,7 @@ import { UserService } from '../../services/user.service';
 import { Turno } from '../../interfaces/turno';
 import { TurnoService } from '../../services/turno.service';
 import { TurnosPacienteComponent } from '../turnos-paciente/turnos-paciente.component';
-import { PacienteService } from '../../services/paciente.service';
+import { EspecialistaService } from '../../services/especialista.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,14 +20,13 @@ export class MisEspecialistasComponent implements OnInit{
   especialistas: Especialista[] = [];
   userService: UserService = inject(UserService);
   pacienteId: string = this.userService.personaLogeada.nroDocumento;
-  pacienteService: PacienteService = inject(PacienteService);
+  especialistaService: EspecialistaService = inject(EspecialistaService);
 
   turnosEspecialistaSeleccionado: Turno[] = [];
   especialistaSeleccionado: Especialista | null = null;
 
   turnos: Turno[] = [];
   selectedEspecialista: Especialista | null = null;
-  //especialistaService: EspecialistaService = inject(EspecialistaService);
   turnoService: TurnoService = inject(TurnoService);
 
   constructor() {}
@@ -37,14 +36,14 @@ export class MisEspecialistasComponent implements OnInit{
   }
 
   cargarEspecialistas(): void {
-/*     this.pacienteService.getEspecialistasByPaciente(this.pacienteId).subscribe((especialistas: Especialista[]) => {
+    this.especialistaService.getEspecialistasByPaciente(this.pacienteId).subscribe((especialistas: Especialista[]) => {
       this.especialistas = especialistas;
-    }); */
+    });
   }
 
   selectEspecialista(especialista: Especialista): void {
     this.selectedEspecialista = especialista;
-    this.turnoService.obtenerTurnosPorEspecialista(especialista.id).subscribe((turnos: Turno[]) => {
+    this.turnoService.obtenerTurnosPorEspecialista(especialista.nroDocumento).subscribe((turnos: Turno[]) => {
       this.turnos = turnos;
     });
   }
@@ -56,5 +55,4 @@ export class MisEspecialistasComponent implements OnInit{
       icon: 'info'
     });
   }
-
 }

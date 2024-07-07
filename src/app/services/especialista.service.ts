@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Firestore, addDoc, collection, doc, getDoc, query, collectionData, orderBy } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, where, getDocs, query, collectionData, orderBy } from '@angular/fire/firestore';
 import { from, Observable, forkJoin } from 'rxjs';
 import { Especialista } from '../models/especialista';
 import { map, switchMap  } from 'rxjs/operators';
@@ -43,8 +43,16 @@ export class EspecialistaService {
   }
 
   getEspecialistaById(especialistaId: string): Observable<Especialista> {
-    const docRef = doc(this.firestore, `especialistas/${especialistaId}`);
-    return from(getDoc(docRef)).pipe(map(docSnap => docSnap.data() as Especialista));
+    const especialistasRef = collection(this.firestore, 'especialistas');
+    const q = query(especialistasRef, where('nroDocumento', '==', especialistaId));
+    return from(getDocs(q)).pipe(
+      map(querySnapshot => {
+        if (querySnapshot.empty) {
+          throw new Error(`No hay especialistas con DNI: ${especialistaId}`);
+        }
+        return querySnapshot.docs[0].data() as Especialista;
+      })
+    );
   }
 
   getPacientesByEspecialista(especialistaId: string): Observable<Paciente[]> {
@@ -56,6 +64,19 @@ export class EspecialistaService {
       switchMap((pacienteIds: string[]) => {
         const pacienteObservables = pacienteIds.map(id => this.pacienteService.getPacienteById(id));
         return forkJoin(pacienteObservables);
+      })
+    );
+  }
+
+  getEspecialistasByPaciente(pacienteId: string): Observable<Especialista[]> {
+    return this.turnoService.obtenerTurnosPorPaciente(pacienteId).pipe(
+      map((turnos: Turno[]) => {
+        const especialistaIds = Array.from(new Set(turnos.map(turno => turno.especialistaId))) as string[];
+        return especialistaIds;
+      }),
+      switchMap((especialistaIds: string[]) => {
+        const especialistaObservables = especialistaIds.map(id => this.getEspecialistaById(id));
+        return forkJoin(especialistaObservables);
       })
     );
   }

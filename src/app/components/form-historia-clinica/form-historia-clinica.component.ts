@@ -43,6 +43,7 @@ export class FormHistoriaClinicaComponent {
   historiaClinica: HistoriaClinica = {
     turnoId: '',
     pacienteId: '',
+    especialistaId: '',
     pacienteNombre: '',
     fechaTurno: '',
     altura: 0,
@@ -68,6 +69,7 @@ export class FormHistoriaClinicaComponent {
     if(this.historiaClinicaForm.valid) {
       this.historiaClinicaForm.markAsPristine();
       this.historiaClinica.pacienteId = this.turno.pacienteId,
+      this.historiaClinica.especialistaId = this.turno.especialistaId,
       this.historiaClinica.pacienteNombre = this.turno.pacienteNombre,
       this.historiaClinica.fechaTurno = this.turno.fecha+' '+this.turno.hora,
       this.historiaClinica.altura = this.historiaClinicaForm.get('altura')?.value;

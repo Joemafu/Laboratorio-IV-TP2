@@ -46,23 +46,10 @@ export class PacienteService {
     return from(getDocs(q)).pipe(
       map(querySnapshot => {
         if (querySnapshot.empty) {
-          throw new Error(`No patient found with nroDocumento: ${pacienteId}`);
+          throw new Error(`No hay pacientes con DNI: ${pacienteId}`);
         }
         return querySnapshot.docs[0].data() as Paciente;
       })
     );
   }
-
-/*   getEspecialistasByPaciente(pacienteId: string): Observable<Paciente[]> {
-    return this.turnoService.obtenerTurnosPorPaciente(pacienteId).pipe(
-      map((turnos: Turno[]) => {
-        const especialistaIds = Array.from(new Set(turnos.map(turno => turno.especialistaId).filter(id => id !== undefined))) as string[];
-        return especialistaIds;
-      }),
-      switchMap((especialistaIds: string[]) => {
-        const especialistaObservables = especialistaIds.map(id => this.especialistaService.getEspecialistaById(id));
-        return forkJoin(especialistaObservables);
-      })
-    );
-  } */
 }
