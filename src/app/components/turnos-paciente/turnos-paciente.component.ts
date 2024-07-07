@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
 import moment from 'moment';
+import { Especialista } from '../../models/especialista';
 
 @Component({
   selector: 'app-turnos-paciente',
@@ -16,6 +17,8 @@ import moment from 'moment';
   styleUrl: './turnos-paciente.component.css'
 })
 export class TurnosPacienteComponent implements OnInit{
+
+  @Input() especialistaSeleccionado!: Especialista;
 
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];

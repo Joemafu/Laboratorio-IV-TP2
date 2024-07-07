@@ -16,10 +16,8 @@ export class TurnoService {
   constructor() {}
 
   async agregarTurnos(turnos: Turno[]): Promise<void> {
-    console.log(turnos);
     const batch = writeBatch(this.firestore);
     const turnosRef = collection(this.firestore, this.PATH);
-
     for (const turno of turnos) {
       const q = query(turnosRef, where('especialistaId', '==', turno.especialistaId), where('fecha', '==', turno.fecha), where('hora', '==', turno.hora));
       const querySnapshot = await getDocs(q);
@@ -102,7 +100,7 @@ export class TurnoService {
     const q = query(col, where('especialistaId', '==', especialistaId), where('pacienteNombre', '!=', ''), orderBy('fecha', 'asc'));
     return collectionData(q, { idField: 'id' }) as Observable<Turno[]>;
   }
-
+  
   obtenerTodosLosTurnos(): Observable<Turno[]> {
     const col = collection(this.firestore, this.PATH);
     const q = query(col, where('pacienteNombre', '!=', ''), orderBy('fecha', 'asc'));

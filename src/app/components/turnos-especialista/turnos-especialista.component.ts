@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Input, SimpleChanges} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
@@ -10,15 +10,19 @@ import moment from 'moment';
 import { HistoriaClinicaService } from '../../services/historia-clinica.service';
 import { FormHistoriaClinicaComponent } from '../form-historia-clinica/form-historia-clinica.component';
 import { HistoriaClinica } from '../../interfaces/historia-clinica';
+import { Paciente } from '../../models/paciente';
+import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
 
 @Component({
   selector: 'app-turnos-especialista',
   standalone: true,
-  imports: [ CommonModule, FormsModule, FormatearFechaPipe, FormHistoriaClinicaComponent ],
+  imports: [ CommonModule, FormsModule, FormatearFechaPipe, FormHistoriaClinicaComponent, HistoriasClinicasComponent],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.css'
 })
 export class TurnosEspecialistaComponent implements OnInit {
+
+  @Input() pacienteSeleccionado!: Paciente;
 
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
@@ -29,8 +33,12 @@ export class TurnosEspecialistaComponent implements OnInit {
   historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
 
   historiaClinica: HistoriaClinica | null = null;
+  historiasClinicas: HistoriaClinica[] = [];
   historiaClinicaToogle: boolean = false;
+  historialPacienteToggle: boolean = false;
   turnoAux: Turno | null = null;
+
+  pacienteId: string = '';
 
   constructor() {}
 
@@ -38,14 +46,25 @@ export class TurnosEspecialistaComponent implements OnInit {
     this.cargarTurnos();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['pacienteSeleccionado'] && this.pacienteSeleccionado) {
+      this.cargarTurnos();
+      this.historialPacienteToggle = false;
+    }
+  }
+
   cargarTurnos(): void {
+
     const especialistaId = this.userService.personaLogeada.nroDocumento;
     this.turnoService.obtenerTurnosTomadosPorEspecialista(especialistaId).subscribe(turnos => {
       this.turnos = turnos;
-      console.log(turnos);
       this.turnosFiltrados = turnos;
       this.filtrarTurnos('');
     });
+    if (this.pacienteSeleccionado) {
+      this.filtro = this.pacienteSeleccionado.apellido + ' ' + this.pacienteSeleccionado.nombre;
+      this.filtrarTurnos(this.filtro);
+    }
   }
 
   filtrarTurnos(string : string): void {
@@ -88,6 +107,10 @@ export class TurnosEspecialistaComponent implements OnInit {
 
   puedeVerComentario(turno: Turno): boolean {
     return turno.comentario != undefined && turno.comentario != null && turno.comentario.length > 0;
+  }
+
+  puedeVerHistoriaClinica(turno: Turno): boolean {
+    return turno.reseniaMedico != undefined && turno.reseniaMedico != null && turno.reseniaMedico.length > 0;
   }
 
   cancelarTurno(turno: Turno): void {
@@ -160,6 +183,15 @@ export class TurnosEspecialistaComponent implements OnInit {
       text: turno.comentario,
       icon: 'info'
     });
+  }
+
+  verHistoriaClinica(pacienteId: string): void {
+    this.pacienteId = pacienteId;
+    this.toggleHistorialPaciente();
+  }
+
+  toggleHistorialPaciente(): void {
+    this.historialPacienteToggle = !this.historialPacienteToggle;
   }
 
   aceptarTurno(turno: Turno): void {

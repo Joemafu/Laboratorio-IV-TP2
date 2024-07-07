@@ -46,11 +46,6 @@
       - Se debe agregar al menos 2, como mínimo, animaciones de transición entre componentes al navegar la aplicación.
       - Derecha a izquierda
 
-
-
-      
-      npm install moment
-
 */
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';

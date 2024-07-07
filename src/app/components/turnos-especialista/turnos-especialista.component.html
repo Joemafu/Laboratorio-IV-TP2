@@ -1,7 +1,7 @@
 <div *ngIf="!historiaClinicaToogle" class="container">
     <h2>Mis Turnos</h2>
 
-    <div class="input-group mb-3">
+    <div *ngIf="!pacienteSeleccionado" class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Buscar por especialidad o paciente" onchange="filtrarTurnos()" [(ngModel)]="filtro" (ngModelChange)="filtrarTurnos($event)">
     </div>
 
@@ -34,8 +34,17 @@
         </tr>
       </tbody>
     </table>
+    <div *ngIf="pacienteSeleccionado" class="container-fluid d-flex justify-content-center align-items-center full-width">
+      <button *ngIf="!historialPacienteToggle" (click)="verHistoriaClinica(pacienteSeleccionado.nroDocumento)" class="btn btn-primary btn-sm btnTurno">Ver Historial</button>
+      <button *ngIf="historialPacienteToggle" (click)="toggleHistorialPaciente()" type="button" class="btn btn-primary btn-sm btnTurno">Ocultar</button>
+    </div>
+
   </div>
 
   <div *ngIf="historiaClinicaToogle">
     <app-form-historia-clinica *ngIf="turnoAux" [turno]="turnoAux" (historiaClinicaGuardada)="guardarHistoriaClinica($event)"></app-form-historia-clinica>
+  </div>
+
+  <div *ngIf="historialPacienteToggle">
+    <app-historias-clinicas [pacienteId]="pacienteId"></app-historias-clinicas>
   </div>

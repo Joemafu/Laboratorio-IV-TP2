@@ -79,7 +79,6 @@ export class SolicitarTurnoComponent implements OnInit{
   loadHorariosDisponibles(especialistaId: string, especialidadId: string) {
     this.turnoService.obtenerTurnosEspecialistaEspecialidadLibres(especialistaId, especialidadId).subscribe(data => {
       this.horariosDisponibles = data;
-      console.log(this.horariosDisponibles.length)
     });
   }
 

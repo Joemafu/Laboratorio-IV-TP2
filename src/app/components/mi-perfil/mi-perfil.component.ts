@@ -5,11 +5,12 @@ import { MisHorariosComponent } from '../mis-horarios/mis-horarios.component';
 import { UserService } from '../../services/user.service';
 import { CalcularEdadPipe } from '../../pipes/calcular-edad.pipe';
 import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
+import { MisEspecialistasComponent } from '../mis-especialistas/mis-especialistas.component';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [ CommonModule, FormsModule, MisHorariosComponent, CalcularEdadPipe, HistoriasClinicasComponent ],
+  imports: [ CommonModule, FormsModule, MisHorariosComponent, CalcularEdadPipe, HistoriasClinicasComponent, MisEspecialistasComponent ],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })

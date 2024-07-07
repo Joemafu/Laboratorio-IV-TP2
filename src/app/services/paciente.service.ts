@@ -1,8 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, addDoc, collection, where, getDocs, query, collectionData, orderBy } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { from, Observable, forkJoin } from 'rxjs';
 import { Paciente } from '../models/paciente';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+import { TurnoService } from './turno.service';
+import { Turno } from '../interfaces/turno';
+import { EspecialistaService } from './especialista.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +15,8 @@ export class PacienteService {
   private firestore: Firestore = inject(Firestore);
   private PATH: string = 'pacientes';
   public pacientesCollection;
+/*   public turnoService: TurnoService = inject(TurnoService);
+  public especialistaService: EspecialistaService = inject(EspecialistaService); */
 
   constructor() {
     this.pacientesCollection = collection(this.firestore, this.PATH);
@@ -47,4 +52,17 @@ export class PacienteService {
       })
     );
   }
+
+/*   getEspecialistasByPaciente(pacienteId: string): Observable<Paciente[]> {
+    return this.turnoService.obtenerTurnosPorPaciente(pacienteId).pipe(
+      map((turnos: Turno[]) => {
+        const especialistaIds = Array.from(new Set(turnos.map(turno => turno.especialistaId).filter(id => id !== undefined))) as string[];
+        return especialistaIds;
+      }),
+      switchMap((especialistaIds: string[]) => {
+        const especialistaObservables = especialistaIds.map(id => this.especialistaService.getEspecialistaById(id));
+        return forkJoin(especialistaObservables);
+      })
+    );
+  } */
 }

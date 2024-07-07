@@ -48,18 +48,13 @@ export class EspecialistaService {
   }
 
   getPacientesByEspecialista(especialistaId: string): Observable<Paciente[]> {
-    console.log("EspecialistaId: ", especialistaId);
     return this.turnoService.obtenerTurnosTomadosPorEspecialista(especialistaId).pipe(
       map((turnos: Turno[]) => {
-        console.log("Turnos: ", turnos);
         const pacienteIds = Array.from(new Set(turnos.map(turno => turno.pacienteId).filter(id => id !== undefined))) as string[];
-        console.log("PacienteIds A: ", pacienteIds);
         return pacienteIds;
       }),
       switchMap((pacienteIds: string[]) => {
-        console.log("PacienteIds B: ", pacienteIds);
         const pacienteObservables = pacienteIds.map(id => this.pacienteService.getPacienteById(id));
-        console.log("Pacientes Obs: ", pacienteObservables);
         return forkJoin(pacienteObservables);
       })
     );

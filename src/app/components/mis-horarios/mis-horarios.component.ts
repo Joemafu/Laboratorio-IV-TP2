@@ -44,25 +44,17 @@ export class MisHorariosComponent implements OnInit {
 
   loadEspecialidades(): void {
     this.especialidades = this.especialista.especialidades;
-    console.log("especialidades: ");
-    console.log("typeof "+ typeof this.especialidades[0]);
-    console.log(this.especialista.especialidades[0]);
     this.selectedEspecialidad = this.especialidades[0];
-    console.log(this.selectedEspecialidad);
   }
 
   loadTurnosExistentes(): void {
     this.turnoService.obtenerTurnosPorEspecialista(this.especialista.nroDocumento).subscribe(turnos => {
       this.turnosExistentes = turnos;
-      console.log('Turnos existentes:', this.turnosExistentes);
     });
   }
 
   selectEspecialidad(especialidad: Especialidad): void {
     this.selectedEspecialidad = especialidad;
-    console.log("selectedEspecialidad: ");
-    console.log(this.selectedEspecialidad);
-    console.log("typeof "+ typeof this.selectedEspecialidad);
   }
 
   generateDias(): void {
@@ -101,8 +93,6 @@ export class MisHorariosComponent implements OnInit {
 
   setActiveDay(fecha: string): void {
     this.activeDay = fecha;
-    console.log("activeDay: ");
-    console.log(this.activeDay);
   }
 
   isTurnoSeleccionado(fecha: string, hora: string): boolean {
@@ -137,8 +127,6 @@ export class MisHorariosComponent implements OnInit {
     } else {
       this.selectedTurnos.push(turno);
     }
-  
-    console.log('Selected Turnos actualizados:', this.selectedTurnos);
   }
   
   isTurnoDisponible(fecha: string, hora: string): boolean {
@@ -180,33 +168,11 @@ export class MisHorariosComponent implements OnInit {
         calificacion: '',
         encuesta: ''
       };
-      console.log('Turno creado:');
-      console.log('ID:', turnoNuevo.id);
-      console.log('Paciente ID:', turnoNuevo.pacienteId);
-      console.log('Paciente Nombre:', turnoNuevo.pacienteNombre);
-      console.log('Especialista ID:', turnoNuevo.especialistaId);
-      console.log('Especialista Nombre:', turnoNuevo.especialistaNombre);
-      console.log('Especialidad:', turnoNuevo.especialidad);
-      console.log('Fecha:', turnoNuevo.fecha+'/24');
-      console.log('Hora:', turnoNuevo.hora);
-      console.log('Estado:', turnoNuevo.estado);
-      console.log('------------------------');
       this.turnos.push(turnoNuevo);    
-      console.log('pusheado a this.turnos.');
-      console.log('------------------------');
     });
-    console.log('Turnos finalizados:');
-    console.log(this.turnos);
-
-    console.log("esto es lo que hay del especialista: ");
-    console.log(this.especialista);
 
     this.turnoService.agregarTurnos(this.turnos).then(() => {
-      console.log('Horarios guardados correctamente.');
       this.initializeSelectedTurnos();
-      console.log('Selected Turnos inicializados.');
-      console.log(this.selectedTurnos);
-      console.log('------------------------');
     }).catch(error => {
       console.error('Error al guardar horarios: ', error);
     });

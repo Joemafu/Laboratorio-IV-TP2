@@ -37,8 +37,8 @@ export const routes: Routes = [
       ...canActivate(() => redirectUnauthorizedToLogin()),
   },
   { 
-      path: 'pacientes',
-      loadComponent: () => import('./components/pacientes/pacientes.component').then(c => c.PacientesComponent),
+      path: 'mis-pacientes',
+      loadComponent: () => import('./components/mis-pacientes/mis-pacientes.component').then(c => c.MisPacientesComponent),
       ...canActivate(() => redirectUnauthorizedToLogin()),
   },
   { 

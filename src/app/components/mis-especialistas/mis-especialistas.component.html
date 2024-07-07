@@ -1,0 +1,11 @@
+<div class="user-list container-fluid d-flex justify-content-evenly align-items-center full-width">
+    <div *ngFor="let especialista of especialistas; let i = index" class="user-card" (click)="selectEspecialista(especialista)">
+        <img [src]="especialista.fotoPerfil" alt="{{especialista.nombre}}" class="user-image">
+        <p>{{ especialista.apellido + ' ' + especialista.nombre }}</p>
+    </div>
+</div>
+
+<div *ngIf="selectedEspecialista">  
+    <app-turnos-paciente [especialistaSeleccionado]="selectedEspecialista"></app-turnos-paciente>
+</div>
+  

@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
   }
 
   buttonPacientes() {
-    this.router.navigate(['pacientes']);
+    this.router.navigate(['mis-pacientes']);
   }
 
   buttonAdministrarUsuarios() {

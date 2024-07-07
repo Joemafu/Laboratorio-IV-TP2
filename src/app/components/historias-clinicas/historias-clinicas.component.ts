@@ -28,7 +28,6 @@ export class HistoriasClinicasComponent implements OnInit {
   cargarHistoriasClinicas() {
     this.historiaClinicaService.obtenerHistoriasClinicasPorPaciente(this.pacienteId).subscribe(historias => {
       this.historiasClinicas = historias;
-      console.log("Historias Clinicas: ", this.historiasClinicas);
     });
   }
 }
