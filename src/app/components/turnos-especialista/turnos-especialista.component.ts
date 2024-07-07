@@ -191,6 +191,14 @@ export class TurnosEspecialistaComponent implements OnInit {
 
   toggleHistorialPaciente(): void {
     this.historialPacienteToggle = !this.historialPacienteToggle;
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
   }
 
   aceptarTurno(turno: Turno): void {

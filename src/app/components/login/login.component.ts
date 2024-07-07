@@ -7,13 +7,16 @@ import { Usuario } from '../../models/usuario';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { slideOutInAnimation } from '../../animations/slideOutInAnimation';
+import { fadeInAnimation } from '../../animations/fadeInAnimation';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ FormsModule, CommonModule, ReactiveFormsModule, MatIconModule, MatButtonModule, MatMenuModule ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+  animations: [slideOutInAnimation, fadeInAnimation]
 })
 
 export class LoginComponent implements OnInit {

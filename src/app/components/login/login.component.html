@@ -1,5 +1,8 @@
 
-<main class="form-signin w-100 m-auto">
+<main class="form-signin w-100 m-auto" >
+  <div [@slideOutInAnimation]>
+
+
   <form [formGroup]="loginForm" (ngSubmit)="buttonEntrar()" class="needs-validation" novalidate>
     <header></header>
 
@@ -37,8 +40,9 @@
     <button class="btn btn-primary w-100 py-2 mb-3" type="submit">Iniciar sesión</button>
 
     </form>
+  </div>
 
-    <div class="fab-container">
+    <div [@fadeInAnimation] class="fab-container">
       <div class="fab-buttons" [class.open]="fabAbierto">
         <button mat-mini-fab color="primary" (click)="accesoUno()" class="fab-sub-button">
           <img src="https://firebasestorage.googleapis.com/v0/b/clinicatp2laboiv.appspot.com/o/imagenes%2F11111111-1-jpg?alt=media&token=a45a999b-61ff-4262-8e00-9870d9aea6e4" alt=""/>

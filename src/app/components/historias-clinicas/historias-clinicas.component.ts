@@ -101,5 +101,13 @@ export class HistoriasClinicasComponent implements OnInit {
     this.turnoService.obtenerResenia(id).subscribe(resenia => {
       this.resenia = resenia;
     });
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
   }
 }

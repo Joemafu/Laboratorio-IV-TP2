@@ -5,13 +5,15 @@ import { RegistrarAdminComponent } from '../registrar-admin/registrar-admin.comp
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { slideInOutAnimation } from '../../animations/slideInOutAnimation';
 
 @Component({
   selector: 'app-registrar-usuario',
   standalone: true,
   imports: [ CommonModule, RegistrarEspecialistaComponent, RegistrarPacienteComponent, RegistrarAdminComponent ],
   templateUrl: './registrar-usuario.component.html',
-  styleUrl: './registrar-usuario.component.css'
+  styleUrl: './registrar-usuario.component.css',
+  animations: [slideInOutAnimation]
 })
 export class RegistrarUsuarioComponent {
 

@@ -205,6 +205,14 @@ export class TurnosPacienteComponent implements OnInit{
 
   toggleHistorialEspecialista(): void {
     this.historialEspecialistaToggle = !this.historialEspecialistaToggle;
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
   }
 
   descargarHistorialTurnosExcel(): void {

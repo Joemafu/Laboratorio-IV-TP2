@@ -69,6 +69,14 @@ export class AdministrarUsuariosComponent implements OnInit {
 
   toggleHistoriasClinicas() {
     this.toogleHistoriaClinica = !this.toogleHistoriaClinica;
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
   }
 
   descargarDatosusuariosExcel() {
