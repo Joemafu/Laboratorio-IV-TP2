@@ -1,14 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LogService } from '../../services/log.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
 import { jsPDF } from 'jspdf';
-//import { CanvasJSChart } from '@canvasjs/angular-charts';
-import { CanvasJSAngularChartsModule, CanvasJS, CanvasJSChart } from '@canvasjs/angular-charts';
-
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 @Component({
   selector: 'app-estadisticas',
@@ -26,21 +23,7 @@ export class EstadisticasComponent implements OnInit{
 
   chartOptions: any = null;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  @ViewChild('chartContainer') chartContainer!: ElementRef;
 
   constructor() {}
 
@@ -53,22 +36,24 @@ export class EstadisticasComponent implements OnInit{
 
      this.turnoService.getTurnosPorEspecialidad().subscribe(turnos => {
       this.turnosPorEspecialidad = turnos;
-      this.generateChart();
+      this.sortturnosPorEspecialidad();
     });
   }
-  i=-1;
 
-  // ESTE NO FUNCIONA
+  sortturnosPorEspecialidad(): void {
+    this.turnosPorEspecialidad.sort((a, b) => b.cantidad - a.cantidad);
+    this.generateChart();
+  }
+
   generateChart(): void {
     let dataPoints = [];
 
-    // Recorrer this.turnosPorEspecialidad manualmente
     for (let i = 0; i < this.turnosPorEspecialidad.length; i++) {
       let item = this.turnosPorEspecialidad[i];
       dataPoints.push({
         label: item.especialidad,
         y: item.cantidad,
-        X: i
+        x: i
       });
     }
   
@@ -82,38 +67,18 @@ export class EstadisticasComponent implements OnInit{
       }]
     };
     console.log(this.chartOptions);
-    console.log(this.chartOptionsBanana);
   }
-
-  // ESTE SI, NO SÉ QUE DIFERENCIA TIENE
-  chartOptionsBanana = {
-    title: {
-      text: "Cantidad de Turnos por Especialidad"
-    },
-    data: [{
-      type: "column",
-      dataPoints: [
-      { label: "Psiquiatría",  y: 3  },
-      { label: "Cirugía", y: 5  },
-      { label: "Psicología", y: 2  }
-      ]
-    }]                
-  };
 
   descargarPDF(): void {
     const doc = new jsPDF();
-
-    // Agregar logo
-    const imgData = '../../../assets/img/logo.png'; // Base64 del logo, puedes convertir tu imagen a base64
+    const imgData = '../../../assets/img/logo.png';
     doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
 
-    // Título y fecha
     doc.setFontSize(16);
     doc.text('Informe de Turnos por Especialidad', 70, 20);
     doc.setFontSize(12);
     doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
 
-    // Información de los turnos por especialidad
     let y = 50;
     this.turnosPorEspecialidad.forEach((turno, index) => {
       doc.setFontSize(14);
@@ -121,14 +86,19 @@ export class EstadisticasComponent implements OnInit{
       doc.setFontSize(12);
       y += 10;
       doc.text(`Cantidad de Turnos: ${turno.cantidad}`, 10, y);
-      y += 20; // Espacio entre especialidades
+      y += 20;
 
-      // Agregar nueva página si es necesario
       if (y > 270) {
         doc.addPage();
-        y = 10; // Reiniciar la posición vertical
+        y = 10;
       }
     });
+
+    const chartElement = this.chartContainer.nativeElement.querySelector('canvas');
+    if (chartElement) {
+      const chartImage = chartElement.toDataURL('image/png');
+      doc.addImage(chartImage, 'PNG', 10, y, 180, 100);
+    }
 
     doc.save('informe_turnos_por_especialidad.pdf');
   }

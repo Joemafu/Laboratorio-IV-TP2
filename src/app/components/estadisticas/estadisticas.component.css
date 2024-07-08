@@ -2,3 +2,24 @@
     color: white;
     background-color: rgba(17, 77, 121, .8);
   }
+
+  .accordion-body {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;
+  }
+  
+  .flex-item {
+    flex: 1; 
+    margin: 0 10px; 
+  }
+  
+  canvas {
+    max-width: 100%;
+  }
+  
+/*   ul {
+    list-style: none;
+    padding: 0;
+  } */
+  
