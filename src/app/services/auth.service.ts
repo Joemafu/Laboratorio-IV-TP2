@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { recaptchaSecretKey } from '../../environments/environment.development';
 import  Swal from 'sweetalert2';
 import { UserService } from './user.service';
+import { LogService } from './log.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,8 @@ export class AuthService {
   private secretKey = recaptchaSecretKey;
 
   public userService: UserService = inject(UserService);
+
+  private logService: LogService = inject(LogService);
 
   constructor() {}
 
@@ -82,6 +85,7 @@ export class AuthService {
               if (user.email) {
                 this.currentUser = user.email;
               }
+              await this.logService.logUserLogin(user.email!);
             } else {
               resolve('Su cuenta se encuentra deshabilitada, póngase en contacto con un administrador.');
               this.logout();

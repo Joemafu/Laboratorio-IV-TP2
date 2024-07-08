@@ -1,0 +1,64 @@
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingLogins">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLogins" aria-expanded="true" aria-controls="collapseLogins">
+          Estadísticas de Logins
+        </button>
+      </h2>
+      <div id="collapseLogins" class="accordion-collapse collapse show" aria-labelledby="headingLogins" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <ul>
+            <li *ngFor="let login of logins$ | async "> Usuario: {{ login.userId }} - Fecha: {{ login.timestamp.toDate() | date: 'short' }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Agregar más acordeones para otros reportes -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTurnos">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnos" aria-expanded="true" aria-controls="collapseTurnos">
+            Cantidad de Turnos por Especialidad
+          </button>
+        </h2>
+        <div id="collapseTurnos" class="accordion-collapse collapse" aria-labelledby="headingTurnos" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <ul>
+              <li *ngFor="let turno of turnosPorEspecialidad">{{ turno.especialidad }}: {{ turno.cantidad }}</li>
+            </ul>
+            <button (click)="descargarPDF()" class="btn btn-primary">Descargar PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTurnos">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnos" aria-expanded="true" aria-controls="collapseTurnos">
+            Cantidad de Turnos por Especialidad
+          </button>
+        </h2>
+        <div id="collapseTurnos" class="accordion-collapse collapse" aria-labelledby="headingTurnos" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <div>
+                <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTurnos">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnos" aria-expanded="true" aria-controls="collapseTurnos">
+            Cantidad de Turnos por Especialidad
+          </button>
+        </h2>
+        <div id="collapseTurnos" class="accordion-collapse collapse" aria-labelledby="headingTurnos" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <div>
+                <canvasjs-chart [options]="chartOptionsBanana"></canvasjs-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+  </div>

@@ -67,6 +67,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['administrar-usuarios']);
   }
 
+  buttonEstadisticas() {
+    this.router.navigate(['estadisticas']);
+  }
+
   buttonLogin() {
     this.router.navigate(['login']);
   }

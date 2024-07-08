@@ -99,7 +99,7 @@ export class TurnoService {
     const col = collection(this.firestore, this.PATH);
     const q = query(col, where('especialistaId', '==', especialistaId), where('pacienteNombre', '!=', ''), orderBy('fecha', 'asc'));
     return collectionData(q, { idField: 'id' }) as Observable<Turno[]>;
-  }
+  }  
   
   obtenerTodosLosTurnos(): Observable<Turno[]> {
     const col = collection(this.firestore, this.PATH);
@@ -118,6 +118,28 @@ export class TurnoService {
       map((docSnapshot) => {
         const data = docSnapshot.data();
         return data?.['reseniaMedico'] ?? '';
+      })
+    );
+  }
+
+  getTurnosPorEspecialidad(): Observable<any[]> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    return collectionData(turnosRef, { idField: 'id' }).pipe(
+      map(turnos => {
+        const especialidades = turnos
+        .filter((turno: any) => turno.pacienteId != '')
+        .reduce((acc: any, turno: any) => {
+          const especialidad = turno.especialidad;
+          if (!acc[especialidad]) {
+            acc[especialidad] = 0;
+          }
+          acc[especialidad]++;
+          return acc;
+        }, {});
+        return Object.keys(especialidades).map(especialidad => ({
+          especialidad,
+          cantidad: especialidades[especialidad]
+        }));
       })
     );
   }
