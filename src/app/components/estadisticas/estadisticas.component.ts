@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
 import { jsPDF } from 'jspdf';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import * as XLSX from 'xlsx';
+import { EspecialistaService } from '../../services/especialista.service';
 
 @Component({
   selector: 'app-estadisticas',
@@ -18,12 +20,22 @@ export class EstadisticasComponent implements OnInit{
   logins$!: Observable<any[]>;
   loginLogs: any[] = [];
   turnosPorEspecialidad: any[] = [];
+  turnosPorDia: any[] = [];
+  turnosPorEspecialista: any[] = [];
+  inicio = new Date();
+  fin = new Date();
+
   logService: LogService = inject(LogService);
   turnoService: TurnoService = inject(TurnoService);
+  especialistaService: EspecialistaService = inject(EspecialistaService);
 
-  chartOptions: any = null;
+  chartOptionsTurnosPorEspecialidad: any = null;
+  chartOptionsTurnosPorDia: any = null;
+  chartOptionsTurnosPorEspecialista: any = null;
 
   @ViewChild('chartContainer') chartContainer!: ElementRef;
+  @ViewChild('chartContainerDia') chartContainerDia!: ElementRef;
+  @ViewChild('chartContainerEspecialista') chartContainerEspecialista!: ElementRef;
 
   constructor() {}
 
@@ -36,16 +48,36 @@ export class EstadisticasComponent implements OnInit{
 
      this.turnoService.getTurnosPorEspecialidad().subscribe(turnos => {
       this.turnosPorEspecialidad = turnos;
-      this.sortturnosPorEspecialidad();
+      this.sortTurnosPorEspecialidad();
+    });
+
+    this.turnoService.getTurnosPorDia().subscribe(turnos => {
+      this.turnosPorDia = turnos;
+      this.sortTurnosPorDia();
+    });
+
+    this.especialistaService.getTurnosPorEspecialistaEnLapsoDeTiempo(this.inicio, this.fin).subscribe(turnos => {
+      this.turnosPorEspecialista = turnos;
+      this.sortTurnosPorEspecialista();
     });
   }
 
-  sortturnosPorEspecialidad(): void {
+  sortTurnosPorEspecialidad(): void {
     this.turnosPorEspecialidad.sort((a, b) => b.cantidad - a.cantidad);
-    this.generateChart();
+    this.generateChartTurnosPorEspecialidad();
   }
 
-  generateChart(): void {
+  sortTurnosPorDia(): void {
+    this.turnosPorDia.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+    this.generateChartTurnosPorDia();
+  }
+
+  sortTurnosPorEspecialista(): void {
+    this.turnosPorEspecialista.sort((a, b) => b.cantidad - a.cantidad);
+    this.generateChartTurnosPorEspecialista();
+  }
+
+  generateChartTurnosPorEspecialidad(): void {
     let dataPoints = [];
 
     for (let i = 0; i < this.turnosPorEspecialidad.length; i++) {
@@ -56,8 +88,7 @@ export class EstadisticasComponent implements OnInit{
         x: i
       });
     }
-  
-    this.chartOptions = {
+    this.chartOptionsTurnosPorEspecialidad = {
       title: {
         text: "Cantidad de Turnos por Especialidad"
       },
@@ -66,10 +97,77 @@ export class EstadisticasComponent implements OnInit{
         dataPoints: dataPoints
       }]
     };
-    console.log(this.chartOptions);
   }
 
-  descargarPDF(): void {
+  generateChartTurnosPorDia(): void {
+    let dataPoints = [];
+
+    for (let i = 0; i < this.turnosPorDia.length; i++) {
+      let item = this.turnosPorDia[i];
+      dataPoints.push({
+        label: item.fecha,
+        y: item.cantidad,
+        x: i
+      });
+    }
+    this.chartOptionsTurnosPorDia = {
+      title: {
+        text: "Cantidad de Turnos por Día"
+      },
+      data: [{
+        type: "column",
+        dataPoints: dataPoints
+      }]
+    };
+  }
+
+  generateChartTurnosPorEspecialista(): void {
+    let dataPoints = this.turnosPorEspecialista.map((item, index) => ({
+      label: item.especialista,
+      y: item.cantidad,
+      x: index
+    }));
+
+    this.chartOptionsTurnosPorEspecialista = {
+      title: {
+        text: "Cantidad de Turnos por Especialista"
+      },
+      data: [{
+        type: "column",
+        dataPoints: dataPoints
+      }]
+    };
+  }
+
+  actualizarTurnosPorEspecialista(): void {
+    console.log(this.inicio, this.fin);
+    const inicioDate = new Date(this.inicio);
+    const finDate = new Date(this.fin);
+    this.especialistaService.getTurnosPorEspecialistaEnLapsoDeTiempo(inicioDate, finDate).subscribe(turnos => {
+      this.turnosPorEspecialista = turnos;
+      this.sortTurnosPorEspecialista();
+    });
+  }
+
+  descargarLogs(): void {
+    const logsData = this.loginLogs.map(log => {
+      const date = new Date(log.timestamp.seconds * 1000 + log.timestamp.nanoseconds / 1000000);
+      const fecha = date.toLocaleDateString();
+      const hora = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return {
+        Usuario: log.userId,
+        Fecha: fecha,
+        Hora: hora
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(logsData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Logins');
+    XLSX.writeFile(wb, 'logins.xlsx');
+  }
+
+  descargarTurnosPorEspecialidadPDF(): void {
     const doc = new jsPDF();
     const imgData = '../../../assets/img/logo.png';
     doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
@@ -93,13 +191,76 @@ export class EstadisticasComponent implements OnInit{
         y = 10;
       }
     });
-
     const chartElement = this.chartContainer.nativeElement.querySelector('canvas');
     if (chartElement) {
       const chartImage = chartElement.toDataURL('image/png');
       doc.addImage(chartImage, 'PNG', 10, y, 180, 100);
     }
-
     doc.save('informe_turnos_por_especialidad.pdf');
+  }
+
+  descargarTurnosPorDiaPDF(): void {
+    const doc = new jsPDF();
+    const imgData = '../../../assets/img/logo.png';
+    doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
+
+    doc.setFontSize(16);
+    doc.text('Informe de Turnos por Día', 70, 20);
+    doc.setFontSize(12);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
+
+    let y = 50;
+    this.turnosPorDia.forEach((turno, index) => {
+      doc.setFontSize(14);
+      doc.text(`Fecha: ${turno.fecha}`, 10, y);
+      doc.setFontSize(12);
+      y += 10;
+      doc.text(`Cantidad de Turnos: ${turno.cantidad}`, 10, y);
+      y += 20;
+
+      if (y > 270) {
+        doc.addPage();
+        y = 10;
+      }
+    });
+    const chartElement = this.chartContainerDia.nativeElement.querySelector('canvas');
+    if (chartElement) {
+      const chartImage = chartElement.toDataURL('image/png');
+      doc.addImage(chartImage, 'PNG', 10, y, 180, 100);
+    }
+    doc.save('informe_turnos_por_dia.pdf');
+  }
+
+  descargarTurnosPorEspecialistaPDF(): void {
+    const doc = new jsPDF();
+    const imgData = '../../../assets/img/logo.png';
+    doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
+
+    doc.setFontSize(16);
+    doc.text('Informe de Turnos por Especialista', 70, 20);
+    doc.setFontSize(12);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
+
+    let y = 50;
+    this.turnosPorEspecialista.forEach((turno, index) => {
+      doc.setFontSize(14);
+      doc.text(`Especialista: ${turno.especialista}`, 10, y);
+      doc.setFontSize(12);
+      y += 10;
+      doc.text(`Cantidad de Turnos: ${turno.cantidad}`, 10, y);
+      y += 20;
+
+      if (y > 270) {
+        doc.addPage();
+        y = 10;
+      }
+    });
+
+    const chartElement = this.chartContainerEspecialista.nativeElement.querySelector('canvas');
+    if (chartElement) {
+      const chartImage = chartElement.toDataURL('image/png');
+      doc.addImage(chartImage, 'PNG', 10, y, 180, 100);
+    }
+    doc.save('informe_turnos_por_especialista.pdf');
   }
 }

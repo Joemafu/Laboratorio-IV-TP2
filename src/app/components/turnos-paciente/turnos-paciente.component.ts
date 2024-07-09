@@ -5,7 +5,7 @@ import { TurnoService } from '../../services/turno.service';
 import { Turno } from '../../interfaces/turno';
 import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
-import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
+import { FormatearFechaConsignaPipe } from '../../pipes/formatear-fecha-consigna.pipe';
 import moment from 'moment';
 import { Especialista } from '../../models/especialista';
 import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
@@ -27,7 +27,7 @@ export class TurnosPacienteComponent implements OnInit{
   filtro: string = '';
   userService: UserService = inject(UserService);
   turnoService: TurnoService = inject(TurnoService);
-  pipe: FormatearFechaPipe = new FormatearFechaPipe();
+  pipe: FormatearFechaConsignaPipe = new FormatearFechaConsignaPipe();
   historialEspecialistaToggle: boolean = false;
   pacienteId: string = '';
   especialistaId: string = '';

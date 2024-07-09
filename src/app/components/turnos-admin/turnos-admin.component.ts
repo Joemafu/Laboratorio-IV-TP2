@@ -4,13 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
 import { Turno } from '../../interfaces/turno';
 import Swal from 'sweetalert2';
-import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
+import { FormatearFechaConsignaPipe } from '../../pipes/formatear-fecha-consigna.pipe';
 import { Paciente } from '../../models/paciente';
 import moment from 'moment';
 import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
 import { UserService } from '../../services/user.service';
 import * as XLSX from 'xlsx';
-import { Especialista } from '../../models/especialista';
 
 @Component({
   selector: 'app-turnos-admin',
@@ -27,7 +26,7 @@ export class TurnosAdminComponent implements OnInit {
   turnosFiltrados: Turno[] = [];
   filtro: string = '';
   turnoService: TurnoService = inject(TurnoService);
-  pipe: FormatearFechaPipe = new FormatearFechaPipe();
+  pipe: FormatearFechaConsignaPipe = new FormatearFechaConsignaPipe();
 
   historialPacienteToggle: boolean = false;
   userService: UserService = inject(UserService);

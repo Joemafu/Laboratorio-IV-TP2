@@ -60,7 +60,7 @@ export class HistoriasClinicasComponent implements OnInit {
     let y = 50;
     historiasClinicas.forEach((historia, index) => {
       doc.setFontSize(14);
-      doc.text(`Historia Clínica ${index + 1} - Turno del ${historia.fechaTurno}`, 10, y);
+      doc.text(`Historia Clínica ${index + 1} - Turno del ${historia.fechaTurno} hs.`, 10, y);
       doc.setFontSize(12);
       y += 10;
       doc.text(`Altura: ${historia.altura} cm`, 10, y);

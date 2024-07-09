@@ -80,4 +80,30 @@ export class EspecialistaService {
       })
     );
   }
+
+  //BETA
+  getTurnosPorEspecialistaEnLapsoDeTiempo(inicio: Date, fin: Date): Observable<any[]> {
+    return this.turnoService.obtenerTodosLosTurnos().pipe(
+      map((turnos: Turno[]) => {
+        const turnosFiltrados = turnos.filter(turno => {
+          const fechaTurno = new Date(turno.fecha);
+          return fechaTurno >= inicio && fechaTurno <= fin;
+        });
+        
+        const turnosPorMedico = turnosFiltrados.reduce((acc: any, turno: Turno) => {
+          const medico = turno.especialistaNombre;
+          if (!acc[medico]) {
+            acc[medico] = 0;
+          }
+          acc[medico]++;
+          return acc;
+        }, {});
+
+        return Object.keys(turnosPorMedico).map(medico => ({
+          medico,
+          cantidad: turnosPorMedico[medico]
+        }));
+      })
+    );
+  }
 }

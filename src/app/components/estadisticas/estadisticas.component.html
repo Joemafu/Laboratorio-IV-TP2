@@ -1,4 +1,5 @@
 <div class="accordion" id="accordionExample">
+
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingLogins">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLogins" aria-expanded="true" aria-controls="collapseLogins">
@@ -7,14 +8,18 @@
       </h2>
       <div id="collapseLogins" class="accordion-collapse collapse show" aria-labelledby="headingLogins" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          <ul>
-            <li *ngFor="let login of logins$ | async "> Usuario: {{ login.userId }} - Fecha: {{ login.timestamp.toDate() | date: 'short' }}</li>
-          </ul>
+          <div>
+            <ul>
+              <li *ngFor="let login of logins$ | async "> Usuario: {{ login.userId }} - Fecha: {{ login.timestamp.toDate() | date: 'short' }}</li>
+            </ul>
+          </div>
+          <div>
+            <button (click)="descargarLogs()" class="btn btn-primary">Descargar XLSX</button>
+          </div>
         </div>
       </div>
     </div>
     
-    <!-- Agregar más acordeones para otros reportes -->
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingTurnosDinamicos">
           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnosDinamicos" aria-expanded="true" aria-controls="collapseTurnosDinamicos">
@@ -23,16 +28,63 @@
         </h2>
         <div id="collapseTurnosDinamicos" class="accordion-collapse collapse" aria-labelledby="headingTurnosDinamicos" data-bs-parent="#accordionExample">
           <div class="accordion-body d-flex align-items-center">
-            <div #chartContainer *ngIf="chartOptions" class="flex-item">
-              <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+            <div #chartContainer *ngIf="chartOptionsTurnosPorEspecialidad" class="flex-item">
+              <canvasjs-chart [options]="chartOptionsTurnosPorEspecialidad"></canvasjs-chart>
             </div>
             <div class="flex-item">
               <ul>
                 <li *ngFor="let turno of turnosPorEspecialidad">{{ turno.especialidad }}: {{ turno.cantidad }}</li>
               </ul>
-              <button (click)="descargarPDF()" class="btn btn-primary">Descargar PDF</button>
+              <button (click)="descargarTurnosPorEspecialidadPDF()" class="btn btn-primary">Descargar PDF</button>
             </div>
           </div>          
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTurnosDia">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnosDia" aria-expanded="false" aria-controls="collapseTurnosDia">
+            Estadísticas de Turnos por Día
+          </button>
+        </h2>
+        <div id="collapseTurnosDia" class="accordion-collapse collapse" aria-labelledby="headingTurnosDia" data-bs-parent="#accordionExample">
+          <div class="accordion-body d-flex align-items-center">
+            <div #chartContainerDia *ngIf="chartOptionsTurnosPorDia" class="flex-item">
+              <canvasjs-chart [options]="chartOptionsTurnosPorDia"></canvasjs-chart>
+            </div>
+            <div class="flex-item">
+              <ul>
+                <li *ngFor="let turno of turnosPorDia">Fecha: {{ turno.fecha }} - Cantidad de Turnos: {{ turno.cantidad }}</li>
+              </ul>
+              <button (click)="descargarTurnosPorDiaPDF()" class="btn btn-primary">Descargar PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTurnosEspecialistaTiempo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnosEspecialistaTiempo" aria-expanded="false" aria-controls="collapseTurnosEspecialistaTiempo">
+            Estadísticas de Turnos por Especialista en lapso de tiempo
+          </button>
+        </h2>
+        <div id="collapseTurnosEspecialistaTiempo" class="accordion-collapse collapse" aria-labelledby="headingTurnosEspecialistaTiempo" data-bs-parent="#accordionExample">
+          <div class="accordion-body d-flex align-items-center">
+            <div #chartContainerEspecialista *ngIf="chartOptionsTurnosPorEspecialista" class="flex-item">
+              <canvasjs-chart [options]="chartOptionsTurnosPorEspecialista"></canvasjs-chart>
+            </div>
+            <div class="flex-item">
+              <label for="inicio">Fecha de inicio:</label>
+              <input id="inicio" type="date" [(ngModel)]="inicio">
+              <label for="fin">Fecha de fin:</label>
+              <input id="fin" type="date" [(ngModel)]="fin">
+              <button (click)="actualizarTurnosPorEspecialista()" class="btn btn-primary">Actualizar</button>
+              <ul>
+                <li *ngFor="let turno of turnosPorEspecialista">Fecha: {{ turno.fecha }} - Cantidad de Turnos: {{ turno.cantidad }}</li>
+              </ul>
+              <button (click)="descargarTurnosPorEspecialistaPDF()" class="btn btn-primary">Descargar PDF</button>
+            </div>
+          </div>
         </div>
       </div>
 

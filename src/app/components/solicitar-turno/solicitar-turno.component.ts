@@ -7,14 +7,14 @@ import { Especialista } from '../../models/especialista';
 import { Especialidad } from '../../interfaces/especialidad';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
-import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
+import { FormatearFechaConsignaPipe } from '../../pipes/formatear-fecha-consigna.pipe';
 import Swal from 'sweetalert2';
 import { Paciente } from '../../models/paciente';
 
 @Component({
   selector: 'app-solicitar-turno',
   standalone: true,
-  imports: [ CommonModule, FormatearFechaPipe ],
+  imports: [ CommonModule, FormatearFechaConsignaPipe ],
   templateUrl: './solicitar-turno.component.html',
   styleUrl: './solicitar-turno.component.css'
 })

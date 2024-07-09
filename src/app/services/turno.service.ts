@@ -143,6 +143,28 @@ export class TurnoService {
       })
     );
   }
+
+  getTurnosPorDia(): Observable<any[]> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    return collectionData(turnosRef, { idField: 'id' }).pipe(
+      map(turnos => {
+        const dias = turnos
+          .filter((turno: any) => turno.pacienteId != '')
+          .reduce((acc: any, turno: any) => {
+            const fecha = turno.fecha;
+            if (!acc[fecha]) {
+              acc[fecha] = 0;
+            }
+            acc[fecha]++;
+            return acc;
+          }, {});
+        return Object.keys(dias).map(fecha => ({
+          fecha,
+          cantidad: dias[fecha]
+        }));
+      })
+    );
+  }
 }
 /* color primario seleccion : hover */
 /* #1c79b8 */

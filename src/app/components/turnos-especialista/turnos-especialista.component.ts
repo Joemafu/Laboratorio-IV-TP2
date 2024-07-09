@@ -5,7 +5,7 @@ import { TurnoService } from '../../services/turno.service';
 import { Turno } from '../../interfaces/turno';
 import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
-import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
+import { FormatearFechaConsignaPipe } from '../../pipes/formatear-fecha-consigna.pipe';
 import moment from 'moment';
 import { HistoriaClinicaService } from '../../services/historia-clinica.service';
 import { FormHistoriaClinicaComponent } from '../form-historia-clinica/form-historia-clinica.component';
@@ -16,7 +16,7 @@ import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clin
 @Component({
   selector: 'app-turnos-especialista',
   standalone: true,
-  imports: [ CommonModule, FormsModule, FormatearFechaPipe, FormHistoriaClinicaComponent, HistoriasClinicasComponent],
+  imports: [ CommonModule, FormsModule, FormatearFechaConsignaPipe, FormHistoriaClinicaComponent, HistoriasClinicasComponent],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.css'
 })
@@ -29,7 +29,7 @@ export class TurnosEspecialistaComponent implements OnInit {
   filtro: string = '';
   userService: UserService = inject(UserService);
   turnoService: TurnoService = inject(TurnoService);
-  pipe: FormatearFechaPipe = new FormatearFechaPipe();
+  pipe: FormatearFechaConsignaPipe = new FormatearFechaConsignaPipe();
   historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
 
   historiaClinica: HistoriaClinica | null = null;
