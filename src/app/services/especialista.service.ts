@@ -86,10 +86,10 @@ export class EspecialistaService {
     return this.turnoService.obtenerTodosLosTurnos().pipe(
       map((turnos: Turno[]) => {
         const turnosFiltrados = turnos.filter(turno => {
-          const fechaTurno = new Date(turno.fecha);
+          const fechaTurno = this.parseFecha(turno.fecha);
           return fechaTurno >= inicio && fechaTurno <= fin;
         });
-        
+
         const turnosPorMedico = turnosFiltrados.reduce((acc: any, turno: Turno) => {
           const medico = turno.especialistaNombre;
           if (!acc[medico]) {
@@ -100,10 +100,18 @@ export class EspecialistaService {
         }, {});
 
         return Object.keys(turnosPorMedico).map(medico => ({
-          medico,
+          especialista: medico,
           cantidad: turnosPorMedico[medico]
         }));
       })
     );
-  }
+}
+
+  
+  private parseFecha(fechaStr: string): Date {
+    const [diaSemana, resto] = fechaStr.split(' ');
+    const [dia, mes, anio] = resto.split('/');
+    const fechaCompleta = new Date(`${anio}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`);
+    return fechaCompleta;
+}
 }

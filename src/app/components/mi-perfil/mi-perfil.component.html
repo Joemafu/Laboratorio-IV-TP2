@@ -48,6 +48,11 @@
   </div>
 }
 @else if (mostrarHorarios){
+  <div class="container-fluid d-flex justify-content-center align-items-center full-width">
+    <div class="text-center row">
+      <button type="button" class="btn btn-primary btn-lg px-4 me-md-2 mb-3" (click)="toggleHorarios()">Volver</button>
+    </div>
+  </div>
   <app-mis-horarios></app-mis-horarios>
 }
 @else if (mostrarHistoriasClinicas){
@@ -55,7 +60,6 @@
   <div class="container-fluid d-flex justify-content-center align-items-center full-width">
     <div class="text-center row">
       <button type="button" class="btn btn-primary btn-lg px-4 me-md-2 mb-3" (click)="toggleHistoriasClinicas()">Volver</button>
-      <!-- <button type="button" class="btn btn-primary btn-lg px-4 me-md-2 mb-3" (click)="test()">Guardar en PDF</button> -->
     </div>
   </div>
   <app-mis-especialistas></app-mis-especialistas>

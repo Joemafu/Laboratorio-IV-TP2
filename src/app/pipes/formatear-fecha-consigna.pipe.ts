@@ -7,6 +7,7 @@ import moment from 'moment';
 })
 export class FormatearFechaConsignaPipe implements PipeTransform {
   transform(horario: string): string {
+    console.log('horario', horario);
     const [diaSemana, ...resto] = horario.split(' ');
     const fechaHora = resto.join(' ');
 

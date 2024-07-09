@@ -134,16 +134,16 @@ export class MisHorariosComponent implements OnInit {
     const formattedHora = this.formatHora(hora);
   
     const turnoExistente = this.turnosExistentes.some(t => {
-      const tFecha = this.formatFecha(t.fecha);
-      const tHora = this.formatHora(t.hora);
+      const tFecha = t.fecha;
+      const tHora = t.hora;
       return tFecha === formattedFecha && tHora === formattedHora;
     });
   
     return !turnoExistente;
   }
   
-  private formatFecha(fecha: string): string {
-    return fecha.trim();
+  private formatFecha(fecha: string): string {   
+    return `${fecha}/${new Date().getFullYear()}`;
   }
   
   private formatHora(hora: string): string {

@@ -33,6 +33,8 @@ export class EstadisticasComponent implements OnInit{
   chartOptionsTurnosPorDia: any = null;
   chartOptionsTurnosPorEspecialista: any = null;
 
+  toggleChartUno = false;
+
   @ViewChild('chartContainer') chartContainer!: ElementRef;
   @ViewChild('chartContainerDia') chartContainerDia!: ElementRef;
   @ViewChild('chartContainerEspecialista') chartContainerEspecialista!: ElementRef;
@@ -140,7 +142,7 @@ export class EstadisticasComponent implements OnInit{
   }
 
   actualizarTurnosPorEspecialista(): void {
-    console.log(this.inicio, this.fin);
+    this.toggleChartUno = true;
     const inicioDate = new Date(this.inicio);
     const finDate = new Date(this.fin);
     this.especialistaService.getTurnosPorEspecialistaEnLapsoDeTiempo(inicioDate, finDate).subscribe(turnos => {
@@ -194,7 +196,7 @@ export class EstadisticasComponent implements OnInit{
     const chartElement = this.chartContainer.nativeElement.querySelector('canvas');
     if (chartElement) {
       const chartImage = chartElement.toDataURL('image/png');
-      doc.addImage(chartImage, 'PNG', 10, y, 180, 100);
+      doc.addImage(chartImage, 'PNG', 50, y, 100, 100);
     }
     doc.save('informe_turnos_por_especialidad.pdf');
   }
@@ -226,7 +228,7 @@ export class EstadisticasComponent implements OnInit{
     const chartElement = this.chartContainerDia.nativeElement.querySelector('canvas');
     if (chartElement) {
       const chartImage = chartElement.toDataURL('image/png');
-      doc.addImage(chartImage, 'PNG', 10, y, 180, 100);
+      doc.addImage(chartImage, 'PNG', 50, y, 100, 100);
     }
     doc.save('informe_turnos_por_dia.pdf');
   }
@@ -237,9 +239,11 @@ export class EstadisticasComponent implements OnInit{
     doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
 
     doc.setFontSize(16);
-    doc.text('Informe de Turnos por Especialista', 70, 20);
+    doc.text(`Informe de Turnos por Especialista`, 70, 20);
+    doc.setFontSize(16);
+    doc.text(`del ${this.inicio} al ${this.fin}`, 70, 27);
     doc.setFontSize(12);
-    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 34);
 
     let y = 50;
     this.turnosPorEspecialista.forEach((turno, index) => {
@@ -259,7 +263,7 @@ export class EstadisticasComponent implements OnInit{
     const chartElement = this.chartContainerEspecialista.nativeElement.querySelector('canvas');
     if (chartElement) {
       const chartImage = chartElement.toDataURL('image/png');
-      doc.addImage(chartImage, 'PNG', 10, y, 180, 100);
+      doc.addImage(chartImage, 'PNG', 50, y, 100, 100);
     }
     doc.save('informe_turnos_por_especialista.pdf');
   }

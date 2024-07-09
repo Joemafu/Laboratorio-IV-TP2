@@ -66,10 +66,11 @@ export class TurnosAdminComponent implements OnInit {
 
   ordenarTurnosPorFecha(): Turno[] {
     return this.turnosFiltrados.sort((a, b) => {
-      const fechaA = moment(this.pipe.transform(`${a.fecha} ${a.hora} hs`), 'YYYY-MM-DD h:mm A');
-      const fechaB = moment(this.pipe.transform(`${b.fecha} ${b.hora} hs`), 'YYYY-MM-DD h:mm A');
-  
-      return fechaA.diff(fechaB);
+      const fechaA = a.fecha.split(' ').slice(1).join(' ');
+      const fechaHoraA = moment(`${fechaA} ${a.hora}`, 'D/M/YYYY HH:mm');
+      const fechaB = b.fecha.split(' ').slice(1).join(' ');
+      const fechaHoraB = moment(`${fechaB} ${b.hora}`, 'D/M/YYYY HH:mm');
+      return fechaHoraA.diff(fechaHoraB);
     });
   }
 

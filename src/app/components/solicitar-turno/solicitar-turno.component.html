@@ -56,7 +56,7 @@
         <h3 *ngIf="horariosDisponibles.length!=0">Seleccionar Fecha y Hora</h3>
         <div class="horarios">
             <button *ngFor="let horario of horariosDisponibles" (click)="onFechaSelect(horario.fecha, horario.hora)">
-                <p>{{ horario.fecha + ' ' + horario.hora | formatearFechaConsigna }}</p>
+                <p>{{ horario.fecha + ' ' + horario.hora | formatearFechaConsigna}}</p>
             </button>
            
         </div>

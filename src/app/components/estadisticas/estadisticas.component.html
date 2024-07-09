@@ -70,19 +70,20 @@
         </h2>
         <div id="collapseTurnosEspecialistaTiempo" class="accordion-collapse collapse" aria-labelledby="headingTurnosEspecialistaTiempo" data-bs-parent="#accordionExample">
           <div class="accordion-body d-flex align-items-center">
-            <div #chartContainerEspecialista *ngIf="chartOptionsTurnosPorEspecialista" class="flex-item">
+            <div #chartContainerEspecialista *ngIf="toggleChartUno && chartOptionsTurnosPorEspecialista" class="flex-item">
               <canvasjs-chart [options]="chartOptionsTurnosPorEspecialista"></canvasjs-chart>
             </div>
             <div class="flex-item">
-              <label for="inicio">Fecha de inicio:</label>
-              <input id="inicio" type="date" [(ngModel)]="inicio">
-              <label for="fin">Fecha de fin:</label>
-              <input id="fin" type="date" [(ngModel)]="fin">
-              <button (click)="actualizarTurnosPorEspecialista()" class="btn btn-primary">Actualizar</button>
+              <p>Seleccione fechas a estimar:</p>
+              <label class="mx-1" for="inicio">Inicio:</label>
+              <input class="mx-1" id="inicio" type="date" [(ngModel)]="inicio">
+              <label class="mx-1" for="fin">Fin:</label>
+              <input class="mx-1" id="fin" type="date" [(ngModel)]="fin">
+              <button class="mx-1" (click)="actualizarTurnosPorEspecialista()" class="btn btn-primary">Actualizar</button>
               <ul>
                 <li *ngFor="let turno of turnosPorEspecialista">Fecha: {{ turno.fecha }} - Cantidad de Turnos: {{ turno.cantidad }}</li>
               </ul>
-              <button (click)="descargarTurnosPorEspecialistaPDF()" class="btn btn-primary">Descargar PDF</button>
+              <button *ngIf="toggleChartUno && chartOptionsTurnosPorEspecialista" (click)="descargarTurnosPorEspecialistaPDF()" class="btn btn-primary">Descargar PDF</button>
             </div>
           </div>
         </div>
