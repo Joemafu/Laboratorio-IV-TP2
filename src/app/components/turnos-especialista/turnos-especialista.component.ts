@@ -78,36 +78,29 @@ export class TurnosEspecialistaComponent implements OnInit {
     });
   }
 
-  filtrarTurnosOld(string : string): void {
+  filtrarTurnos(filtro : string): void {
     this.filtro = this.filtro.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(turno =>
       turno.especialidad.toLowerCase().includes(this.filtro) ||
-      turno.pacienteNombre?.toLowerCase().includes(this.filtro)
+      turno.pacienteNombre?.toLowerCase().includes(this.filtro) ||
+      turno.comentario?.toLowerCase().includes(this.filtro) || 
+      turno.encuesta?.toLowerCase().includes(this.filtro) || 
+      turno.calificacion?.toString().includes(this.filtro)
     );
+    if(!this.pacienteSeleccionado) {
+      this.buscarEnHistoriasClinicas(this.filtro);
+    }
     this.ordenarTurnosPorFecha();
   }
 
-    filtrarTurnos(filtro : string): void {
-      this.filtro = this.filtro.toLowerCase();
-      this.turnosFiltrados = this.turnos.filter(turno =>
-        turno.especialidad.toLowerCase().includes(this.filtro) ||
-        turno.especialistaNombre.toLowerCase().includes(this.filtro) ||
-        turno.comentario?.toLowerCase().includes(filtro) || 
-        turno.encuesta?.toLowerCase().includes(filtro) || 
-        turno.calificacion?.toString().includes(filtro)
-      );
-      this.buscarEnHistoriasClinicas(this.filtro);
-      this.ordenarTurnosPorFecha();
-    }
-
   buscarEnHistoriasClinicas(filtro: string): void {
     this.historiasClinicasFiltradas = [];
-    if(filtro === '') {
+    if(this.filtro === '') {
       this.mostrarHistoriasClinicas = false;
       return;
     }
     this.turnos.forEach(turno => {
-      if(turno.reseniaMedico?.toLowerCase().includes(filtro))
+      if(turno.reseniaMedico?.toLowerCase().includes(this.filtro))
       {
         this.turnosFiltrados.push(turno);
         this.historiasClinicas.forEach(historiaClinica => {
@@ -121,17 +114,16 @@ export class TurnosEspecialistaComponent implements OnInit {
     });
     this.historiasClinicas.forEach(historiaClinica => {
       if (
-
-        historiaClinica.altura.toString() == filtro ||
-        historiaClinica.peso.toString() == filtro ||
-        historiaClinica.temperatura.toString() == filtro ||
-        historiaClinica.presion.toString() == filtro ||
-        historiaClinica.datoDinamicoUno?.clave.toLowerCase().includes(filtro) ||
-        historiaClinica.datoDinamicoUno?.valor.toLowerCase().includes(filtro) ||
-        historiaClinica.datoDinamicoDos?.clave.toLowerCase().includes(filtro) ||
-        historiaClinica.datoDinamicoDos?.valor.toLowerCase().includes(filtro) ||
-        historiaClinica.datoDinamicoTres?.clave.toLowerCase().includes(filtro) ||
-        historiaClinica.datoDinamicoTres?.valor.toLowerCase().includes(filtro)
+        historiaClinica.altura.toString().includes(this.filtro) ||
+        historiaClinica.peso.toString().includes(this.filtro) ||
+        historiaClinica.temperatura.toString().includes(this.filtro) ||
+        historiaClinica.presion.toString().includes(this.filtro) ||
+        historiaClinica.datoDinamicoUno?.clave.toLowerCase().includes(this.filtro) ||
+        historiaClinica.datoDinamicoUno?.valor.toLowerCase().includes(this.filtro) ||
+        historiaClinica.datoDinamicoDos?.clave.toLowerCase().includes(this.filtro) ||
+        historiaClinica.datoDinamicoDos?.valor.toLowerCase().includes(this.filtro) ||
+        historiaClinica.datoDinamicoTres?.clave.toLowerCase().includes(this.filtro) ||
+        historiaClinica.datoDinamicoTres?.valor.toLowerCase().includes(this.filtro)
       ) {
         this.turnos.forEach(turno => {
           historiaClinica.turnoId === turno.id && !this.turnosFiltrados.includes(turno) ? this.turnosFiltrados.push(turno) : null;          
@@ -140,7 +132,6 @@ export class TurnosEspecialistaComponent implements OnInit {
         {
           this.historiasClinicasFiltradas.push(historiaClinica);
         }
-        console.log(this.historiasClinicasFiltradas);
         this.mostrarHistoriasClinicas = true;
       }
       if(this.historiasClinicasFiltradas.length === 0) {

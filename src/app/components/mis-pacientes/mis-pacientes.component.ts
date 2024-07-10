@@ -55,7 +55,6 @@ export class MisPacientesComponent implements OnInit {
     });
   }
 
-  //BETA
   selectPaciente(paciente: Paciente): void {
     this.selectedPaciente = paciente;
     this.turnoService.obtenerTurnosPorPaciente(paciente.nroDocumento).subscribe((turnos: Turno[]) => {
@@ -63,7 +62,6 @@ export class MisPacientesComponent implements OnInit {
     });
   }
 
-  //BETA
   verResenia(turno: Turno): void {
     Swal.fire({
       title: 'Reseña de la consulta',
