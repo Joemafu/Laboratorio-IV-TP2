@@ -81,7 +81,6 @@ export class EspecialistaService {
     );
   }
 
-  //BETA
   getTurnosPorEspecialistaEnLapsoDeTiempo(inicio: Date, fin: Date): Observable<any[]> {
     return this.turnoService.obtenerTodosLosTurnos().pipe(
       map((turnos: Turno[]) => {
@@ -107,11 +106,38 @@ export class EspecialistaService {
     );
 }
 
+//BETA
+getTurnosFinalizadosPorEspecialistaEnLapsoDeTiempo(inicio: Date, fin: Date): Observable<any[]> {
+  return this.turnoService.obtenerTodosLosTurnos().pipe(
+    map((turnos: Turno[]) => {
+      const turnosFiltrados = turnos.filter(turno => {
+        const fechaTurno = this.parseFecha(turno.fecha);
+        return fechaTurno >= inicio && fechaTurno <= fin && turno.estado === 'Finalizado';
+      });
+
+      const turnosPorMedico = turnosFiltrados.reduce((acc: any, turno: Turno) => {
+        const medico = turno.especialistaNombre;
+        if (!acc[medico]) {
+          acc[medico] = 0;
+        }
+        acc[medico]++;
+        return acc;
+      }, {});
+
+      return Object.keys(turnosPorMedico).map(medico => ({
+        especialista: medico,
+        cantidad: turnosPorMedico[medico]
+      }));
+    })
+  );
+}
+
+
   
   private parseFecha(fechaStr: string): Date {
     const [diaSemana, resto] = fechaStr.split(' ');
     const [dia, mes, anio] = resto.split('/');
     const fechaCompleta = new Date(`${anio}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`);
     return fechaCompleta;
-}
+  }
 }

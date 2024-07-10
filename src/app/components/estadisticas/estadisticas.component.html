@@ -3,12 +3,12 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingLogins">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLogins" aria-expanded="true" aria-controls="collapseLogins">
-          Estadísticas de Logins
+          Estadísticas de logins
         </button>
       </h2>
       <div id="collapseLogins" class="accordion-collapse collapse show" aria-labelledby="headingLogins" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          <div>
+          <div class="logBox">
             <ul>
               <li *ngFor="let login of logins$ | async "> Usuario: {{ login.userId }} - Fecha: {{ login.timestamp.toDate() | date: 'short' }}</li>
             </ul>
@@ -23,7 +23,7 @@
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingTurnosDinamicos">
           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnosDinamicos" aria-expanded="true" aria-controls="collapseTurnosDinamicos">
-            Cantidad de Turnos por Especialidad
+            Cantidad de turnos por especialidad
           </button>
         </h2>
         <div id="collapseTurnosDinamicos" class="accordion-collapse collapse" aria-labelledby="headingTurnosDinamicos" data-bs-parent="#accordionExample">
@@ -65,7 +65,7 @@
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingTurnosEspecialistaTiempo">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnosEspecialistaTiempo" aria-expanded="false" aria-controls="collapseTurnosEspecialistaTiempo">
-            Estadísticas de Turnos por Especialista en lapso de tiempo
+            Estadísticas de turnos por especialista en lapso de tiempo
           </button>
         </h2>
         <div id="collapseTurnosEspecialistaTiempo" class="accordion-collapse collapse" aria-labelledby="headingTurnosEspecialistaTiempo" data-bs-parent="#accordionExample">
@@ -79,11 +79,38 @@
               <input class="mx-1" id="inicio" type="date" [(ngModel)]="inicio">
               <label class="mx-1" for="fin">Fin:</label>
               <input class="mx-1" id="fin" type="date" [(ngModel)]="fin">
-              <button class="mx-1" (click)="actualizarTurnosPorEspecialista()" class="btn btn-primary">Actualizar</button>
+              <button class="mx-1" (click)="actualizarInformesPorFecha()" class="btn btn-primary">Actualizar</button>
               <ul>
-                <li *ngFor="let turno of turnosPorEspecialista">Fecha: {{ turno.fecha }} - Cantidad de Turnos: {{ turno.cantidad }}</li>
+                <li *ngFor="let turno of turnosPorEspecialista">Especialista: {{ turno.especialista }} - Cantidad de Turnos: {{ turno.cantidad }}</li>
               </ul>
               <button *ngIf="toggleChartUno && chartOptionsTurnosPorEspecialista" (click)="descargarTurnosPorEspecialistaPDF()" class="btn btn-primary">Descargar PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTurnosEspecialistaFinalizadosTiempo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTurnosEspecialistaFinalizadosTiempo" aria-expanded="false" aria-controls="collapseTurnosEspecialistaFinalizadosTiempo">
+            Estadísticas de turnos finalizados por especialista en lapso de tiempo
+          </button>
+        </h2>
+        <div id="collapseTurnosEspecialistaFinalizadosTiempo" class="accordion-collapse collapse" aria-labelledby="headingTurnosEspecialistaFinalizadosTiempo" data-bs-parent="#accordionExample">
+          <div class="accordion-body d-flex align-items-center">
+            <div #chartContainerFinalizadosEspecialista *ngIf="toggleChartUno && chartOptionsTurnosFinalizadosPorEspecialista" class="flex-item">
+              <canvasjs-chart [options]="chartOptionsTurnosFinalizadosPorEspecialista"></canvasjs-chart>
+            </div>
+            <div class="flex-item">
+              <p>Seleccione fechas a estimar:</p>
+              <label class="mx-1" for="inicio">Inicio:</label>
+              <input class="mx-1" id="inicio" type="date" [(ngModel)]="inicio">
+              <label class="mx-1" for="fin">Fin:</label>
+              <input class="mx-1" id="fin" type="date" [(ngModel)]="fin">
+              <button class="mx-1" (click)="actualizarInformesPorFecha()" class="btn btn-primary">Actualizar</button>
+              <ul>
+                <li *ngFor="let turno of turnosFinalizadosPorEspecialista">Especialista: {{ turno.especialista }} - Cantidad de Turnos: {{ turno.cantidad }}</li>
+              </ul>
+              <button *ngIf="toggleChartUno && chartOptionsTurnosFinalizadosPorEspecialista" (click)="descargarTurnosFinalizadosPorEspecialistaPDF()" class="btn btn-primary">Descargar PDF</button>
             </div>
           </div>
         </div>

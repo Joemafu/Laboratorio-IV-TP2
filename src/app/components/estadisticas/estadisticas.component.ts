@@ -22,6 +22,7 @@ export class EstadisticasComponent implements OnInit{
   turnosPorEspecialidad: any[] = [];
   turnosPorDia: any[] = [];
   turnosPorEspecialista: any[] = [];
+  turnosFinalizadosPorEspecialista: any[] = [];
   inicio = new Date();
   fin = new Date();
 
@@ -32,12 +33,14 @@ export class EstadisticasComponent implements OnInit{
   chartOptionsTurnosPorEspecialidad: any = null;
   chartOptionsTurnosPorDia: any = null;
   chartOptionsTurnosPorEspecialista: any = null;
+  chartOptionsTurnosFinalizadosPorEspecialista: any = null;
 
   toggleChartUno = false;
 
   @ViewChild('chartContainer') chartContainer!: ElementRef;
   @ViewChild('chartContainerDia') chartContainerDia!: ElementRef;
   @ViewChild('chartContainerEspecialista') chartContainerEspecialista!: ElementRef;
+  @ViewChild('chartContainerFinalizadosEspecialista') chartContainerFinalizadosEspecialista!: ElementRef;
 
   constructor() {}
 
@@ -62,6 +65,11 @@ export class EstadisticasComponent implements OnInit{
       this.turnosPorEspecialista = turnos;
       this.sortTurnosPorEspecialista();
     });
+
+    this.especialistaService.getTurnosFinalizadosPorEspecialistaEnLapsoDeTiempo(this.inicio, this.fin).subscribe(turnos => {
+      this.turnosFinalizadosPorEspecialista = turnos;
+      this.sortTurnosFinalizadosPorEspecialista();
+    });
   }
 
   sortTurnosPorEspecialidad(): void {
@@ -77,6 +85,11 @@ export class EstadisticasComponent implements OnInit{
   sortTurnosPorEspecialista(): void {
     this.turnosPorEspecialista.sort((a, b) => b.cantidad - a.cantidad);
     this.generateChartTurnosPorEspecialista();
+  }
+
+  sortTurnosFinalizadosPorEspecialista(): void {
+    this.turnosPorEspecialista.sort((a, b) => b.cantidad - a.cantidad);
+    this.generateChartTurnosFinalizadosPorEspecialista();
   }
 
   generateChartTurnosPorEspecialidad(): void {
@@ -141,13 +154,35 @@ export class EstadisticasComponent implements OnInit{
     };
   }
 
-  actualizarTurnosPorEspecialista(): void {
+  generateChartTurnosFinalizadosPorEspecialista(): void {
+    let dataPoints = this.turnosFinalizadosPorEspecialista.map((item, index) => ({
+      label: item.especialista,
+      y: item.cantidad,
+      x: index
+    }));
+
+    this.chartOptionsTurnosFinalizadosPorEspecialista = {
+      title: {
+        text: "Cantidad de Turnos Finalizados por Especialista"
+      },
+      data: [{
+        type: "column",
+        dataPoints: dataPoints
+      }]
+    };
+  }
+
+  actualizarInformesPorFecha(): void {
     this.toggleChartUno = true;
     const inicioDate = new Date(this.inicio);
     const finDate = new Date(this.fin);
     this.especialistaService.getTurnosPorEspecialistaEnLapsoDeTiempo(inicioDate, finDate).subscribe(turnos => {
       this.turnosPorEspecialista = turnos;
       this.sortTurnosPorEspecialista();
+    });
+    this.especialistaService.getTurnosFinalizadosPorEspecialistaEnLapsoDeTiempo(inicioDate, finDate).subscribe(turnos => {
+      this.turnosFinalizadosPorEspecialista = turnos;
+      this.sortTurnosFinalizadosPorEspecialista();
     });
   }
 
@@ -175,7 +210,7 @@ export class EstadisticasComponent implements OnInit{
     doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
 
     doc.setFontSize(16);
-    doc.text('Informe de Turnos por Especialidad', 70, 20);
+    doc.text('Informe de turnos por especialidad', 70, 20);
     doc.setFontSize(12);
     doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
 
@@ -185,7 +220,7 @@ export class EstadisticasComponent implements OnInit{
       doc.text(`Especialidad: ${turno.especialidad}`, 10, y);
       doc.setFontSize(12);
       y += 10;
-      doc.text(`Cantidad de Turnos: ${turno.cantidad}`, 10, y);
+      doc.text(`Cantidad de turnos: ${turno.cantidad}`, 10, y);
       y += 20;
 
       if (y > 270) {
@@ -207,7 +242,7 @@ export class EstadisticasComponent implements OnInit{
     doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
 
     doc.setFontSize(16);
-    doc.text('Informe de Turnos por Día', 70, 20);
+    doc.text('Informe de turnos por día', 70, 20);
     doc.setFontSize(12);
     doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
 
@@ -217,7 +252,7 @@ export class EstadisticasComponent implements OnInit{
       doc.text(`Fecha: ${turno.fecha}`, 10, y);
       doc.setFontSize(12);
       y += 10;
-      doc.text(`Cantidad de Turnos: ${turno.cantidad}`, 10, y);
+      doc.text(`Cantidad de turnos: ${turno.cantidad}`, 10, y);
       y += 20;
 
       if (y > 270) {
@@ -239,7 +274,7 @@ export class EstadisticasComponent implements OnInit{
     doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
 
     doc.setFontSize(16);
-    doc.text(`Informe de Turnos por Especialista`, 70, 20);
+    doc.text(`Informe de turnos por especialista`, 70, 20);
     doc.setFontSize(16);
     doc.text(`del ${this.inicio} al ${this.fin}`, 70, 27);
     doc.setFontSize(12);
@@ -251,7 +286,7 @@ export class EstadisticasComponent implements OnInit{
       doc.text(`Especialista: ${turno.especialista}`, 10, y);
       doc.setFontSize(12);
       y += 10;
-      doc.text(`Cantidad de Turnos: ${turno.cantidad}`, 10, y);
+      doc.text(`Cantidad de turnos: ${turno.cantidad}`, 10, y);
       y += 20;
 
       if (y > 270) {
@@ -266,5 +301,40 @@ export class EstadisticasComponent implements OnInit{
       doc.addImage(chartImage, 'PNG', 50, y, 100, 100);
     }
     doc.save('informe_turnos_por_especialista.pdf');
+  }
+
+  descargarTurnosFinalizadosPorEspecialistaPDF(): void {
+    const doc = new jsPDF();
+    const imgData = '../../../assets/img/logo.png';
+    doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
+
+    doc.setFontSize(16);
+    doc.text(`Informe de turnos finalizados por especialista`, 70, 20);
+    doc.setFontSize(16);
+    doc.text(`del ${this.inicio} al ${this.fin}`, 70, 27);
+    doc.setFontSize(12);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 34);
+
+    let y = 50;
+    this.turnosFinalizadosPorEspecialista.forEach((turno, index) => {
+      doc.setFontSize(14);
+      doc.text(`Especialista: ${turno.especialista}`, 10, y);
+      doc.setFontSize(12);
+      y += 10;
+      doc.text(`Cantidad de turnos: ${turno.cantidad}`, 10, y);
+      y += 20;
+
+      if (y > 270) {
+        doc.addPage();
+        y = 10;
+      }
+    });
+
+    const chartElement = this.chartContainerFinalizadosEspecialista.nativeElement.querySelector('canvas');
+    if (chartElement) {
+      const chartImage = chartElement.toDataURL('image/png');
+      doc.addImage(chartImage, 'PNG', 50, y, 100, 100);
+    }
+    doc.save('informe_turnos_finalizados_por_especialista.pdf');
   }
 }

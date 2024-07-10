@@ -17,3 +17,9 @@
   canvas {
     max-width: 100%;
   }
+
+  .logBox{
+    max-height: 40vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
