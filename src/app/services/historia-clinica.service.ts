@@ -22,9 +22,26 @@ export class HistoriaClinicaService {
     );
   }
 
-  obtenerHistoriasClinicasPorEspecialista(pacienteId: string, especialistaIdId: string): Observable<HistoriaClinica[]> {
+  obtenerHistoriasClinicasPorEspecialista(especialistaId: string): Observable<HistoriaClinica[]> {
     const colRef = collection(this.firestore, this.PATH);
-    const q = query(colRef, where('especialistaId', '==', especialistaIdId), where('pacienteId', '==', pacienteId));
+    const q = query(colRef, where('especialistaId', '==', especialistaId));
+    return from(getDocs(q)).pipe(
+      map(querySnapshot => querySnapshot.docs.map(docSnap => docSnap.data() as HistoriaClinica))
+    );
+  }
+
+  obtenerTodasLasHistoriasClinicas(): Observable<HistoriaClinica[]> {
+    const colRef = collection(this.firestore, this.PATH);
+    const q = query(colRef);
+    return from(getDocs(q)).pipe(
+      map(querySnapshot => querySnapshot.docs.map(docSnap => docSnap.data() as HistoriaClinica))
+    );
+  }
+
+
+  obtenerHistoriasClinicasPorPacienteYEspecialista(pacienteId: string, especialistaId: string): Observable<HistoriaClinica[]> {
+    const colRef = collection(this.firestore, this.PATH);
+    const q = query(colRef, where('especialistaId', '==', especialistaId), where('pacienteId', '==', pacienteId));
     return from(getDocs(q)).pipe(
       map(querySnapshot => querySnapshot.docs.map(docSnap => docSnap.data() as HistoriaClinica))
     );

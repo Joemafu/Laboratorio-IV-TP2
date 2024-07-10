@@ -16,7 +16,7 @@ import { jsPDF } from 'jspdf';
 export class HistoriasClinicasComponent implements OnInit {
   @Input() pacienteId: string = '';
   @Input() especialistaId: string = '';
-  protected historiasClinicas: HistoriaClinica[] = [];
+  @Input() historiasClinicas: HistoriaClinica[] = [];
   historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
   userService: UserService = inject(UserService);
   documentoNro: string = '';  
@@ -26,13 +26,21 @@ export class HistoriasClinicasComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.cargarHistoriasClinicas();
+    if(this.pacienteId || this.especialistaId)
+    {
+      this.cargarHistoriasClinicas();
+    }    
+    this.obtenerResenia(this.historiasClinicas[0].turnoId);
+  }
+
+  ngOnChanges(): void {
+    this.obtenerResenia(this.historiasClinicas[0].turnoId);
   }
 
   cargarHistoriasClinicas() {
     if (this.especialistaId) {
       this.pacienteId = this.userService.personaLogeada.nroDocumento;
-      this.historiaClinicaService.obtenerHistoriasClinicasPorEspecialista(this.pacienteId, this.especialistaId).subscribe(historias => {
+      this.historiaClinicaService.obtenerHistoriasClinicasPorPacienteYEspecialista(this.pacienteId, this.especialistaId).subscribe(historias => {
         this.historiasClinicas = historias;
         this.obtenerResenia(historias[0].turnoId);
       });
@@ -46,17 +54,14 @@ export class HistoriasClinicasComponent implements OnInit {
   public descargarHistoriaClinicaPdf(historiasClinicas: HistoriaClinica[]) {
     const doc = new jsPDF();
 
-    // Agregar logo
-    const imgData = '../../../assets/img/logo.png'; // Base64 de la imagen del logo
+    const imgData = '../../../assets/img/logo.png';
     doc.addImage(imgData, 'PNG', 10, 10, 20, 20);
 
-    // Título y fecha
     doc.setFontSize(16);
     doc.text('Informe de Historias Clínicas', 70, 20);
     doc.setFontSize(12);
     doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 70, 30);
 
-    // Información de cada historia clínica
     let y = 50;
     historiasClinicas.forEach((historia, index) => {
       doc.setFontSize(14);
@@ -84,12 +89,11 @@ export class HistoriasClinicasComponent implements OnInit {
         y += 10;
       }
       doc.text(`Reseña/Diagnóstico: ${this.resenia}`, 10, y);
-      y += 20; // Espacio entre historias clínicas
+      y += 20;
 
-      // Agregar nueva página si es necesario
       if (y > 270) {
         doc.addPage();
-        y = 10; // Reiniciar la posición vertical
+        y = 10;
       }
     });
 

@@ -47,3 +47,7 @@
   <div *ngIf="historialPacienteToggle">
     <app-historias-clinicas [pacienteId]="pacienteId"></app-historias-clinicas>
   </div>
+
+  <div *ngIf="mostrarHistoriasClinicas">
+    <app-historias-clinicas [historiasClinicas]="historiasClinicasFiltradas"></app-historias-clinicas>
+  </div>

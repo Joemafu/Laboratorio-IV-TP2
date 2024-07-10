@@ -10,6 +10,8 @@ import moment from 'moment';
 import { Especialista } from '../../models/especialista';
 import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
 import * as XLSX from 'xlsx';
+import { HistoriaClinica } from '../../interfaces/historia-clinica';
+import { HistoriaClinicaService } from '../../services/historia-clinica.service';
 
 @Component({
   selector: 'app-turnos-paciente',
@@ -24,12 +26,15 @@ export class TurnosPacienteComponent implements OnInit{
 
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
+  historiasClinicas: HistoriaClinica[] = [];
+  historiasClinicasFiltradas: HistoriaClinica[] = [];
+  mostrarHistoriasClinicas: boolean = false;
+  historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
   filtro: string = '';
   userService: UserService = inject(UserService);
   turnoService: TurnoService = inject(TurnoService);
   pipe: FormatearFechaConsignaPipe = new FormatearFechaConsignaPipe();
   historialEspecialistaToggle: boolean = false;
-  pacienteId: string = '';
   especialistaId: string = '';
 
   constructor() {}
@@ -46,7 +51,7 @@ export class TurnosPacienteComponent implements OnInit{
   }
 
   cargarTurnos(): void {
-    const pacienteId = this. userService.personaLogeada.nroDocumento;
+    const pacienteId = this.userService.personaLogeada.nroDocumento;
     this.turnoService.obtenerTurnosPorPaciente(pacienteId).subscribe(turnos => {
       this.turnos = turnos;
       this.filtrarTurnos('');
@@ -55,15 +60,75 @@ export class TurnosPacienteComponent implements OnInit{
       this.filtro = this.especialistaSeleccionado.apellido + ' ' + this.especialistaSeleccionado.nombre;
       this.filtrarTurnos(this.filtro);
     }
+    this.cargarHistoriasClinicas();
+  }
+
+  cargarHistoriasClinicas(): void {
+    this.historiaClinicaService.obtenerHistoriasClinicasPorPaciente(this.userService.personaLogeada.nroDocumento).subscribe(historiasClinicas => {
+      this.historiasClinicas = historiasClinicas;
+    });
   }
 
   filtrarTurnos(filtro : string): void {
     this.filtro = this.filtro.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(turno =>
       turno.especialidad.toLowerCase().includes(this.filtro) ||
-      turno.especialistaNombre.toLowerCase().includes(this.filtro)
+      turno.especialistaNombre.toLowerCase().includes(this.filtro) ||
+      turno.comentario?.toLowerCase().includes(filtro) || 
+      turno.encuesta?.toLowerCase().includes(filtro) || 
+      turno.calificacion?.toString().includes(filtro)
     );
+    this.buscarEnHistoriasClinicas(this.filtro);
     this.ordenarTurnosPorFecha();
+  }
+
+  buscarEnHistoriasClinicas(filtro: string): void {
+    this.historiasClinicasFiltradas = [];
+    if(filtro === '') {
+      this.mostrarHistoriasClinicas = false;
+      return;
+    }
+    this.turnos.forEach(turno => {
+      if(turno.reseniaMedico?.toLowerCase().includes(filtro))
+      {
+        this.turnosFiltrados.push(turno);
+        this.historiasClinicas.forEach(historiaClinica => {
+          if(historiaClinica.turnoId === turno.id && !this.historiasClinicasFiltradas.includes(historiaClinica))
+          {
+            this.historiasClinicasFiltradas.push(historiaClinica);
+          }
+        });
+        this.mostrarHistoriasClinicas = true;
+      }
+    });
+    this.historiasClinicas.forEach(historiaClinica => {
+      if (
+
+        historiaClinica.altura.toString() == filtro ||
+        historiaClinica.peso.toString() == filtro ||
+        historiaClinica.temperatura.toString() == filtro ||
+        historiaClinica.presion.toString() == filtro ||
+        historiaClinica.datoDinamicoUno?.clave.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoUno?.valor.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoDos?.clave.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoDos?.valor.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoTres?.clave.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoTres?.valor.toLowerCase().includes(filtro)
+      ) {
+        this.turnos.forEach(turno => {
+          historiaClinica.turnoId === turno.id && !this.turnosFiltrados.includes(turno) ? this.turnosFiltrados.push(turno) : null;          
+        });
+        if(!this.historiasClinicasFiltradas.includes(historiaClinica))
+        {
+          this.historiasClinicasFiltradas.push(historiaClinica);
+        }
+        console.log(this.historiasClinicasFiltradas);
+        this.mostrarHistoriasClinicas = true;
+      }
+      if(this.historiasClinicasFiltradas.length === 0) {
+        this.mostrarHistoriasClinicas = false;
+      }
+    });
   }
 
   // ORDENAR TURNOS POR FECHA
@@ -225,6 +290,6 @@ export class TurnosPacienteComponent implements OnInit{
     })));
 
     const workbook: XLSX.WorkBook = { Sheets: { 'Historial de Turnos': worksheet }, SheetNames: ['Historial de Turnos'] };
-    XLSX.writeFile(workbook, `HistorialTurnos_${this.pacienteId}.xlsx`);
+    XLSX.writeFile(workbook, `HistorialTurnos_${this.userService.personaLogeada.nroDocumento}.xlsx`);
   }
 }

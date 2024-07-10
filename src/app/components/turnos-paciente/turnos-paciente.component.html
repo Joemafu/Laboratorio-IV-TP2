@@ -44,3 +44,7 @@
   <div *ngIf="historialEspecialistaToggle">
     <app-historias-clinicas [especialistaId]="especialistaId"></app-historias-clinicas>
   </div>
+
+  <div *ngIf="mostrarHistoriasClinicas">
+    <app-historias-clinicas [historiasClinicas]="historiasClinicasFiltradas"></app-historias-clinicas>
+  </div>

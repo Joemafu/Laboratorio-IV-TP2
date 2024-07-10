@@ -10,6 +10,8 @@ import moment from 'moment';
 import { HistoriasClinicasComponent } from '../historias-clinicas/historias-clinicas.component';
 import { UserService } from '../../services/user.service';
 import * as XLSX from 'xlsx';
+import { HistoriaClinica } from '../../interfaces/historia-clinica';
+import { HistoriaClinicaService } from '../../services/historia-clinica.service';
 
 @Component({
   selector: 'app-turnos-admin',
@@ -27,6 +29,11 @@ export class TurnosAdminComponent implements OnInit {
   filtro: string = '';
   turnoService: TurnoService = inject(TurnoService);
   pipe: FormatearFechaConsignaPipe = new FormatearFechaConsignaPipe();
+
+  historiasClinicas: HistoriaClinica[] = [];
+  historiasClinicasFiltradas: HistoriaClinica[] = [];
+  mostrarHistoriasClinicas: boolean = false;
+  historiaClinicaService: HistoriaClinicaService = inject(HistoriaClinicaService);
 
   historialPacienteToggle: boolean = false;
   userService: UserService = inject(UserService);
@@ -52,16 +59,74 @@ export class TurnosAdminComponent implements OnInit {
       this.turnosFiltrados = turnos;
       this.filtrarTurnos('');
     });
+    this.cargarHistoriasClinicas();
   }
 
-  filtrarTurnos(string:string): void {
+  cargarHistoriasClinicas(): void {
+    this.historiaClinicaService.obtenerTodasLasHistoriasClinicas().subscribe(historiasClinicas => {
+      this.historiasClinicas = historiasClinicas;
+    });
+  }
+
+  filtrarTurnos(filtro : string): void {
     this.filtro = this.filtro.toLowerCase();
     this.turnosFiltrados = this.turnos.filter(turno =>
-      turno.especialidad.toLowerCase().includes(this.filtro.toLowerCase()) ||
-      turno.pacienteNombre?.toLowerCase().includes(this.filtro.toLowerCase()) ||
-      turno.especialistaNombre.toLowerCase().includes(this.filtro.toLowerCase())
+      turno.especialidad.toLowerCase().includes(this.filtro) ||
+      turno.especialistaNombre.toLowerCase().includes(this.filtro) ||
+      turno.comentario?.toLowerCase().includes(filtro) || 
+      turno.encuesta?.toLowerCase().includes(filtro) || 
+      turno.calificacion?.toString().includes(filtro)
     );
+    this.buscarEnHistoriasClinicas(this.filtro);
     this.ordenarTurnosPorFecha();
+  }
+
+  buscarEnHistoriasClinicas(filtro: string): void {
+    this.historiasClinicasFiltradas = [];
+    if(filtro === '') {
+      this.mostrarHistoriasClinicas = false;
+      return;
+    }
+    this.turnos.forEach(turno => {
+      if(turno.reseniaMedico?.toLowerCase().includes(filtro))
+      {
+        this.turnosFiltrados.push(turno);
+        this.historiasClinicas.forEach(historiaClinica => {
+          if(historiaClinica.turnoId === turno.id && !this.historiasClinicasFiltradas.includes(historiaClinica))
+          {
+            this.historiasClinicasFiltradas.push(historiaClinica);
+          }
+        });
+        this.mostrarHistoriasClinicas = true;
+      }
+    });
+    this.historiasClinicas.forEach(historiaClinica => {
+      if (
+        historiaClinica.altura.toString() == filtro ||
+        historiaClinica.peso.toString() == filtro ||
+        historiaClinica.temperatura.toString() == filtro ||
+        historiaClinica.presion.toString() == filtro ||
+        historiaClinica.datoDinamicoUno?.clave.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoUno?.valor.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoDos?.clave.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoDos?.valor.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoTres?.clave.toLowerCase().includes(filtro) ||
+        historiaClinica.datoDinamicoTres?.valor.toLowerCase().includes(filtro)
+      ) {
+        this.turnos.forEach(turno => {
+          historiaClinica.turnoId === turno.id && !this.turnosFiltrados.includes(turno) ? this.turnosFiltrados.push(turno) : null;          
+        });
+        if(!this.historiasClinicasFiltradas.includes(historiaClinica))
+        {
+          this.historiasClinicasFiltradas.push(historiaClinica);
+        }
+        console.log(this.historiasClinicasFiltradas);
+        this.mostrarHistoriasClinicas = true;
+      }
+      if(this.historiasClinicasFiltradas.length === 0) {
+        this.mostrarHistoriasClinicas = false;
+      }
+    });
   }
 
   ordenarTurnosPorFecha(): Turno[] {
