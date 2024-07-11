@@ -47,7 +47,6 @@ export class TurnosPacienteComponent implements OnInit{
     if (changes['especialistaSeleccionado'] && this.especialistaSeleccionado) {
       this.cargarTurnos();
       this.historialEspecialistaToggle = false;
-      console.log(this.especialistaSeleccionado);
     }
   }
 

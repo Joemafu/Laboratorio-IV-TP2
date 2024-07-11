@@ -9,11 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { slideOutInAnimation } from '../../animations/slideOutInAnimation';
 import { fadeInAnimation } from '../../animations/fadeInAnimation';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ FormsModule, CommonModule, ReactiveFormsModule, MatIconModule, MatButtonModule, MatMenuModule ],
+  imports: [ FormsModule, CommonModule, ReactiveFormsModule, MatIconModule, MatButtonModule, MatMenuModule, SpinnerComponent ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   animations: [slideOutInAnimation, fadeInAnimation]
@@ -30,6 +31,8 @@ export class LoginComponent implements OnInit {
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
   fabAbierto: boolean = false;
+  spinner: boolean = false;
+  
 
 
   constructor() {
@@ -89,6 +92,7 @@ export class LoginComponent implements OnInit {
 
   async buttonEntrar()
   {
+    this.spinner = true;
     if (this.loginForm.valid) {
       const usuario: Usuario = this.loginForm.value;
       this.authService.login(usuario.mail, usuario.pass)
@@ -99,7 +103,6 @@ export class LoginComponent implements OnInit {
       if (alert === '') {
         this.router.navigateByUrl('/bienvenida');
       }
-
     }).catch(error => {
       console.error('login.component - login()', error);
     });

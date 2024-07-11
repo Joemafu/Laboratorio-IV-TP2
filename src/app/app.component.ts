@@ -5,11 +5,12 @@ import { AuthService } from './services/auth.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { UserService } from './services/user.service';
+import { AppLoadingDirective } from './directives/app-loading.directive';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, FormsModule, RouterLink],
+  imports: [RouterOutlet, CommonModule, FormsModule, RouterLink, AppLoadingDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

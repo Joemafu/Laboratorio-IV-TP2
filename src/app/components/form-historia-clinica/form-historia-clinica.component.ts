@@ -1,14 +1,15 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, OnInit } from '@angular/core';
 import { HistoriaClinica } from '../../interfaces/historia-clinica';
 import { Turno } from '../../interfaces/turno';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TurnoService } from '../../services/turno.service';
+import { ValidateFieldCompletionDirective } from '../../directives/validate-field-completion.directive';
 
 @Component({
   selector: 'app-form-historia-clinica',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, ValidateFieldCompletionDirective],
   templateUrl: './form-historia-clinica.component.html',
   styleUrl: './form-historia-clinica.component.css'
 })

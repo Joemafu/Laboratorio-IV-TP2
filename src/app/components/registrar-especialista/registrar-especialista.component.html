@@ -4,13 +4,15 @@
     </div>
   
     <div class="row g-5">
+        <div class="container-fluid d-flex justify-content-center align-items-center full-width mt-3 mb-3">
+            <h4 class="text-primary">Ingrese los datos del especialista:</h4>
+        </div>
   
         <div class="col-md-5 col-lg-4 order-md-last">
             <app-tabla-especialidades (especialidadSeleccionada)="onEspecialidadSeleccionada($event)"></app-tabla-especialidades>
         </div>
   
         <div class="col-md-7 col-lg-8">
-            <h4 class="text-primary mb-3">Ingrese los datos del especialista:</h4>
             @if(errorMensaje !== "") {
 
                 <div class="alert alert-danger">

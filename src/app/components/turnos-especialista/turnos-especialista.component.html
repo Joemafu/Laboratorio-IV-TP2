@@ -35,8 +35,8 @@
       </tbody>
     </table>
     <div *ngIf="pacienteSeleccionado" class="container-fluid d-flex justify-content-center align-items-center full-width">
-      <button *ngIf="!historialPacienteToggle" (click)="verHistoriaClinica(pacienteSeleccionado.nroDocumento)" class="btn btn-primary btn-sm btnTurno">Ver Historial</button>
-      <button *ngIf="historialPacienteToggle" (click)="toggleHistorialPaciente()" type="button" class="btn btn-primary btn-sm btnTurno">Ocultar</button>
+      <button *ngIf="!historialPacienteToggle" (click)="verHistoriaClinica(pacienteSeleccionado.nroDocumento)" class="btn btn-primary btn-sm btnTurno mx-1 mb-3">Ver Historial</button>
+      <button *ngIf="historialPacienteToggle" (click)="toggleHistorialPaciente()" type="button" class="btn btn-primary btn-sm btnTurno mx-1 mb-3">Ocultar</button>
     </div>
   </div>
 

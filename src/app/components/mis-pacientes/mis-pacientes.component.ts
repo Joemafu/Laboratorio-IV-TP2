@@ -36,6 +36,10 @@ export class MisPacientesComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    do{
+      this.especialistaId = this.userService.personaLogeada.nroDocumento;
+    }
+    while(this.userService.personaLogeada == null || undefined);
     if(this.userService.personaLogeada.rol === 'Admin') {
       this.cargarTodosLosPacientes();  
     } else {

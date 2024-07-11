@@ -5,11 +5,13 @@ import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { TurnoService } from '../../services/turno.service';
 import { jsPDF } from 'jspdf';
+import { FormatearFechaPipe } from '../../pipes/formatear-fecha.pipe';
+import { HighlightButtonDirective } from '../../directives/highlight-button.directive';
 
 @Component({
   selector: 'app-historias-clinicas',
   standalone: true,
-  imports: [ CommonModule ],
+  imports: [ CommonModule, FormatearFechaPipe, HighlightButtonDirective],
   templateUrl: './historias-clinicas.component.html',
   styleUrl: './historias-clinicas.component.css'
 })
@@ -30,11 +32,6 @@ export class HistoriasClinicasComponent implements OnInit {
     {
       this.cargarHistoriasClinicas();
     }    
-    this.obtenerResenia(this.historiasClinicas[0].turnoId);
-  }
-
-  ngOnChanges(): void {
-    this.obtenerResenia(this.historiasClinicas[0].turnoId);
   }
 
   cargarHistoriasClinicas() {
@@ -88,7 +85,10 @@ export class HistoriasClinicasComponent implements OnInit {
         doc.text(`${historia.datoDinamicoTres.clave}: ${historia.datoDinamicoTres.valor}`, 10, y);
         y += 10;
       }
+
       doc.text(`Reseña/Diagnóstico: ${this.resenia}`, 10, y);
+
+
       y += 20;
 
       if (y > 270) {
@@ -100,9 +100,10 @@ export class HistoriasClinicasComponent implements OnInit {
     doc.save('historias_clinicas.pdf');
   }
 
-  obtenerResenia(id : string)
+  async obtenerResenia(id : string)
   {
-    this.turnoService.obtenerResenia(id).subscribe(resenia => {
+    console.log('obtenerResenia', id);
+    await this.turnoService.obtenerResenia(id).subscribe(resenia => {
       this.resenia = resenia;
     });
     this.scrollToBottom();

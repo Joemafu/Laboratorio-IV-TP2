@@ -1,7 +1,6 @@
 
-<main class="form-signin w-100 m-auto" >
+<main *ngIf="!spinner" class="form-signin w-100 m-auto" >
   <div [@slideOutInAnimation]>
-
 
   <form [formGroup]="loginForm" (ngSubmit)="buttonEntrar()" class="needs-validation" novalidate>
     <header></header>
@@ -68,6 +67,9 @@
         <img src="../../../assets/usuariosDemo.svg" alt="User Profile" class="fav-button-image">
       </button>
     
-      
     </div>
 </main>
+
+<div *ngIf="spinner">
+  <app-spinner></app-spinner>
+</div>

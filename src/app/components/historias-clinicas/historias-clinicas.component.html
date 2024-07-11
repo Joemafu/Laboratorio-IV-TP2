@@ -5,32 +5,33 @@
   <h3>Aún no tienes historias clínicas con este especialista.</h3>
 </div>
 <div class="accordion" id="accordionExample">
-    <div class="accordion-item" *ngFor="let historia of historiasClinicas; let i = index">
-      <h2 class="accordion-header" [id]="'heading' + i">
-        <button (click)="obtenerResenia(historia.turnoId)" class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" [attr.aria-expanded]="i === 0 ? 'true' : 'false'" [attr.aria-controls]="'collapse' + i">
-          Historia Clínica {{i + 1}} - Turno del {{historia.fechaTurno}} hs.
-        </button>
-      </h2>
-      <div [id]="'collapse' + i" class="accordion-collapse collapse" [class.show]="i === 0" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-          <p><strong>Altura (Cms):</strong> {{historia.altura}} cm</p>
-          <p><strong>Peso (Kgs):</strong> {{historia.peso}} kg</p>
-          <p><strong>Temperatura (ºC):</strong> {{historia.temperatura}} °C</p>
-          <p><strong>Presión (mm/Hg):</strong> {{historia.presion}}</p>
-          <div *ngIf="historia.datoDinamicoUno?.clave != ''">
-            <p><strong>{{ historia.datoDinamicoUno?.clave }}:</strong> {{ historia.datoDinamicoUno?.valor }}</p>
-          </div>
-          <div *ngIf="historia.datoDinamicoDos?.clave !=''">
-            <p><strong>{{ historia.datoDinamicoDos?.clave }}:</strong> {{ historia.datoDinamicoDos?.valor }}</p>
-          </div>
-          <div *ngIf="historia.datoDinamicoTres?.clave != ''">
-            <p><strong>{{ historia.datoDinamicoTres?.clave }}:</strong> {{ historia.datoDinamicoTres?.valor }}</p>
-          </div>
-          <p><strong>Reseña/Diagnóstico:</strong> {{resenia}}</p>
+  <div class="accordion-item" *ngFor="let historia of historiasClinicas; let i = index">
+    <h2 class="accordion-header" [id]="'heading' + i">
+      <button (click)="obtenerResenia(historia.turnoId)" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i">
+        Historia Clínica {{i + 1}} - Turno del {{historia.fechaTurno}} hs.
+      </button>
+    </h2>
+    <div [id]="'collapse' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <p><strong>Altura (Cms):</strong> {{historia.altura}} cm</p>
+        <p><strong>Peso (Kgs):</strong> {{historia.peso}} kg</p>
+        <p><strong>Temperatura (ºC):</strong> {{historia.temperatura}} °C</p>
+        <p><strong>Presión (mm/Hg):</strong> {{historia.presion}}</p>
+        <div *ngIf="historia.datoDinamicoUno?.clave != ''">
+          <p><strong>{{ historia.datoDinamicoUno?.clave }}:</strong> {{ historia.datoDinamicoUno?.valor }}</p>
         </div>
+        <div *ngIf="historia.datoDinamicoDos?.clave !=''">
+          <p><strong>{{ historia.datoDinamicoDos?.clave }}:</strong> {{ historia.datoDinamicoDos?.valor }}</p>
+        </div>
+        <div *ngIf="historia.datoDinamicoTres?.clave != ''">
+          <p><strong>{{ historia.datoDinamicoTres?.clave }}:</strong> {{ historia.datoDinamicoTres?.valor }}</p>
+        </div>
+        <p><strong>Reseña/Diagnóstico:</strong> {{resenia}}</p>
       </div>
     </div>
   </div>
+</div>
+
 
   <div class="container-fluid d-flex justify-content-center align-items-center full-width">
     <button 

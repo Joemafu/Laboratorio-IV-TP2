@@ -9,3 +9,7 @@
   .btn {
     margin-top: 10px;
   }
+
+  .text-primary {
+    color: #114d79 !important;
+  }

@@ -4,7 +4,9 @@
   </div>
 
   <div class="row g-5 container-fluid d-flex justify-content-center align-items-center full-width">
-    <h4 class="text-primary">Ingrese los datos de {{ turno.pacienteNombre }}:</h4>
+    <div class="container-fluid d-flex justify-content-center align-items-center full-width">
+      <h4 class="text-primary">Ingrese los datos del turno con {{ turno.pacienteNombre }}:</h4>
+    </div>
     <div class="col-md-7 col-lg-8">
       <div *ngIf="errorMensaje !== ''" class="alert alert-danger">
         {{ errorMensaje }}
@@ -97,9 +99,7 @@
             <div *ngIf="historiaClinicaForm.get('resenia')?.invalid && (historiaClinicaForm.get('resenia')?.dirty || historiaClinicaForm.get('resenia')?.touched)" class="alert alert-danger">
               Ingrese un comentario/diagnóstico.
             </div>
-          </div>
-
-          
+          </div>          
         </div>
 
         <hr class="my-4">

@@ -11,4 +11,5 @@ export interface HistoriaClinica {
     datoDinamicoUno?: { clave: string, valor: string };
     datoDinamicoDos?: { clave: string, valor: string };
     datoDinamicoTres?: { clave: string, valor: string };
+    reseniaMedico?: string;
 }

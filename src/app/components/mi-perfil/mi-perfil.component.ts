@@ -26,7 +26,11 @@ export class MiPerfilComponent implements OnInit{
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    do{
+      this.usuario = this.userService.personaLogeada;
+    }while(this.usuario == null || undefined);
+  }
 
   toggleHorarios() {
     this.mostrarHorarios = !this.mostrarHorarios;
@@ -41,10 +45,5 @@ export class MiPerfilComponent implements OnInit{
     this.historiaClinicaService.obtenerHistoriasClinicasPorPaciente(this.userService.personaLogeada.nroDocumento).subscribe(historias => {
       this.historiasClinicas = historias;
     });
-  }
-
-  test()
-  {
-    this.historiasClinicas; 
   }
 }

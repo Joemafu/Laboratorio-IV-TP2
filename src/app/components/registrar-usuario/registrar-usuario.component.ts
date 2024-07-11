@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { slideInOutAnimation } from '../../animations/slideInOutAnimation';
+import { fadeInAnimation } from '../../animations/fadeInAnimation';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -13,7 +14,7 @@ import { slideInOutAnimation } from '../../animations/slideInOutAnimation';
   imports: [ CommonModule, RegistrarEspecialistaComponent, RegistrarPacienteComponent, RegistrarAdminComponent ],
   templateUrl: './registrar-usuario.component.html',
   styleUrl: './registrar-usuario.component.css',
-  animations: [slideInOutAnimation]
+  animations: [slideInOutAnimation, fadeInAnimation]
 })
 export class RegistrarUsuarioComponent {
 

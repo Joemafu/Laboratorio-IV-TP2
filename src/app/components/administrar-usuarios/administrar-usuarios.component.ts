@@ -12,7 +12,12 @@ import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-administrar-usuarios',
   standalone: true,
-  imports: [ CommonModule, MatSlideToggleModule, HistoriasClinicasComponent, MisPacientesComponent ],
+  imports: [ 
+    CommonModule, 
+    MatSlideToggleModule, 
+    HistoriasClinicasComponent, 
+    MisPacientesComponent
+  ],
   templateUrl: './administrar-usuarios.component.html',
   styleUrl: './administrar-usuarios.component.css'
 })
@@ -72,7 +77,6 @@ export class AdministrarUsuariosComponent implements OnInit {
   }
 
   descargarDatosusuariosExcel() {
-
     const usuariosFiltrados = this.pacientes.concat(this.especialistas).map(usuario => ({
         Nombre: usuario.nombre,
         Apellido: usuario.apellido,

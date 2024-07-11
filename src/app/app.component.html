@@ -64,13 +64,7 @@
               </li>
             }
             
-            <li>
-              <a class="nav-link disabled ">{{usuario}}</a>
-            </li>
             
-            <li>
-              <a class="nav-link" role="button" (click)="buttonLogOut()">Cerrar Sesión</a>
-            </li>
           }
           
           @if(authService.currentUserSig() == null)
@@ -80,6 +74,19 @@
             </li>
           }          
         </ul>
+        @if(authService.currentUserSig() != null)
+        {
+          <ul class="d-flex navbar-nav ml-auto mt-2 mt-lg-0">
+
+            <li>
+              <a class="nav-link disabled ">{{usuario}}</a>
+            </li>
+            
+            <li>
+              <a class="nav-link" role="button" (click)="buttonLogOut()">Cerrar Sesión</a>
+            </li>
+          </ul>
+        }
       </div>
     </div>
   </nav>
