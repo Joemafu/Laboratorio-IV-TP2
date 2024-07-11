@@ -37,11 +37,8 @@ Carga de información médica del paciente posterior a su visita.
 
 Pacientes: Acá podemos visualizar a los pacientes atendidos y al seleccionar uno visualizaremos lista de turnos de éste, así como un acceso rápido a su historial médico.
 
-![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/17e7d4e4-6f2e-4ad2-8202-0a7fed4cd2bd)
+![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/b29161af-1e24-4e92-84bb-9dd654221d36)
 
-
-
-![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/0edb5217-71c4-4373-9d1a-8033038d3bf4)
 
 
 
@@ -55,10 +52,10 @@ Mi perfil: Desde acá podemos ver la información personal del paciente, o acced
 
 
 Mi Historial Clínico: Desde acá podemos ver los especialistas con los que nos hemos atendido. Seleccionando uno por su imagen, vemos el listado de turnos pendientes, cancelados o finalizados, y tenemos la posibilidad de completar una encuesta de satisfacción, así como puntuar nuestra experiencia del 1 al 5 o ver el resultado del diagnóstico del especialista.
-También podemos consultar nuestro historial médico o descargar la información de los turnos en formato xlsx.
+También podemos consultar nuestro historial médico o descargar la información de los turnos en formato xlsx, así como nuestro historial clínico con cada especialista.
 
-![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/b545cfad-d56c-48c0-9edc-0a0b4b4e78ad)
-![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/2707c90d-b26b-4492-be01-366cb25097a5)
+![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/315082b3-e7d8-4076-9e7c-aa7ceef16ba3)
+
 
 
 
@@ -91,6 +88,61 @@ Todos validados con sus campos obligatorios validados contra campos vacíos o da
 
 ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/fc5330a6-9309-4327-a3b9-3b8b5bef5220)
 ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/efd69f57-8a35-4cbf-940e-0c480705911b)
+
+
+Turnos: Similar a la sección Turnos de otros usuarios, con la diferencia de que podemos visualizar la totalidad de los turnos, y la posibilidad de cancelar aquellos que aún no se han realizado.
+
+![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/9931bcd5-5e63-437e-8f82-4099e88b5aa4)
+
+Así como en la sección turnos de otros usuarios, podemos utilizar el filtro para buscar fácilmente entre turnos según especialista, especialidad, paciente o datos de la historia clínica, lo que nos trae tanto la historia clínica, como el turno que dio lugar a la misma.
+
+![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/344961ff-35c3-4d26-b609-a2cfc420ae61)
+
+
+Administrar Usuarios: 
+Desde acá podemos realizar una lista variada de tareas:
+  * Ver un listado de todos los usuarios registrados
+  * Habilitar y deshabilitar cuentas
+  * Descargar un registro xlsx con la información completa de todos los usuarios
+  * Seleccionar un paciente para listar su historial de turnos
+  * Descargar el historial de turnos de dicho paciente en una hija de cálculo xlsx
+  * Descargar los datos de un usuario en particular
+  * Visualizar su historia clínica completa
+  * Descargarla en formato PDF
+
+![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/d9796842-084b-42cb-93f5-a300c1058a21)
+
+
+Estadísticas: 
+Desde acá podemos acceder a ciertos informes estadísticos del uso del sistema:
+  * Logs de inicio de sesión (Listado de inicios de sesión a la plataforma, con usuario, fecha y hora) Descargable en formato xlsx.
+    
+    ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/d71cd6c1-b904-4032-8768-2dda4d6972a2)
+
+
+  * Calcular la cantidad de turnos solicitados por especialidad. Descargable en formato PDF.
+    
+    ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/21674579-1738-494e-badf-edceed92cb7a)
+
+
+  * Cantidad de turnos solicitados por día. Descargable en formato PDF.
+    
+    ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/94926303-98de-42c7-8df9-d27348846946)
+
+
+  * Cantidad de turnos por especialista en un determinado lapso de tiempo configurable.
+    
+    ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/ef113138-9b74-4472-85aa-29157064b8f6)
+
+
+  * Cantidad de turnos finalizados por especialista en un determinado lapso de tiempo configurable.
+    ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/cfac977a-aa7f-497c-b0f7-04a3eeaed0ea)
+
+    
+
+
+
+
 
 
 
