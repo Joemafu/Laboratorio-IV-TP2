@@ -5,9 +5,9 @@ https://clinicatp2laboiv.web.app/bienvenida
 
 Pagina de inicio de sesión:
 
-![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/e2d67004-4da9-43da-8635-ec8ed402554b)
-
 Abajo a la derecha tenemos los accesos rápidos para poder testear las funcionalidades.
+
+![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/e2d67004-4da9-43da-8635-ec8ed402554b)
 
 
 
