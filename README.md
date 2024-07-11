@@ -1,5 +1,6 @@
 Applicación web "La Clínica Online" Proyecto final de la materia "Laboratorio de Computación IV" de la UTN
 
+Podés probarlo desde este enlace:
 https://clinicatp2laboiv.web.app/bienvenida
 
 
@@ -24,14 +25,15 @@ Mis Horarios: Seleccionamos la especialidad a cubrir, el día y los turnos a abr
 ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/7545f289-4adb-47fc-bb71-a39e3fe45780)
 
 
-Turnos: Desde esta pantalla podemos visualizar el historial de turnos, estado del mismo e información adicional como motivo de la cancelación en caso de que el turno haya sido cancelado. También podemos aceptar o rechazar turnos pendientes o darlos por finalizados para cargar los datos del paciente que se sumarán a su historia clínica.
+Turnos: Desde esta pantalla podemos visualizar el historial de turnos, estado del mismo e información adicional como "motivo de la cancelación" en caso de que el turno haya sido cancelado. También podemos aceptar o rechazar turnos pendientes o darlos por finalizados para cargar los datos del paciente que se sumarán a su historia clínica.
 
 ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/02e6cfbb-c992-4edf-8d61-8d0a5c0f03bd)
 
 
 Carga de información médica del paciente posterior a su visita.
 
-![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/6608918f-c35c-4325-a7eb-2e0937291c98)
+![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/0ef5b078-15be-4be7-a0a5-9d844e143461)
+
 
 
 
@@ -51,15 +53,15 @@ Mi perfil: Desde acá podemos ver la información personal del paciente, o acced
 
 
 
-Mi Historial Clínico: Desde acá podemos ver los especialistas con los que nos hemos atendido. Seleccionando uno por su imagen, vemos el listado de turnos pendientes, cancelados o finalizados, y tenemos la posibilidad de completar una encuesta de satisfacción, así como puntuar nuestra experiencia del 1 al 5 o ver el resultado del diagnóstico del especialista.
-También podemos consultar nuestro historial médico o descargar la información de los turnos en formato xlsx, así como nuestro historial clínico con cada especialista.
+Mi Historial Clínico: Desde acá podemos ver los especialistas con los que nos hemos atendido. Seleccionando uno por su imagen, vemos el listado de turnos pendientes, cancelados o finalizados, y tenemos la posibilidad de completar una encuesta de satisfacción, así como puntuar nuestra experiencia del 1 al 5, o ver el resultado del diagnóstico del especialista.
+También podemos consultar nuestro historial médico o descargar la información de los turnos en formato xlsx, así como nuestro historial clínico con cada especialista en PDF.
 
 ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/315082b3-e7d8-4076-9e7c-aa7ceef16ba3)
 
 
 
 
-Turnos: Acá podemos gestionar los turnos, filtrar por espeicalidad, especialista o datos de la historia clínica o diagnóstico. Ver todos los pendientes, finalizados y cancelados, así como cancelar, calificar, completar encuestas, ver comentario o diagnóstico y obviamente solicitar uno nuevo a partir de un especialista, especialidad y horario.
+Turnos: Acá podemos gestionar los turnos, filtrar por especialidad, especialista o datos de la historia clínica o diagnóstico. Ver todos los pendientes, finalizados y cancelados, así como cancelar, calificar, completar encuestas, ver comentario o diagnóstico y obviamente solicitar uno nuevo a partir de un especialista, especialidad y horario.
 
 ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/a0c7e97f-2606-419c-b0a3-3c208e722c4e)
 ![imagen](https://github.com/Joemafu/Laboratorio-IV-TP2/assets/52410521/70dd781b-f85c-4936-b4dc-6314669e46e6)
@@ -105,7 +107,7 @@ Desde acá podemos realizar una lista variada de tareas:
   * Habilitar y deshabilitar cuentas
   * Descargar un registro xlsx con la información completa de todos los usuarios
   * Seleccionar un paciente para listar su historial de turnos
-  * Descargar el historial de turnos de dicho paciente en una hija de cálculo xlsx
+  * Descargar el historial de turnos de dicho paciente en una hoja de cálculo xlsx
   * Descargar los datos de un usuario en particular
   * Visualizar su historia clínica completa
   * Descargarla en formato PDF
